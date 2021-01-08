@@ -1,0 +1,75 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{F654F2D8-2D7A-4BA1-AABF-4989A196933C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Domain", "Lib\UltimateRedditBot.Domain\UltimateRedditBot.Domain.csproj", "{F0742946-CC78-4B5D-AAFE-F19671307193}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Database", "Lib\UltimateRedditBot.Database\UltimateRedditBot.Database.csproj", "{E17D56C6-3218-4D67-801B-C7097C911715}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Infra", "Lib\UltimateRedditBot.Infra\UltimateRedditBot.Infra.csproj", "{27693853-C1C8-4369-BEE6-EDBEE6E6C59D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Core", "Lib\UltimateRedditBot.Core\UltimateRedditBot.Core.csproj", "{86891A68-4807-4C2E-B0D5-FF508F4DE889}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.App", "Lib\UltimateRedditBot.App\UltimateRedditBot.App.csproj", "{6D208E80-8817-469F-AED4-8A813040C178}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{9809C4ED-942D-4FDF-A151-A7DA22FADF14}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7B25CDF9-4944-4929-989A-8E6647DD9CBD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Discord", "Discord", "{DEC0580F-D238-4C39-840A-E01D6034A146}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Telegram", "Telegram", "{65C2AAFB-3B33-40C3-BC9A-A3AA636819E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Discord.Console", "Src\Discord\UltimateRedditBot.Discord.Console\UltimateRedditBot.Discord.Console.csproj", "{08E117B0-51CF-42BA-B328-2D20D12A255E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F0742946-CC78-4B5D-AAFE-F19671307193}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0742946-CC78-4B5D-AAFE-F19671307193}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0742946-CC78-4B5D-AAFE-F19671307193}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0742946-CC78-4B5D-AAFE-F19671307193}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E17D56C6-3218-4D67-801B-C7097C911715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E17D56C6-3218-4D67-801B-C7097C911715}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E17D56C6-3218-4D67-801B-C7097C911715}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E17D56C6-3218-4D67-801B-C7097C911715}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27693853-C1C8-4369-BEE6-EDBEE6E6C59D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27693853-C1C8-4369-BEE6-EDBEE6E6C59D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27693853-C1C8-4369-BEE6-EDBEE6E6C59D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27693853-C1C8-4369-BEE6-EDBEE6E6C59D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86891A68-4807-4C2E-B0D5-FF508F4DE889}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86891A68-4807-4C2E-B0D5-FF508F4DE889}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86891A68-4807-4C2E-B0D5-FF508F4DE889}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86891A68-4807-4C2E-B0D5-FF508F4DE889}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D208E80-8817-469F-AED4-8A813040C178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D208E80-8817-469F-AED4-8A813040C178}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D208E80-8817-469F-AED4-8A813040C178}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D208E80-8817-469F-AED4-8A813040C178}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08E117B0-51CF-42BA-B328-2D20D12A255E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08E117B0-51CF-42BA-B328-2D20D12A255E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08E117B0-51CF-42BA-B328-2D20D12A255E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08E117B0-51CF-42BA-B328-2D20D12A255E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F0742946-CC78-4B5D-AAFE-F19671307193} = {F654F2D8-2D7A-4BA1-AABF-4989A196933C}
+		{E17D56C6-3218-4D67-801B-C7097C911715} = {F654F2D8-2D7A-4BA1-AABF-4989A196933C}
+		{27693853-C1C8-4369-BEE6-EDBEE6E6C59D} = {F654F2D8-2D7A-4BA1-AABF-4989A196933C}
+		{86891A68-4807-4C2E-B0D5-FF508F4DE889} = {F654F2D8-2D7A-4BA1-AABF-4989A196933C}
+		{6D208E80-8817-469F-AED4-8A813040C178} = {F654F2D8-2D7A-4BA1-AABF-4989A196933C}
+		{DEC0580F-D238-4C39-840A-E01D6034A146} = {9809C4ED-942D-4FDF-A151-A7DA22FADF14}
+		{65C2AAFB-3B33-40C3-BC9A-A3AA636819E6} = {9809C4ED-942D-4FDF-A151-A7DA22FADF14}
+		{08E117B0-51CF-42BA-B328-2D20D12A255E} = {DEC0580F-D238-4C39-840A-E01D6034A146}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B2FFFFC-9619-4CC0-9DA8-C6A3C3F8FA59}
+	EndGlobalSection
+EndGlobal
