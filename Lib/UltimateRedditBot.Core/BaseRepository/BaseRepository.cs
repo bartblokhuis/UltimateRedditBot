@@ -1,0 +1,121 @@
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+using UltimateRedditBot.Database;
+using UltimateRedditBot.Domain.Models.Common;
+using UltimateRedditBot.Infra.BaseRepository;
+
+namespace UltimateRedditBot.Core.BaseRepository
+{
+    public class BaseRepository
+    {
+        protected BaseRepository(UltimateContext context)
+            : base(context)
+        {
+        }
+    }
+
+    public class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey>
+        where TEntity : class, IBaseEntity<TKey>
+    {
+        private readonly UltimateContext _context;
+        private readonly DbSet<TEntity> _dbSet;
+
+        protected BaseRepository(UltimateContext context)
+        {
+            _context = context;
+            _dbSet = context.Set<TEntity>();
+        }
+
+        public virtual async Task<IEnumerable<TEntity>> GetAsync(
+            Expression<Func<TEntity, bool>> filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "")
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            if (filter != null)
+                query = query.Where(filter);
+
+            if (includeProperties != null)
+                query = includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+
+            if (orderBy != null)
+                return orderBy(query).ToList();
+
+            return await query.ToListAsync().ConfigureAwait(false);
+        }
+
+        public virtual async Task<TEntity> GetByIdAsync(TKey id)
+        {
+            var entity = await _dbSet.FindAsync(id);
+            return entity;
+        }
+
+        public async Task InsertAsync(TEntity entity)
+        {
+            await _dbSet.AddAsync(entity);
+            await SaveChanges();
+        }
+
+        public virtual async Task InsertAsync(IEnumerable<TEntity> entity)
+        {
+            await _dbSet.AddRangeAsync(entity);
+            await SaveChanges();
+        }
+
+        public virtual async Task DeleteAsync(TKey id)
+        {
+            var entity = await _dbSet.FindAsync(id);
+            await DeleteAsync(entity);
+            await SaveChanges();
+        }
+
+        public async Task DeleteAsync(TEntity entity)
+        {
+            _dbSet.Remove(entity);
+            await SaveChanges();
+        }
+
+        public async Task DeleteAsync(IEnumerable<TEntity> entities)
+        {
+            _dbSet.RemoveRange(entities);
+            await SaveChanges();
+        }
+
+        public async Task UpdateAsync(TEntity entity)
+        {
+            _dbSet.Update(entity);
+            await SaveChanges();
+        }
+
+        public async Task UpdateRangeAsync(IEnumerable<TEntity> entities)
+        {
+            _dbSet.UpdateRange(entities);
+            await SaveChanges();
+        }
+
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            IQueryable<TEntity> query = _dbSet;
+            return await query.ToListAsync();
+        }
+
+        protected IQueryable<TEntity> QueryableAsync()
+        {
+            return _dbSet.AsQueryable();
+        }
+
+        private async Task SaveChanges()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public int Count()
+            => _dbSet.Count();
+    }
+}
