@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UltimateRedditBot.Domain.Models.Common;
 
-namespace UltimateRedditBot.Domain.Models.Reddit
+namespace UltimateRedditBot.Domain.Models.Settings
 {
-    public class GenericSettings : BaseEntity
+    public class GenericSetting : BaseEntity
     {
         #region Constructors
 
-        public GenericSettings()
+        public GenericSetting()
         { }
 
         #endregion
@@ -17,6 +14,8 @@ namespace UltimateRedditBot.Domain.Models.Reddit
         #region Properties
 
         public string EntityId { get; set; }
+
+        public string KeyGroup { get; set; }
 
         public string Key { get; set; }
 

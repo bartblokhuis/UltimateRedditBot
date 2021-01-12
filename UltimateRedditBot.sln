@@ -5,15 +5,15 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{F654F2D8-2D7A-4BA1-AABF-4989A196933C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Domain", "Lib\UltimateRedditBot.Domain\UltimateRedditBot.Domain.csproj", "{F0742946-CC78-4B5D-AAFE-F19671307193}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UltimateRedditBot.Domain", "Lib\UltimateRedditBot.Domain\UltimateRedditBot.Domain.csproj", "{F0742946-CC78-4B5D-AAFE-F19671307193}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Database", "Lib\UltimateRedditBot.Database\UltimateRedditBot.Database.csproj", "{E17D56C6-3218-4D67-801B-C7097C911715}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UltimateRedditBot.Database", "Lib\UltimateRedditBot.Database\UltimateRedditBot.Database.csproj", "{E17D56C6-3218-4D67-801B-C7097C911715}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Infra", "Lib\UltimateRedditBot.Infra\UltimateRedditBot.Infra.csproj", "{27693853-C1C8-4369-BEE6-EDBEE6E6C59D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UltimateRedditBot.Infra", "Lib\UltimateRedditBot.Infra\UltimateRedditBot.Infra.csproj", "{27693853-C1C8-4369-BEE6-EDBEE6E6C59D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Core", "Lib\UltimateRedditBot.Core\UltimateRedditBot.Core.csproj", "{86891A68-4807-4C2E-B0D5-FF508F4DE889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UltimateRedditBot.Core", "Lib\UltimateRedditBot.Core\UltimateRedditBot.Core.csproj", "{86891A68-4807-4C2E-B0D5-FF508F4DE889}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.App", "Lib\UltimateRedditBot.App\UltimateRedditBot.App.csproj", "{6D208E80-8817-469F-AED4-8A813040C178}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UltimateRedditBot.App", "Lib\UltimateRedditBot.App\UltimateRedditBot.App.csproj", "{6D208E80-8817-469F-AED4-8A813040C178}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{9809C4ED-942D-4FDF-A151-A7DA22FADF14}"
 EndProject
@@ -23,7 +23,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Discord", "Discord", "{DEC0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Telegram", "Telegram", "{65C2AAFB-3B33-40C3-BC9A-A3AA636819E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Discord.Console", "Src\Discord\UltimateRedditBot.Discord.Console\UltimateRedditBot.Discord.Console.csproj", "{08E117B0-51CF-42BA-B328-2D20D12A255E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UltimateRedditBot.Discord.Console", "Src\Discord\UltimateRedditBot.Discord.Console\UltimateRedditBot.Discord.Console.csproj", "{08E117B0-51CF-42BA-B328-2D20D12A255E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Discord.Domain", "Src\Discord\UltimateRedditBot.Discord.Domain\UltimateRedditBot.Discord.Domain.csproj", "{1795D634-C2B2-42B6-9648-BDCDE83F56FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Discord.Database", "Src\Discord\UltimateRedditBot.Discord.Database\UltimateRedditBot.Discord.Database.csproj", "{BB29E056-013F-4D38-A609-BC75498FFB22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateRedditBot.Discord.App", "Src\Discord\UltimateRedditBot.Discord.App\UltimateRedditBot.Discord.App.csproj", "{3A086BE0-47DB-49DE-8A2F-7AF92E795A6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +61,18 @@ Global
 		{08E117B0-51CF-42BA-B328-2D20D12A255E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08E117B0-51CF-42BA-B328-2D20D12A255E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08E117B0-51CF-42BA-B328-2D20D12A255E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1795D634-C2B2-42B6-9648-BDCDE83F56FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1795D634-C2B2-42B6-9648-BDCDE83F56FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1795D634-C2B2-42B6-9648-BDCDE83F56FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1795D634-C2B2-42B6-9648-BDCDE83F56FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB29E056-013F-4D38-A609-BC75498FFB22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB29E056-013F-4D38-A609-BC75498FFB22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB29E056-013F-4D38-A609-BC75498FFB22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB29E056-013F-4D38-A609-BC75498FFB22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A086BE0-47DB-49DE-8A2F-7AF92E795A6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A086BE0-47DB-49DE-8A2F-7AF92E795A6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A086BE0-47DB-49DE-8A2F-7AF92E795A6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A086BE0-47DB-49DE-8A2F-7AF92E795A6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,6 +86,9 @@ Global
 		{DEC0580F-D238-4C39-840A-E01D6034A146} = {9809C4ED-942D-4FDF-A151-A7DA22FADF14}
 		{65C2AAFB-3B33-40C3-BC9A-A3AA636819E6} = {9809C4ED-942D-4FDF-A151-A7DA22FADF14}
 		{08E117B0-51CF-42BA-B328-2D20D12A255E} = {DEC0580F-D238-4C39-840A-E01D6034A146}
+		{1795D634-C2B2-42B6-9648-BDCDE83F56FA} = {DEC0580F-D238-4C39-840A-E01D6034A146}
+		{BB29E056-013F-4D38-A609-BC75498FFB22} = {DEC0580F-D238-4C39-840A-E01D6034A146}
+		{3A086BE0-47DB-49DE-8A2F-7AF92E795A6A} = {DEC0580F-D238-4C39-840A-E01D6034A146}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B2FFFFC-9619-4CC0-9DA8-C6A3C3F8FA59}

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Lib\UltimateRedditBot.Database\UltimateRedditBot.Database.csproj" />
+    <ProjectReference Include="..\UltimateRedditBot.Discord.Domain\UltimateRedditBot.Discord.Domain.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="dataSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

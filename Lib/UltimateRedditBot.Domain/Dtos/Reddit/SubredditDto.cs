@@ -1,18 +1,16 @@
 using System;
 using System.Collections.Generic;
-using UltimateRedditBot.Domain.Models.Common;
+using System.Text;
+using UltimateRedditBot.Domain.Dtos.Common;
+using UltimateRedditBot.Domain.Models.Reddit;
 
-namespace UltimateRedditBot.Domain.Models.Reddit
+namespace UltimateRedditBot.Domain.Dtos.Reddit
 {
-    public class Subreddit : BaseEntity, IFullyAuditedObject
+    public class SubredditDto : BaseDto
     {
-        #region Constructor
+        #region Constructors
 
-        //Empty constructor for ef core
-        public Subreddit()
-        { }
-
-        public Subreddit(string name, bool isNsfw)
+        public SubredditDto(string name, bool isNsfw)
         {
             Name = name;
             IsNsfw = isNsfw;
@@ -32,16 +30,6 @@ namespace UltimateRedditBot.Domain.Models.Reddit
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        public void Update(string name, bool isNsfw)
-        {
-            Name = name;
-            IsNsfw = isNsfw;
-        }
 
         #endregion
     }

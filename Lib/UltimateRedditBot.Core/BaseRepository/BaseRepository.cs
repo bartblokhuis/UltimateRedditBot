@@ -11,7 +11,8 @@ using UltimateRedditBot.Infra.BaseRepository;
 
 namespace UltimateRedditBot.Core.BaseRepository
 {
-    public class BaseRepository
+    public class BaseRepository<TEntity> : BaseRepository<TEntity, int>
+        where TEntity : class, IBaseEntity<int>
     {
         protected BaseRepository(UltimateContext context)
             : base(context)

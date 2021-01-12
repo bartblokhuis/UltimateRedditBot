@@ -1,0 +1,65 @@
+using System;
+using UltimateRedditBot.Domain.Dtos.Common;
+using UltimateRedditBot.Domain.Enums;
+using UltimateRedditBot.Domain.Models.Reddit;
+
+namespace UltimateRedditBot.Domain.Dtos.Reddit
+{
+    public class PostDto : BaseDto<string>
+    {
+        #region Constructor
+
+        public PostDto()
+        { }
+
+        public PostDto(string postId, string author, int downs, int ups, bool isOver18, string title, string postLink, Uri thumbnail, string selfText, Uri url, PostType postType)
+        {
+            Id = postId;
+            Author = author;
+            Downs = downs;
+            Ups = ups;
+            IsOver18 = isOver18;
+            Title = title;
+            PostLink = postLink;
+            Thumbnail = thumbnail;
+            Selftext = selfText;
+            Url = url;
+            PostType = postType;
+        }
+
+        #endregion
+
+        #region Properties
+
+        public string Author { get; set; }
+
+        public int Downs { get; set; }
+
+        public int Ups { get; set; }
+
+        public bool IsOver18 { get; set; }
+
+        public string Title { get; set; }
+
+        public string PostLink { get; set; }
+
+        public Uri Thumbnail { get; set; }
+
+        public string Selftext { get; set; }
+
+        public Uri Url { get; set; }
+
+        public virtual Subreddit Subreddit { get; set; }
+
+        public int SubRedditId { get; set; }
+
+        public PostType PostType { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        #endregion
+
+    }
+}

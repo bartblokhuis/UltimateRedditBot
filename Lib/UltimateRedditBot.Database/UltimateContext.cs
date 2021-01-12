@@ -7,12 +7,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using UltimateRedditBot.Domain.Models.Common;
 using UltimateRedditBot.Domain.Models.Reddit;
+using UltimateRedditBot.Domain.Models.Settings;
 
 namespace UltimateRedditBot.Database
 {
-    public class UltimateContext : DbContext
+    public abstract class UltimateContext : DbContext
     {
-        public UltimateContext(DbContextOptions options)
+        protected UltimateContext(DbContextOptions options)
             : base(options)
         {
         }
@@ -22,13 +23,7 @@ namespace UltimateRedditBot.Database
 
         public DbSet<Subreddit> Subreddits { get; set; }
 
-        public DbSet<GenericSettings> GenericSettings { get; set; }
-
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
+        public DbSet<GenericSetting> GenericSettings { get; set; }
 
         /// <summary>
         /// Used to update auditable entities.
