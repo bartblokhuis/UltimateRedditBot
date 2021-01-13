@@ -52,10 +52,26 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
 
             //Ensure that the message being sent had the configured prefix.
             //TODO Change prefix to configurable per guild
-            
+
             var argPos = 0;
-            if (msg.HasStringPrefix(_config["Prefix"], ref argPos) || msg.HasMentionPrefix(_discord.CurrentUser, ref argPos))
+            var prefix = _config["Prefix"];
+            if (msg.HasStringPrefix(prefix, ref argPos) || msg.HasMentionPrefix(_discord.CurrentUser, ref argPos))
             {
+                var command = string.Empty;
+
+                var firstSpace = msg.Content.IndexOf(" ", StringComparison.Ordinal);
+
+                command = firstSpace == -1 ?
+                    msg.Content.Substring(prefix.Length, msg.Content.Length - prefix.Length)
+                    : msg.Content.Substring(prefix.Length, firstSpace - prefix.Length);
+
+                if (!DiscordHelper.DoesCommandExist(command))
+                {
+                    //TODO Write a better response message.
+                    await context.Channel.SendMessageAsync("Command does not exist.");
+                    return;
+                }
+
                 //Execute the command
                 var result = await _commands.ExecuteAsync(context, argPos, _provider);
 
