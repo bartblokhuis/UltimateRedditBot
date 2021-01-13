@@ -1,12 +1,28 @@
-﻿namespace UltimateRedditBot.Discord.App.Discord.Constants
+﻿using System.Collections.Generic;
+using UltimateRedditBot.Discord.App.Discord.Helpers;
+
+namespace UltimateRedditBot.Discord.App.Discord.Constants
 {
     public static class DiscordConstants
     {
-        //TODO: Make a command class set requirements ex has to have 1 or 2 arguments.
-        public static readonly string[] Commands = new string[]
+        public static readonly string[] Commands_ = new string[]
         {
             "help",
             "r"
+        };
+
+        public static readonly CommandHelper[] Commands =
+        {
+            new()
+            {
+                Name = "Help",
+                AllowedArgs = new List<int>{0}
+            },
+            new()
+            {
+                Name = "R",
+                AllowedArgs = new List<int>{0,1,2}
+            }
         };
     }
 }
