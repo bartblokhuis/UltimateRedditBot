@@ -4,6 +4,6 @@ namespace UltimateRedditBot.Domain.Models.Common
 {
     public interface IHasUpdatedDate
     {
-        public DateTime UpdatedAt { get; set; }
+        public DateTime CreatedAtUTC { get; set; }
     }
 }

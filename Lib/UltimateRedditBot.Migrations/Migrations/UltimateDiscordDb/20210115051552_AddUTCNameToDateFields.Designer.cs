@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UltimateRedditBot.Discord.Database;
 
-namespace UltimateRedditBot.Discord.Database.Migrations
+namespace UltimateRedditBot.Migrations.Migrations.UltimateDiscordDb
 {
     [DbContext(typeof(UltimateDiscordDbContext))]
-    [Migration("20210115040121_Init")]
-    partial class Init
+    [Migration("20210115051552_AddUTCNameToDateFields")]
+    partial class AddUTCNameToDateFields
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,10 +45,10 @@ namespace UltimateRedditBot.Discord.Database.Migrations
                         .HasColumnType("decimal(20,0)")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("CreatedAtUTC")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<DateTime>("UpdatedAtUTC")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

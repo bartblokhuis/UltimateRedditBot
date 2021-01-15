@@ -54,9 +54,9 @@ namespace UltimateRedditBot.Domain.Models.Reddit
 
         public PostType PostType { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAtUTC { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAtUTC { get; set; }
 
         #endregion
 

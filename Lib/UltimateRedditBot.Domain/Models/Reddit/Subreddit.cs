@@ -29,9 +29,9 @@ namespace UltimateRedditBot.Domain.Models.Reddit
 
         public virtual IEnumerable<Post> Posts { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAtUTC { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAtUTC { get; set; }
 
         #endregion
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UltimateRedditBot.Database;
 
 namespace UltimateRedditBot.Migrations.Migrations
 {
     [DbContext(typeof(UltimateDbContext))]
-    partial class UltimateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210115052424_AddUTCNameToDateFields")]
+    partial class AddUTCNameToDateFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

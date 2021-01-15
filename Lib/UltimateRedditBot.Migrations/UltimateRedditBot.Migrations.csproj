@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Src\Discord\UltimateRedditBot.Discord.Database\UltimateRedditBot.Discord.Database.csproj" />
       <ProjectReference Include="..\UltimateRedditBot.Database\UltimateRedditBot.Database.csproj" />
     </ItemGroup>
 

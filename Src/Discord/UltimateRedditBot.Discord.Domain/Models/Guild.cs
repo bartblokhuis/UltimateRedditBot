@@ -22,9 +22,9 @@ namespace UltimateRedditBot.Discord.Domain.Models
 
         #region Properties
 
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAtUTC { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAtUTC { get; set; }
 
         public virtual ICollection<DiscordChannel> Channels { get; set; }
 

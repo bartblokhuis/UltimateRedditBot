@@ -1,5 +1,0 @@
-﻿{
-  "ConnectionString": {
-    "DefaultConnection": "Data Source=localhost;Initial Catalog=UltimateReddit;Integrated Security=True;Persist Security Info=False"
-  }
-}
