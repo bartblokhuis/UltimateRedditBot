@@ -1,0 +1,6 @@
+﻿{
+  "ConnectionString": {
+    "DefaultConnection": "Data Source=localhost;Initial Catalog=UltimateRedditShared;Integrated Security=True;Persist Security Info=False",
+    "DiscordConnection": "Data Source=localhost;Initial Catalog=UltimateRedditDiscord; Integrated Security=True;Persist Security Info=False"
+  }
+}

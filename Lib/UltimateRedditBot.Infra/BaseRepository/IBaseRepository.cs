@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using UltimateRedditBot.Database;
 
 namespace UltimateRedditBot.Infra.BaseRepository
 {
@@ -12,12 +13,16 @@ namespace UltimateRedditBot.Infra.BaseRepository
 
     }
 
-    public interface IBaseRepository<TEntity, in TKey>
+    public interface IBaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey, UltimateDbContext>
     {
 
+    }
+
+    public interface IBaseRepository<TEntity, TKey, TDbContext>
+    {
         Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null,
-                                        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-                                        string includeProperties = "");
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
+            string includeProperties = "");
 
         Task<IEnumerable<TEntity>> GetAllAsync();
 
@@ -38,6 +43,5 @@ namespace UltimateRedditBot.Infra.BaseRepository
         Task<TEntity> GetByIdAsync(TKey id);
 
         int Count();
-
     }
 }

@@ -26,8 +26,7 @@ namespace UltimateRedditBot.Discord.Domain.Models
 
         public DateTime CreatedAt { get; set; }
 
-        //public virtual ICollection<SubRedditHistory> SubRedditHistories { get; set; }
-        public ICollection<DiscordChannel> Channels { get; set; }
+        public virtual ICollection<DiscordChannel> Channels { get; set; }
 
         #endregion
 

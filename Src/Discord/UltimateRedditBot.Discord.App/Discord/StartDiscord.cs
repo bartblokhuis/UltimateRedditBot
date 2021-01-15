@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
+using UltimateRedditBot.Discord.App.Services;
+using UltimateRedditBot.Discord.Domain.Dtos;
 
 namespace UltimateRedditBot.Discord.App.Discord
 {
@@ -16,17 +19,19 @@ namespace UltimateRedditBot.Discord.App.Discord
         private readonly DiscordSocketClient _discord;
         private readonly CommandService _commands;
         private readonly IConfiguration _config;
+        private readonly IGuildService _guildService;
 
         #endregion
 
         #region Constructor
 
-        public StartDiscord(IConfiguration config, CommandService commands, DiscordSocketClient discord, IServiceProvider provider)
+        public StartDiscord(IConfiguration config, CommandService commands, DiscordSocketClient discord, IServiceProvider provider, IGuildService guildService)
         {
             _config = config;
             _commands = commands;
             _discord = discord;
             _provider = provider;
+            _guildService = guildService;
         }
 
         #endregion
@@ -50,6 +55,13 @@ namespace UltimateRedditBot.Discord.App.Discord
 
             //Set the bot's status.
             await _discord.SetGameAsync($"{ _discord.Guilds.Count }, servers", type: ActivityType.Watching);
+
+            var guild = new GuildDto()
+            {
+                Id = _discord.Guilds.FirstOrDefault().Id
+            };
+
+            await _guildService.AddGuild(guild);
         }
 
         /// <summary>

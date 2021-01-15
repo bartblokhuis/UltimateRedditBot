@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace UltimateRedditBot.Discord.Database
 {
-    public class DiscordContextFactory: IDesignTimeDbContextFactory<UltimateDiscordDbContext>
+    public class DiscordContextFactory : IDesignTimeDbContextFactory<UltimateDiscordDbContext>
     {
         public UltimateDiscordDbContext CreateDbContext(string[] args)
         {
@@ -13,7 +13,7 @@ namespace UltimateRedditBot.Discord.Database
                 .Build();
 
             var dbContextBuilder = new DbContextOptionsBuilder();
-            var connectionString = configuration["ConnectionString:DefaultConnection"];
+            var connectionString = configuration["ConnectionString:DiscordConnection"];
 
             dbContextBuilder.UseSqlServer(connectionString);
 

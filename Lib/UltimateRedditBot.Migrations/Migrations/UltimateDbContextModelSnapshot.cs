@@ -3,58 +3,21 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using UltimateRedditBot.Discord.Database;
+using UltimateRedditBot.Database;
 
-namespace UltimateRedditBot.Discord.Database.Migrations
+namespace UltimateRedditBot.Migrations.Migrations
 {
-    [DbContext(typeof(UltimateDiscordDbContext))]
-    [Migration("20210109021413_Init")]
-    partial class Init
+    [DbContext(typeof(UltimateDbContext))]
+    partial class UltimateDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
-
-            modelBuilder.Entity("UltimateRedditBot.Discord.Domain.Models.DiscordChannel", b =>
-                {
-                    b.Property<decimal>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(20,0)")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
-
-                    b.Property<decimal>("GuildId")
-                        .HasColumnType("decimal(20,0)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GuildId");
-
-                    b.ToTable("DiscordChannel");
-                });
-
-            modelBuilder.Entity("UltimateRedditBot.Discord.Domain.Models.Guild", b =>
-                {
-                    b.Property<decimal>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(20,0)")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Guild");
-                });
 
             modelBuilder.Entity("UltimateRedditBot.Domain.Models.Reddit.Post", b =>
                 {
@@ -155,17 +118,6 @@ namespace UltimateRedditBot.Discord.Database.Migrations
                     b.ToTable("GenericSettings");
                 });
 
-            modelBuilder.Entity("UltimateRedditBot.Discord.Domain.Models.DiscordChannel", b =>
-                {
-                    b.HasOne("UltimateRedditBot.Discord.Domain.Models.Guild", "Guild")
-                        .WithMany("Channels")
-                        .HasForeignKey("GuildId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Guild");
-                });
-
             modelBuilder.Entity("UltimateRedditBot.Domain.Models.Reddit.Post", b =>
                 {
                     b.HasOne("UltimateRedditBot.Domain.Models.Reddit.Subreddit", "Subreddit")
@@ -175,11 +127,6 @@ namespace UltimateRedditBot.Discord.Database.Migrations
                         .IsRequired();
 
                     b.Navigation("Subreddit");
-                });
-
-            modelBuilder.Entity("UltimateRedditBot.Discord.Domain.Models.Guild", b =>
-                {
-                    b.Navigation("Channels");
                 });
 
             modelBuilder.Entity("UltimateRedditBot.Domain.Models.Reddit.Subreddit", b =>

@@ -11,11 +11,6 @@ namespace UltimateRedditBot.Discord
         //Startup
         private static void Main(string[] args)
         {
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
-                .AddEnvironmentVariables()
-                .Build();
-
             MainAsync(args).GetAwaiter().GetResult();
         }
 
@@ -26,6 +21,11 @@ namespace UltimateRedditBot.Discord
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(options =>
+                {
+                    options.AddJsonFile("appsettings.json");
+                    options.AddJsonFile("dataSettings.json");
+                })
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
     }
 }

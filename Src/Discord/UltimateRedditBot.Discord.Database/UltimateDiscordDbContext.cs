@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using UltimateRedditBot.Database;
+using UltimateRedditBot.Database.Common;
 using UltimateRedditBot.Discord.Domain.Models;
 
 namespace UltimateRedditBot.Discord.Database
 {
-    public class UltimateDiscordDbContext : UltimateContext
+    public class UltimateDiscordDbContext : BaseUltimateDbContext
     {
         public UltimateDiscordDbContext(DbContextOptions options)
             :base(options)

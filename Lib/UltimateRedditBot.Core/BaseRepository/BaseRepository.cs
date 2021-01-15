@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using UltimateRedditBot.Database;
 using UltimateRedditBot.Domain.Models.Common;
@@ -11,22 +10,32 @@ using UltimateRedditBot.Infra.BaseRepository;
 
 namespace UltimateRedditBot.Core.BaseRepository
 {
-    public class BaseRepository<TEntity> : BaseRepository<TEntity, int>
+    public class BaseRepository<TEntity> : BaseRepository<TEntity, int>, IBaseRepository<TEntity>
         where TEntity : class, IBaseEntity<int>
     {
-        protected BaseRepository(UltimateContext context)
+        public BaseRepository(UltimateDbContext context)
             : base(context)
         {
         }
     }
 
-    public class BaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey>
+    public class BaseRepository<TEntity, TKey> : BaseRepository<TEntity, TKey, UltimateDbContext>, IBaseRepository<TEntity, TKey>
         where TEntity : class, IBaseEntity<TKey>
     {
-        private readonly UltimateContext _context;
+        public BaseRepository(UltimateDbContext context)
+            : base(context)
+        {
+        }
+    }
+
+    public class BaseRepository<TEntity, TKey, TDbContext> : IBaseRepository<TEntity, TKey, TDbContext>
+        where TDbContext : DbContext
+        where TEntity : class, IBaseEntity<TKey>
+    {
+        private readonly DbContext _context;
         private readonly DbSet<TEntity> _dbSet;
 
-        protected BaseRepository(UltimateContext context)
+        public BaseRepository(TDbContext context)
         {
             _context = context;
             _dbSet = context.Set<TEntity>();
