@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Discord.Commands;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 
-namespace UltimateRedditBot.Discord.App.Discord.Modules
+namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 {
-    public class SubredditModule : UltimateCommandModule
+    public class HelpModule: UltimateCommandModule
     {
         #region Fields
 
@@ -13,17 +14,17 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules
 
         #region Constructor
 
+        public HelpModule()
+        {
 
+        }
 
         #endregion
 
         #region Methods
 
-        public async Task GetSubreddits()
-        {
-        }
-
-        public async Task GetSubreddits(int page)
+        [Command("help"), Alias("help")]
+        public async Task Help()
         {
 
         }

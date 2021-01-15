@@ -2,8 +2,9 @@
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Common
 {
-    public class UltimateCommandModule : ModuleBase
+    [RequireContext(ContextType.Guild)]
+    public class UltimateGuildModule : UltimateCommandModule
     {
-        //TODO Add logger
+
     }
 }

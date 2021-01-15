@@ -14,7 +14,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
         private readonly CommandService _commands;
         private readonly IConfiguration _config;
         private readonly IServiceProvider _provider;
-        //private readonly IGuildFactory _guildFactory;
 
         #endregion
 

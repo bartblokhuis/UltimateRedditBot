@@ -2,9 +2,9 @@
 using Discord.Commands;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 
-namespace UltimateRedditBot.Discord.App.Discord.Modules
+namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 {
-    public class QueueModule : UltimateCommandModule
+    public class GuildQueueModule : UltimateGuildModule
     {
         #region Fields
 

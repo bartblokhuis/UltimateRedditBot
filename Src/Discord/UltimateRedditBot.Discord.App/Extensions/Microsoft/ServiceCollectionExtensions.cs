@@ -8,6 +8,9 @@ using UltimateRedditBot.Discord.App.AutoMapper;
 using UltimateRedditBot.Discord.App.Discord;
 using UltimateRedditBot.Discord.App.Discord.Commands;
 using UltimateRedditBot.Discord.App.Discord.Modules;
+using UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage;
+using UltimateRedditBot.Discord.App.Discord.Modules.Guild;
+using UltimateRedditBot.Discord.App.Discord.Modules.Shared;
 using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.Database;
 
@@ -38,10 +41,11 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
                 .AddSingleton<StartDiscord>()
                 .AddSingleton<CommandHandler>()
                 .AddSingleton<HelpModule>()
-                .AddSingleton<QueueModule>()
-                .AddSingleton<SettingsModule>()
+                .AddSingleton<DirectMessageSettingsModule>()
+                .AddSingleton<GuildQueueModule>()
+                .AddSingleton<GuildSettingsModule>()
                 .AddSingleton<SubredditModule>()
-                .AddSingleton<SubscriptionModule>();
+                .AddSingleton<DirectMessageSettingsModule>();
 
         }
     }

@@ -2,9 +2,9 @@
 using Discord.Commands;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 
-namespace UltimateRedditBot.Discord.App.Discord.Modules
+namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 {
-    public class SettingsModule : UltimateCommandModule
+    public class GuildSettingsModule : UltimateGuildModule
     {
         #region Fields
 
@@ -14,7 +14,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules
 
         #region Constructor
 
-        public SettingsModule()
+        public GuildSettingsModule()
         {
 
         }

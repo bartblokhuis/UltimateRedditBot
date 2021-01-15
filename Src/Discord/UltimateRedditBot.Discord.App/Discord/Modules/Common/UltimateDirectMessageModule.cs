@@ -2,8 +2,9 @@
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Common
 {
-    public class UltimateCommandModule : ModuleBase
+    [RequireContext(ContextType.DM)]
+    public class UltimateDirectMessageModule : UltimateCommandModule
     {
-        //TODO Add logger
+
     }
 }
