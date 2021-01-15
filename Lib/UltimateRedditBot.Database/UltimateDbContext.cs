@@ -7,7 +7,7 @@ namespace UltimateRedditBot.Database
 {
     public class UltimateDbContext : BaseUltimateDbContext
     {
-        public UltimateDbContext(DbContextOptions options)
+        public UltimateDbContext(DbContextOptions<UltimateDbContext> options)
             : base(options)
         {
         }

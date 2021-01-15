@@ -30,8 +30,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
             _provider = provider;
 
             _discord.MessageReceived += OnMessageReceivedAsync;
-            _discord.JoinedGuild += OnGuildJoin;
-
         }
 
         #region Methods
@@ -75,27 +73,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
 
                 await context.Channel.SendMessageAsync(errorMessage);
             }
-        }
-
-        /// <summary>
-        /// Handles the on guild joined event.
-        /// Every guild that joins has to ge registered in the database.
-        /// </summary>
-        /// <param name="socketGuild">socketGuild event</param>
-        /// <returns></returns>
-        private async Task OnGuildJoin(SocketGuild socketGuild)
-        {
-            //await _guildFactory.Insert(socketGuild.Id);
-            await UpdateBotStatus();
-        }
-
-        /// <summary>
-        /// Sets the bot status to amount of guilds it has joined.
-        /// </summary>
-        /// <returns></returns>
-        private async Task UpdateBotStatus()
-        {
-            await _discord.SetGameAsync(_discord.Guilds.Count + " servers!", type: ActivityType.Watching);
         }
 
         #endregion

@@ -32,6 +32,8 @@ namespace UltimateRedditBot.Discord.App.Discord
             _discord = discord;
             _provider = provider;
             _guildService = guildService;
+
+            _discord.JoinedGuild += OnGuildJoin;
         }
 
         #endregion
@@ -56,12 +58,7 @@ namespace UltimateRedditBot.Discord.App.Discord
             //Set the bot's status.
             await _discord.SetGameAsync($"{ _discord.Guilds.Count }, servers", type: ActivityType.Watching);
 
-            var guild = new GuildDto()
-            {
-                Id = _discord.Guilds.FirstOrDefault().Id
-            };
-
-            await _guildService.AddGuild(guild);
+            await RegisterNewGuilds();
         }
 
         /// <summary>
@@ -78,6 +75,32 @@ namespace UltimateRedditBot.Discord.App.Discord
 
             await _discord.LoginAsync(TokenType.Bot, discordToken);
             await _discord.StartAsync();
+        }
+
+        private async Task RegisterNewGuilds()
+        {
+            if (!_discord.Guilds.Any())
+                return;
+
+            var newGuildDtos = _discord.Guilds.Select(guild => new GuildDto
+            {
+                Id = guild.Id
+            });
+
+            await _guildService.RegisterNewGuilds(newGuildDtos);
+        }
+
+        /// <summary>
+        /// Handles the on guild joined event.
+        /// Every guild that joins has to ge registered in the database.
+        /// </summary>
+        /// <param name="socketGuild">socketGuild event</param>
+        /// <returns></returns>
+        private async Task OnGuildJoin(SocketGuild socketGuild)
+        {
+            var guild = await _guildService.GetById(socketGuild.Id);
+            if (guild == null)
+                await _guildService.InsertGuild(new GuildDto { Id = socketGuild.Id });
         }
 
         #endregion

@@ -13,7 +13,7 @@ namespace UltimateRedditBot.Database
                 .AddJsonFile("dataSettings.json")
                 .Build();
 
-            var dbContextBuilder = new DbContextOptionsBuilder();
+            var dbContextBuilder = new DbContextOptionsBuilder<UltimateDbContext>();
             var connectionString = configuration["ConnectionString:DefaultConnection"];
 
             dbContextBuilder.UseSqlServer(connectionString, b => b.MigrationsAssembly("UltimateRedditBot.Migrations"));

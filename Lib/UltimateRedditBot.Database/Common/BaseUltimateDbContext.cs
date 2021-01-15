@@ -30,7 +30,7 @@ namespace UltimateRedditBot.Database.Common
                 if ((change.State == EntityState.Modified || change.State == EntityState.Added) && HasUpdatedTime(change.Entity))
                 {
                     if (change.Entity is IHasUpdatedDate updateTime)
-                        updateTime.CreatedAtUTC = DateTime.UtcNow;
+                        updateTime.UpdatedAtUTC = DateTime.UtcNow;
                 }
 
                 if (change.State == EntityState.Added && HasCreationTime(change.Entity))

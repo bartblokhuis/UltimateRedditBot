@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using UltimateRedditBot.Discord.Database;
 using UltimateRedditBot.Discord.Domain.Dtos;
@@ -26,10 +28,24 @@ namespace UltimateRedditBot.Discord.App.Services
 
         #endregion
 
-        public async Task AddGuild(GuildDto guildDto)
+        public async Task InsertGuild(GuildDto guildDto)
         {
             var guild = _mapper.Map<Guild>(guildDto);
             await _guildRepository.InsertAsync(guild);
+        }
+
+        public async Task RegisterNewGuilds(IEnumerable<GuildDto> guilds)
+        {
+            var allGuilds = await _guildRepository.GetAllAsync();
+            var newGuilds = guilds.Where(dto => allGuilds.All(guild => dto.Id != guild.Id))
+                .Select(dto => _mapper.Map<Guild>(dto)).ToList();
+
+            await _guildRepository.InsertAsync(newGuilds);
+        }
+
+        public Task<Guild> GetById(ulong guildId)
+        {
+            return _guildRepository.GetByIdAsync(guildId);
         }
     }
 }
