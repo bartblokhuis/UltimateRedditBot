@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using UltimateRedditBot.Discord.App.Discord.Helpers;
 
 namespace UltimateRedditBot.Discord.App.Discord.Commands
 {
@@ -60,33 +59,22 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
             if (!msg.HasStringPrefix(prefix, ref argPos) && !msg.HasMentionPrefix(_discord.CurrentUser, ref argPos))
                 return;
 
-            var firstSpace = msg.Content.IndexOf(" ", StringComparison.Ordinal);
-
-            var command = firstSpace == -1
-                ? msg.Content.Substring(prefix.Length,
-                    msg.Content.Length - prefix.Length) //String doesn't contain a space.
-                : msg.Content.Substring(prefix.Length, firstSpace - prefix.Length);
-
-            var commandHelper = DiscordHelper.GetCommandHelperByName(command);
-            if (commandHelper is null)
-            {
-                await context.Channel.SendMessageAsync("Command does not exist");
-                return;
-            }
-
-            if (!commandHelper.IsValid(msg.Content))
-            {
-                //TODO Check the type of argument
-                await context.Channel.SendMessageAsync("To many arguments given");
-                return;
-            }
-
             //Execute the command
             var result = await _commands.ExecuteAsync(context, argPos, _provider);
 
             //If sending the message was not successful send the error message.
             if (!result.IsSuccess)
-                await context.Channel.SendMessageAsync(result.ToString());
+            {
+                var errorMessage = result.Error switch
+                {
+                    CommandError.UnknownCommand => "Unknown command",
+                    CommandError.BadArgCount => "The command has to many or not enough arguments",
+                    CommandError.Exception => "Bot error has occured, please try again. If the error keeps happening please contact support.",
+                    _ => "Failed to execute command"
+                };
+
+                await context.Channel.SendMessageAsync(errorMessage);
+            }
         }
 
         /// <summary>

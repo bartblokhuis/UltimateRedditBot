@@ -21,7 +21,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules
 
         public async Task GetSubreddits()
         {
-            await ReplyAsync("memes, funny");
         }
 
         public async Task GetSubreddits(int page)

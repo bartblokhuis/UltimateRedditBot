@@ -26,13 +26,11 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules
         [Command("setting"), Alias("s")]
         public async Task GetSetting(string setting)
         {
-            await ReplyAsync("3");
         }
 
         [Command("setting"), Alias("s")]
         public async Task SaveSettings(string setting, string value)
         {
-            await ReplyAsync("saved");
         }
 
         #endregion

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord.Commands;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 
@@ -26,7 +27,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules
         [Command("help"), Alias("help")]
         public async Task Help()
         {
-            await ReplyAsync("yes sir");
         }
 
         #endregion

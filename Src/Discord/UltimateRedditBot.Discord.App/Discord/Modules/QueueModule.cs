@@ -23,25 +23,21 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules
         [Command("r"), Alias("r")]
         public async Task AddToQueue(string subreddit)
         {
-            await ReplyAsync("Done sire");
         }
 
         [Command("r"), Alias("r")]
         public async Task AddToQueue(string subreddit, int amountOfTimes)
         {
-            await ReplyAsync($"Done {amountOfTimes} times");
         }
 
         [Command("r-remove"), Alias("r-remove")]
         public async Task RemoveFromQueue(string subreddit)
         {
-            await ReplyAsync("Removed from queue");
         }
 
         [Command("r-clear"), Alias("r-clear")]
-        public async Task ClearCueue()
+        public async Task ClearQueue()
         {
-            await ReplyAsync("Cleared queue");
         }
 
         #endregion

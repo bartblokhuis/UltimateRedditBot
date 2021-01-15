@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
-using UltimateRedditBot.Discord.App.Discord.Modules;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 
 namespace UltimateRedditBot.Discord.App.Discord
@@ -47,7 +45,7 @@ namespace UltimateRedditBot.Discord.App.Discord
             //Load the modules
             await _commands.AddModulesAsync(typeof(UltimateCommandModule).Assembly, _provider);
 
-            //Wait 1second to be sure the bot has connected to discord
+            //Wait 1second to ensure the bot has connected to discord
             await Task.Delay(1000);
 
             //Set the bot's status.
