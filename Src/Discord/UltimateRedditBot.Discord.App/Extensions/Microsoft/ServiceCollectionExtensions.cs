@@ -4,15 +4,12 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using UltimateRedditBot.Core.BaseRepository;
 using UltimateRedditBot.Discord.App.AutoMapper;
 using UltimateRedditBot.Discord.App.Discord;
 using UltimateRedditBot.Discord.App.Discord.Commands;
 using UltimateRedditBot.Discord.App.Discord.Modules;
 using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.Database;
-using UltimateRedditBot.Discord.Domain.Models;
-using UltimateRedditBot.Infra.BaseRepository;
 
 namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
 {

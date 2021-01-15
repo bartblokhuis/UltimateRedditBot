@@ -1,8 +1,6 @@
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using UltimateRedditBot.Core.Constants;
 using UltimateRedditBot.Domain.Dtos.Reddit;
@@ -49,7 +47,7 @@ namespace UltimateRedditBot.Core.Services
 
         #region Utils
 
-        private SubredditDto ParseSubReddit(string name, string responseData)
+        private static SubredditDto ParseSubReddit(string name, string responseData)
         {
             dynamic data = JObject.Parse(responseData);
 

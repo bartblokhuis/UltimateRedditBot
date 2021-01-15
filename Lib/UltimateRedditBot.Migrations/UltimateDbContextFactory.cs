@@ -22,7 +22,7 @@ namespace UltimateRedditBot.Database
         }
     }
 
-    public class UltimateDiscorDbContextFactory : IDesignTimeDbContextFactory<UltimateDiscordDbContext>
+    public class UltimateDiscordDbContextFactory : IDesignTimeDbContextFactory<UltimateDiscordDbContext>
     {
         public UltimateDiscordDbContext CreateDbContext(string[] args)
         {
@@ -30,7 +30,7 @@ namespace UltimateRedditBot.Database
                 .AddJsonFile("dataSettings.json")
                 .Build();
 
-            var dbContextBuilder = new DbContextOptionsBuilder();
+            var dbContextBuilder = new DbContextOptionsBuilder<UltimateDiscordDbContext>();
             var connectionString = configuration["ConnectionString:DiscordConnection"];
 
             dbContextBuilder.UseSqlServer(connectionString, b => b.MigrationsAssembly("UltimateRedditBot.Migrations"));

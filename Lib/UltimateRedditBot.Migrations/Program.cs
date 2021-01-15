@@ -1,5 +1,4 @@
 ﻿using System;
-using UltimateRedditBot.Database;
 
 namespace UltimateRedditBot.Migrations
 {

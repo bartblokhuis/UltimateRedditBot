@@ -6,7 +6,7 @@ namespace UltimateRedditBot.Discord.Database
 {
     public class UltimateDiscordDbContext : BaseUltimateDbContext
     {
-        public UltimateDiscordDbContext(DbContextOptions options)
+        public UltimateDiscordDbContext(DbContextOptions<UltimateDiscordDbContext> options)
             :base(options)
         {
 

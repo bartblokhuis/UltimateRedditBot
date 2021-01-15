@@ -45,13 +45,13 @@ namespace UltimateRedditBot.Database.Common
 
         #region Helpers
 
-        private bool HasUpdatedTime<TEntity>(TEntity entity)
+        private static bool HasUpdatedTime<TEntity>(TEntity entity)
         {
             var entityType = entity.GetType();
             return typeof(IHasUpdatedDate).IsAssignableFrom(entityType);
         }
 
-        private bool HasCreationTime<TEntity>(TEntity entity)
+        private static bool HasCreationTime<TEntity>(TEntity entity)
         {
             var entityType = entity.GetType();
             return typeof(IHasCreationDate).IsAssignableFrom(entityType);

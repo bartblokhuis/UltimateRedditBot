@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Discord.Commands;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 
