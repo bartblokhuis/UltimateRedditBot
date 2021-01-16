@@ -25,8 +25,6 @@ namespace UltimateRedditBot.App.Extensions.Microsoft
             services.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddAutoMapper(typeof(UltimateAutoMapperProfile));
-
-
         }
 
     }

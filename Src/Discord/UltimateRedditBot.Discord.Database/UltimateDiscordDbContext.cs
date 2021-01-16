@@ -17,5 +17,9 @@ namespace UltimateRedditBot.Discord.Database
         public DbSet<Guild> Guilds { get; set; }
 
         public DbSet<GuildSettings> GuildSettings { get; set; }
+
+        public DbSet<User> Users { get; set; }
+        
+        public DbSet<UserSettings> UserSettings { get; set; }
     }
 }

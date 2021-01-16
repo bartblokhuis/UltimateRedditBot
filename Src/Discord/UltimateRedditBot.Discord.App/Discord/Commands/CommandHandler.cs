@@ -5,6 +5,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using UltimateRedditBot.Discord.App.Discord.Constants;
 using UltimateRedditBot.Discord.App.Services;
+using UltimateRedditBot.Discord.App.Services.User;
 
 namespace UltimateRedditBot.Discord.App.Discord.Commands
 {
@@ -17,6 +18,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
         private readonly IConfiguration _config;
         private readonly IServiceProvider _provider;
         private readonly IGuildService _guildService;
+        private readonly IUserService _userService;
 
         #endregion
 
@@ -24,13 +26,14 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
             CommandService commands,
             IConfiguration config,
             IServiceProvider provider,
-            IGuildService guildService)
+            IGuildService guildService, IUserService userService)
         {
             _discord = discord;
             _commands = commands;
             _config = config;
             _provider = provider;
             _guildService = guildService;
+            _userService = userService;
 
             _discord.MessageReceived += OnMessageReceivedAsync;
         }
@@ -89,6 +92,12 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
                 var guildSettings = await _guildService.GetGuildSettingsById(id);
                 if (guildSettings is not null && !string.IsNullOrEmpty(guildSettings.Prefix))
                     prefix = guildSettings.Prefix;
+            }
+            else
+            {
+                var userSettings = await _userService.GetUserSettingsById(id);
+                if (userSettings is not null && !string.IsNullOrEmpty(userSettings.Prefix))
+                    prefix = userSettings.Prefix;
             }
 
             return prefix;

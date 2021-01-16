@@ -10,8 +10,15 @@ namespace UltimateRedditBot.Discord.App.AutoMapper
         {
             CreateMap<Guild, GuildDto>();
             CreateMap<GuildDto, Guild>();
+
             CreateMap<GuildSettings, GuildSettingsDto>();
             CreateMap<GuildSettingsDto, GuildSettings>();
+
+            CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
+
+            CreateMap<UserSettings, UserSettingsDto>();
+            CreateMap<UserSettingsDto, UserSettings>();
         }
     }
 }

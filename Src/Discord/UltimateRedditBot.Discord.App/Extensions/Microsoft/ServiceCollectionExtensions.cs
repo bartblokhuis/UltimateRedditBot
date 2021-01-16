@@ -12,6 +12,7 @@ using UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage;
 using UltimateRedditBot.Discord.App.Discord.Modules.Guild;
 using UltimateRedditBot.Discord.App.Discord.Modules.Shared;
 using UltimateRedditBot.Discord.App.Services;
+using UltimateRedditBot.Discord.App.Services.User;
 using UltimateRedditBot.Discord.Database;
 
 namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
@@ -27,6 +28,7 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
 
             services.AddAutoMapper(typeof(DiscordAutoMapperProfile));
             services.AddSingleton<IGuildService, GuildService>();
+            services.AddSingleton<IUserService, UserService>();
 
             services.AddSingleton(new CommandService(new CommandServiceConfig
                 {

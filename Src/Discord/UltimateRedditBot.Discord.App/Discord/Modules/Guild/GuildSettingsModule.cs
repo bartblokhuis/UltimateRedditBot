@@ -43,8 +43,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 
                 await ReplyAsync(guildSettings.Prefix);
             }
-
-
         }
 
         [Command("setting"), Alias("s")]
@@ -53,6 +51,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             var guild = ((SocketGuildChannel)Context.Channel).Guild;
             if (setting.Equals("Prefix", StringComparison.OrdinalIgnoreCase))
             {
+                //TODO Check if the user attempting to change the setting has the permissions to do so.
                 var guildSettings = await _guildService.GetGuildSettingsById(guild.Id);
                 if (guildSettings == null)
                 {
@@ -65,7 +64,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
                     guildSettings.Prefix = value;
 
                 await _guildService.SaveGuildSettings(guildSettings);
-
+                await ReplyAsync($"Prefix is now: {value}");
             }
         }
 
