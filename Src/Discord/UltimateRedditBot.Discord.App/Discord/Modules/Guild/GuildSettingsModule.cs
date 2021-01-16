@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Discord.Commands;
 using Discord.WebSocket;
+using UltimateRedditBot.Discord.App.Discord.Constants;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.Domain.Dtos;
@@ -36,8 +37,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
                 var guildSettings = await _guildService.GetGuildSettingsById(guild.Id);
                 if (guildSettings == null)
                 {
-                    //TODO Replace to message to default prefix
-                    await ReplyAsync("Guild settings not found.");
+                    await ReplyAsync($"Prefix: { DefaultSettings.DefaultGuildSettings.Prefix }");
                     return;
                 }
 

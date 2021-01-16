@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Discord.Commands;
+using UltimateRedditBot.Discord.App.Discord.Constants;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 using UltimateRedditBot.Discord.App.Services.User;
 using UltimateRedditBot.Discord.Domain.Dtos;
@@ -34,8 +35,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
                 var userSettings = await _userService.GetUserSettingsById(Context.User.Id);
                 if (userSettings == null)
                 {
-                    //TODO Replace to message to default prefix
-                    await ReplyAsync("User settings not found.");
+                    await ReplyAsync($"Prefix: { DefaultSettings.DefaultGuildSettings.Prefix }");
                     return;
                 }
 
@@ -48,7 +48,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
         {
             if (setting.Equals("Prefix", StringComparison.OrdinalIgnoreCase))
             {
-                //TODO Validate if the new prefix is valid
+                //TODO Validate the prefix
                 var userSettings = await _userService.GetUserSettingsById(Context.User.Id);
                 if (userSettings == null)
                 {
