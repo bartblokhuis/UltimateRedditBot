@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Discord.Commands;
 using Discord.WebSocket;
+using UltimateRedditBot.Discord.App.Discord.Constants;
+using UltimateRedditBot.Discord.App.Services;
 
 namespace UltimateRedditBot.Discord.App.Discord.Commands
 {
@@ -14,18 +16,21 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
         private readonly CommandService _commands;
         private readonly IConfiguration _config;
         private readonly IServiceProvider _provider;
+        private readonly IGuildService _guildService;
 
         #endregion
 
         public CommandHandler(DiscordSocketClient discord,
             CommandService commands,
             IConfiguration config,
-            IServiceProvider provider)
+            IServiceProvider provider,
+            IGuildService guildService)
         {
             _discord = discord;
             _commands = commands;
             _config = config;
             _provider = provider;
+            _guildService = guildService;
 
             _discord.MessageReceived += OnMessageReceivedAsync;
         }
@@ -47,10 +52,13 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
             var context = new SocketCommandContext(_discord, msg);
 
             //Ensure that the message being sent had the configured prefix.
-            //TODO Change prefix to configurable per guild
-
             var argPos = 0;
-            var prefix = _config["Prefix"];
+
+            string prefix;
+            if (context.Guild != null)
+                prefix = await GetPrefix(context.Guild.Id, true);
+            else
+                prefix = await GetPrefix(context.User.Id, false);
 
             if (!msg.HasStringPrefix(prefix, ref argPos) && !msg.HasMentionPrefix(_discord.CurrentUser, ref argPos))
                 return;
@@ -71,6 +79,19 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
 
                 await context.Channel.SendMessageAsync(errorMessage);
             }
+        }
+
+        private async Task<string> GetPrefix(ulong id, bool isGuild)
+        {
+            var prefix = DefaultSettings.DefaultGuildSettings.Prefix;
+            if (isGuild)
+            {
+                var guildSettings = await _guildService.GetGuildSettingsById(id);
+                if (guildSettings is not null && !string.IsNullOrEmpty(guildSettings.Prefix))
+                    prefix = guildSettings.Prefix;
+            }
+
+            return prefix;
         }
 
         #endregion

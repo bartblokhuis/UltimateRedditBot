@@ -22,7 +22,6 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
         {
             services.AddDbContext<UltimateDiscordDbContext>(options =>
             {
-                options.UseLazyLoadingProxies();
                 options.UseSqlServer(connectionString);
             });
 

@@ -112,7 +112,7 @@ namespace UltimateRedditBot.Core.BaseRepository
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             IQueryable<TEntity> query = _dbSet;
-            return await query.ToListAsync();
+            return await query.AsNoTracking().ToListAsync();
         }
 
         protected IQueryable<TEntity> QueryableAsync()

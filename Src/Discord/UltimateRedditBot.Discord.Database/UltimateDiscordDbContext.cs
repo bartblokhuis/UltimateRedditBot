@@ -14,6 +14,8 @@ namespace UltimateRedditBot.Discord.Database
 
         public DbSet<DiscordChannel> DiscordChannels { get; set; }
 
-        public DbSet<DiscordChannel> Guilds { get; set; }
+        public DbSet<Guild> Guilds { get; set; }
+
+        public DbSet<GuildSettings> GuildSettings { get; set; }
     }
 }

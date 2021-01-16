@@ -14,15 +14,17 @@ namespace UltimateRedditBot.Discord.App.Services
         #region Fields
 
         private readonly IBaseRepository<Guild, ulong, UltimateDiscordDbContext> _guildRepository;
+        private readonly IBaseRepository<GuildSettings, int, UltimateDiscordDbContext> _guildSettingsRepository;
         private readonly IMapper _mapper;
 
         #endregion
 
         #region Constructor
 
-        public GuildService(IMapper mapper, IBaseRepository<Guild, ulong, UltimateDiscordDbContext> guildRepository)
+        public GuildService(IMapper mapper, IBaseRepository<Guild, ulong, UltimateDiscordDbContext> guildRepository, IBaseRepository<GuildSettings, int, UltimateDiscordDbContext> guildSettingsRepository)
         {
             _guildRepository = guildRepository;
+            _guildSettingsRepository = guildSettingsRepository;
             _mapper = mapper;
         }
 
@@ -46,6 +48,25 @@ namespace UltimateRedditBot.Discord.App.Services
         public Task<Guild> GetById(ulong guildId)
         {
             return _guildRepository.GetByIdAsync(guildId);
+        }
+
+        public async Task<GuildSettingsDto> GetGuildSettingsById(ulong guildId)
+        {
+            //TODO Improve db call
+            var settings = await _guildSettingsRepository.GetAllAsync();
+            var guildSettings = settings.FirstOrDefault(setting => setting.GuildId == guildId);
+
+            return guildSettings == null ? null : _mapper.Map<GuildSettingsDto>(guildSettings);
+        }
+
+        public async Task SaveGuildSettings(GuildSettingsDto guildSettingsDto)
+        {
+            var guildSettings = _mapper.Map<GuildSettings>(guildSettingsDto);
+
+            if (guildSettings.Id != 0)
+                await _guildSettingsRepository.UpdateAsync(guildSettings);
+            else
+                await _guildSettingsRepository.InsertAsync(guildSettings);
         }
     }
 }

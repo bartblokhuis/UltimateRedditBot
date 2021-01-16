@@ -12,5 +12,9 @@ namespace UltimateRedditBot.Discord.App.Services
         Task RegisterNewGuilds(IEnumerable<GuildDto> guilds);
 
         Task<Guild> GetById(ulong guildId);
+
+        Task<GuildSettingsDto> GetGuildSettingsById(ulong guildId);
+
+        Task SaveGuildSettings(GuildSettingsDto guildSettingsDto);
     }
 }

@@ -53,7 +53,7 @@ namespace UltimateRedditBot.Discord.App.Discord
             await _commands.AddModulesAsync(typeof(UltimateCommandModule).Assembly, _provider);
 
             //Wait 1second to ensure the bot has connected to discord
-            await Task.Delay(1000);
+            await Task.Delay(2000);
 
             //Set the bot's status.
             await _discord.SetGameAsync($"{ _discord.Guilds.Count }, servers", type: ActivityType.Watching);

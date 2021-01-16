@@ -1,4 +1,5 @@
-﻿using UltimateRedditBot.Domain.Models.Common;
+﻿using System;
+using UltimateRedditBot.Domain.Models.Common;
 
 namespace UltimateRedditBot.Discord.Domain.Models
 {
