@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Discord.Commands;
+using UltimateRedditBot.App.Services.Queue;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
@@ -8,13 +9,16 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
     {
         #region Fields
 
-
+        private readonly IQueueService _queueService;
 
         #endregion
 
         #region Constructor
 
-
+        public DirectMessagesQueueModule(IQueueService queueService)
+        {
+            _queueService = queueService;
+        }
 
         #endregion
 
@@ -23,6 +27,8 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
         [Command("r"), Alias("r")]
         public async Task AddToQueue(string subreddit)
         {
+            var result = await _queueService.AddToQueue("DISCORD.DM", Context.User.Id, subreddit, 1);
+            await ReplyAsync(result);
         }
 
         [Command("r"), Alias("r")]

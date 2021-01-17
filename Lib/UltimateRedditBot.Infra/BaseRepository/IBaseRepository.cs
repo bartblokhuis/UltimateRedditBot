@@ -3,22 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Database;
 
 namespace UltimateRedditBot.Infra.BaseRepository
 {
     public interface IBaseRepository<TEntity> : IBaseRepository<TEntity, int>
+        where TEntity : class
     {
 
     }
 
     public interface IBaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey, UltimateDbContext>
+        where TEntity : class
     {
 
     }
 
     public interface IBaseRepository<TEntity, TKey, TDbContext>
+        where TEntity : class
     {
+        public DbSet<TEntity> Table { get; }
+
         Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
             string includeProperties = "");

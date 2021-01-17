@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using UltimateRedditBot.App.Services.Queue;
+using UltimateRedditBot.App.Services.Reddit;
 using UltimateRedditBot.Core.AutoMapper;
 using UltimateRedditBot.Core.BaseRepository;
 using UltimateRedditBot.Core.Services;
@@ -21,6 +23,9 @@ namespace UltimateRedditBot.App.Extensions.Microsoft
 
             services.AddHttpClient();
             services.AddSingleton<IRedditApiService, RedditApiService>();
+            services.AddSingleton<IQueueManager, QueueManager>();
+            services.AddSingleton<IQueueService, QueueService>();
+            services.AddSingleton<IGenericSettingService, GenericSettingService>();
             services.AddScoped(typeof(IBaseRepository<,,>), typeof(BaseRepository<,,>));
             services.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));

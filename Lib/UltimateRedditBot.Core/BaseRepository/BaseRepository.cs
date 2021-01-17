@@ -39,7 +39,10 @@ namespace UltimateRedditBot.Core.BaseRepository
         {
             _context = context;
             _dbSet = context.Set<TEntity>();
+            Table = _dbSet;
         }
+
+        public DbSet<TEntity> Table { get; }
 
         public virtual async Task<IEnumerable<TEntity>> GetAsync(
             Expression<Func<TEntity, bool>> filter = null,
