@@ -2,11 +2,14 @@
 
 namespace UltimateRedditBot.Discord.App.Discord.Constants
 {
-    public static class DefaultSettings
+    public static class DiscordSettings
     {
         public static readonly GuildSettingsDto DefaultGuildSettings = new GuildSettingsDto()
         {
             Prefix = "$"
         };
+
+        public const string GenericSettingDmGroup = "DISCORD.DM";
+        public const string GenericSettingGuildGroup = "DISCORD.GUILD";
     }
 }

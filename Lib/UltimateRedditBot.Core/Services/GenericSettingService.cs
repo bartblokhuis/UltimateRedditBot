@@ -24,9 +24,13 @@ namespace UltimateRedditBot.Core.Services
 
         #endregion
 
-        public async Task<TObj> GetSettingValueByKeyGroupAndKey<TObj>(string keyGroup, string key)
+        public async Task<TObj> GetSettingValueByKeyGroupAndKey<TObj>(string keyGroup, string key, string entityId)
         {
-            var setting = await GetSettingByKeyGroupAndKey(keyGroup, key);
+            var setting = await GetSettingByKeyGroupAndKey(keyGroup, key, entityId);
+
+            if (setting == null)
+                return default;
+
 
             if (typeof(TObj).BaseType == typeof(Enum))
             {
@@ -36,17 +40,15 @@ namespace UltimateRedditBot.Core.Services
             return (TObj)Convert.ChangeType(setting.Value, typeof(TObj));
         }
 
-        public Task<GenericSetting> GetSettingByKeyGroupAndKey(string keyGroup, string key)
+        public Task<GenericSetting> GetSettingByKeyGroupAndKey(string keyGroup, string key, string entityId)
         {
-            var setting = _genericSettingRepo.Table.FirstOrDefaultAsync(genericSetting =>
-                genericSetting.KeyGroup.Equals(keyGroup) && genericSetting.Key.Equals(key));
-
-            return setting;
+            return _genericSettingRepo.Table.FirstOrDefaultAsync(genericSetting =>
+                genericSetting.KeyGroup.Equals(keyGroup) && genericSetting.Key.Equals(key) && genericSetting.EntityId.Equals(entityId));
         }
 
         public Task SaveSetting(GenericSetting setting)
         {
-            return _genericSettingRepo.InsertAsync(setting);
+            return setting.Id == 0 ? _genericSettingRepo.InsertAsync(setting) : _genericSettingRepo.UpdateAsync(setting);
         }
     }
 }

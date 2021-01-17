@@ -86,7 +86,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
 
         private async Task<string> GetPrefix(ulong id, bool isGuild)
         {
-            var prefix = DefaultSettings.DefaultGuildSettings.Prefix;
+            var prefix = DiscordSettings.DefaultGuildSettings.Prefix;
             if (isGuild)
             {
                 var guildSettings = await _guildService.GetGuildSettingsById(id);

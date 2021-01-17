@@ -1,12 +1,12 @@
-using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using UltimateRedditBot.App.Services.Reddit;
+using Newtonsoft.Json.Linq;
 using UltimateRedditBot.Core.Constants;
 using UltimateRedditBot.Domain.Dtos.Reddit;
+using UltimateRedditBot.Infra.Services;
 
-namespace UltimateRedditBot.App.Services.Reddit
+namespace UltimateRedditBot.Core.Services
 {
     public class RedditApiService : IRedditApiService
     {
