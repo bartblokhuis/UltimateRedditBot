@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using UltimateRedditBot.App.Services.Events;
 using UltimateRedditBot.Core.Constants;
 using UltimateRedditBot.Infra.Services;
 
@@ -11,16 +12,18 @@ namespace UltimateRedditBot.App.Services.Queue
         private readonly IQueueManager _queueManager;
         private readonly IGenericSettingService _genericSettingService;
         private readonly ISubredditService _subredditService;
+        private readonly IEventPublisher _eventPublisher;
 
         #endregion
 
         #region Constructor
 
-        public QueueService(IQueueManager queueManager, IGenericSettingService genericSettingService, ISubredditService subredditService)
+        public QueueService(IQueueManager queueManager, IGenericSettingService genericSettingService, ISubredditService subredditService, IEventPublisher eventPublisher)
         {
             _queueManager = queueManager;
             _genericSettingService = genericSettingService;
             _subredditService = subredditService;
+            _eventPublisher = eventPublisher;
         }
 
         #endregion
@@ -44,8 +47,9 @@ namespace UltimateRedditBot.App.Services.Queue
                 amountOfTimes = max;
 
             var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
+            await _eventPublisher.Publish(subreddit);
             if (subreddit == null)
-                return "Subreddit doens't exist";
+                return "Subreddit doesn't exist";
 
             return string.Empty;
         }
