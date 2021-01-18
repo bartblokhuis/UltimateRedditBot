@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Discord.Commands;
 using UltimateRedditBot.App.Services.Queue;
+using UltimateRedditBot.Discord.App.Discord.Constants;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
+using UltimateRedditBot.Discord.Domain.Queue;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
 {
@@ -27,7 +29,12 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
         [Command("r"), Alias("r")]
         public async Task AddToQueue(string subreddit)
         {
-            var result = await _queueService.AddToQueue("DISCORD.DM", Context.User.Id, subreddit, 1);
+            var options = new AddToQueueDiscordOptions()
+            {
+                Group = DiscordSettings.GenericSettingDmGroup,
+                ClientId = Context.User.Id
+            };
+            var result = await _queueService.AddToQueue(options, subreddit, 1);
             await ReplyAsync(result);
         }
 

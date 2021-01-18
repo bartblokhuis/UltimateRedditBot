@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
-using UltimateRedditBot.App.Services.Events;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using UltimateRedditBot.Core.Constants;
+using UltimateRedditBot.Domain.Enums;
+using UltimateRedditBot.Domain.Queue;
 using UltimateRedditBot.Infra.Services;
 
 namespace UltimateRedditBot.App.Services.Queue
@@ -9,51 +12,63 @@ namespace UltimateRedditBot.App.Services.Queue
     {
         #region Fields
 
-        private readonly IQueueManager _queueManager;
         private readonly IGenericSettingService _genericSettingService;
         private readonly ISubredditService _subredditService;
-        private readonly IEventPublisher _eventPublisher;
+        private readonly IQueueManager _queueManager;
 
         #endregion
 
         #region Constructor
 
-        public QueueService(IQueueManager queueManager, IGenericSettingService genericSettingService, ISubredditService subredditService, IEventPublisher eventPublisher)
+        public QueueService(IGenericSettingService genericSettingService, ISubredditService subredditService, IQueueManager queueManager)
         {
-            _queueManager = queueManager;
             _genericSettingService = genericSettingService;
             _subredditService = subredditService;
-            _eventPublisher = eventPublisher;
+            _queueManager = queueManager;
         }
 
         #endregion
 
-        #region Methods
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="group"></param>
-        /// <param name="id"></param>
-        /// <param name="subreddit"></param>
-        /// <param name="amountOfTimes">The amount of times a subreddit post is being requested</param>
-        /// <returns></returns>
-        public async Task<string> AddToQueue(string group, ulong id, string subredditName, int amountOfTimes)
+        public virtual async Task<string> AddToQueue<T>(T options, string subredditName, int amountOfTimes)
+            where T : IAddToQueueOptions
         {
-            var max = await _genericSettingService.GetSettingValueByKeyGroupAndKey<int>(group,
-                GenericSettingKeyConstants.BulkSettingKey, id.ToString());
+            var max = await _genericSettingService.GetSettingValueByKeyGroupAndKey<int>(options.Group,
+                GenericSettingKeyConstants.BulkSettingKey, options.ClientId.ToString());
 
             if (max > amountOfTimes)
                 amountOfTimes = max;
 
             var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
-            await _eventPublisher.Publish(subreddit);
             if (subreddit == null)
                 return "Subreddit doesn't exist";
+
+            var queueClient = FindQueueClient(1);
 
             return string.Empty;
         }
 
-        #endregion
+        protected virtual async Task<QueueItem> PrepareQueueItem(string subredditName, int amountOfPosts = 1)
+        {
+            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
+            return new QueueItem()
+            {
+                Id = Guid.NewGuid(),
+                Sort = Sort.Hot,
+                PostType = PostType.Gif,
+                SubredditDto = subreddit,
+                AmountOfPosts = amountOfPosts
+            };
+        }
+
+        /*protected async Task<T> PrepareBaseQueueClient<T>()
+            where T : IQueueClient
+        {
+
+        }*/
+
+        protected virtual IQueueClient FindQueueClient(ulong id)
+        {
+            return null;
+        }
     }
 }

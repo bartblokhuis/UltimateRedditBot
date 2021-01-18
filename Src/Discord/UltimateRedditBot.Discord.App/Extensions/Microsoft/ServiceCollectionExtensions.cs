@@ -4,7 +4,9 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using UltimateRedditBot.App.Services.Events;
+using UltimateRedditBot.App.Services.Queue;
 using UltimateRedditBot.Discord.App.AutoMapper;
 using UltimateRedditBot.Discord.App.Discord;
 using UltimateRedditBot.Discord.App.Discord.Commands;
@@ -12,6 +14,7 @@ using UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage;
 using UltimateRedditBot.Discord.App.Discord.Modules.Guild;
 using UltimateRedditBot.Discord.App.Discord.Modules.Shared;
 using UltimateRedditBot.Discord.App.Services;
+using UltimateRedditBot.Discord.App.Services.Queue;
 using UltimateRedditBot.Discord.App.Services.User;
 using UltimateRedditBot.Discord.Database;
 
@@ -29,6 +32,7 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
             services.AddAutoMapper(typeof(DiscordAutoMapperProfile));
             services.AddSingleton<IGuildService, GuildService>();
             services.AddSingleton<IUserService, UserService>();
+            services.Replace(ServiceDescriptor.Singleton<IQueueService, DiscordQueueService>());
 
             services.AddSingleton(new CommandService(new CommandServiceConfig
                 {

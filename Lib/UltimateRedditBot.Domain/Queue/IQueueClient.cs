@@ -4,7 +4,7 @@ namespace UltimateRedditBot.Domain.Queue
 {
     public interface IQueueClient
     {
-        ulong QueueClientId { get; set; }
+        ulong ClientId { get; set; }
 
         IEnumerable<QueueItem> QueueItems { get; set; }
 
