@@ -13,6 +13,7 @@ using UltimateRedditBot.Discord.App.Discord.Commands;
 using UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage;
 using UltimateRedditBot.Discord.App.Discord.Modules.Guild;
 using UltimateRedditBot.Discord.App.Discord.Modules.Shared;
+using UltimateRedditBot.Discord.App.Events;
 using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.App.Services.Queue;
 using UltimateRedditBot.Discord.App.Services.User;
@@ -32,6 +33,8 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
             services.AddAutoMapper(typeof(DiscordAutoMapperProfile));
             services.AddSingleton<IGuildService, GuildService>();
             services.AddSingleton<IUserService, UserService>();
+
+            services.AddSingleton<IConsumer<QueueItemPostReceived>, DiscordQueueItemReceived>();
             services.Replace(ServiceDescriptor.Singleton<IQueueService, DiscordQueueService>());
 
             services.AddSingleton(new CommandService(new CommandServiceConfig

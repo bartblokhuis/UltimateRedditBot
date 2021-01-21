@@ -61,5 +61,28 @@ namespace UltimateRedditBot.Domain.Dtos.Reddit
 
         #endregion
 
+        #region Methods
+
+        public PostType GetPostType()
+        {
+            if (Url is null)
+                return PostType;
+
+            var url = Url.ToString();
+
+            if (url.Contains(".gif") || url.Contains("https://gfycat") || url.Contains("https://redgifs"))
+                PostType = PostType.Gif;
+
+            if (url.Contains(".jpg") || url.Contains(".png") || url.Contains(".jpeg"))
+                PostType = PostType.Gif;
+
+            if (url.Contains(".mp4"))
+                PostType = PostType.Video;
+
+            return PostType;
+        }
+
+        #endregion
+
     }
 }

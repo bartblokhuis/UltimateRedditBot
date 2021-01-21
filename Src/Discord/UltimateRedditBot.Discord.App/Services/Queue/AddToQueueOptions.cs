@@ -1,6 +1,6 @@
 ﻿using UltimateRedditBot.Domain.Queue;
 
-namespace UltimateRedditBot.Discord.Domain.Queue
+namespace UltimateRedditBot.Discord.App.Services.Queue
 {
     public interface IAddToQueueDiscordOptions : IAddToQueueOptions
     {

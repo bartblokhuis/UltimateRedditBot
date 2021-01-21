@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UltimateRedditBot.App.Services.Events;
 using UltimateRedditBot.App.Services.Queue;
-using UltimateRedditBot.Discord.Domain.Queue;
 using UltimateRedditBot.Domain.Queue;
 using UltimateRedditBot.Infra.Services;
 
@@ -14,15 +14,19 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
         #region Fields
 
         private readonly IQueueManager _queueManager;
+        private IRedditApiService _redditApiService;
+        private IEventPublisher _eventPublisher;
 
         #endregion
 
         #region Constructor
 
-        public DiscordQueueService(IGenericSettingService genericSettingService, ISubredditService subredditService, IQueueManager queueManager)
+        public DiscordQueueService(IGenericSettingService genericSettingService, ISubredditService subredditService, IQueueManager queueManager, IRedditApiService redditApiService, IEventPublisher eventPublisher)
             : base(genericSettingService, subredditService, queueManager)
         {
             _queueManager = queueManager;
+            _redditApiService = redditApiService;
+            _eventPublisher = eventPublisher;
         }
 
         #endregion
@@ -80,12 +84,13 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
             return queueClients.FirstOrDefault(x => x.Group == group && x.ClientId == clientId);
         }
 
-        private static DiscordQueueClient CreateDiscordQueueClient(AddToQueueDiscordOptions options)
+        private DiscordQueueClient CreateDiscordQueueClient(AddToQueueDiscordOptions options)
         {
-            return new()
+            return new(_redditApiService, _eventPublisher)
             {
                 Group = options.Group,
                 ClientId = options.ClientId,
+                ChannelId = options.ChannelId,
                 QueueItems = new List<QueueItem>()
             };
         }

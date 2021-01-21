@@ -3,7 +3,7 @@ using Discord.Commands;
 using UltimateRedditBot.App.Services.Queue;
 using UltimateRedditBot.Discord.App.Discord.Constants;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
-using UltimateRedditBot.Discord.Domain.Queue;
+using UltimateRedditBot.Discord.App.Services.Queue;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
 {
@@ -41,6 +41,13 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
         [Command("r"), Alias("r")]
         public async Task AddToQueue(string subreddit, int amountOfTimes)
         {
+            var options = new AddToQueueDiscordOptions()
+            {
+                Group = DiscordSettings.GenericSettingDmGroup,
+                ClientId = Context.User.Id
+            };
+            var result = await _queueService.AddToQueue(options, subreddit, amountOfTimes);
+            await ReplyAsync(result);
         }
 
         [Command("r-remove"), Alias("r-remove")]

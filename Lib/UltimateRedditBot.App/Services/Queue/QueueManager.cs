@@ -24,6 +24,8 @@ namespace UltimateRedditBot.App.Services.Queue
         public void AddQueueClient(IQueueClient queueClient)
         {
             _queueClients.Add(queueClient);
+            var  client = queueClient as QueueClient;
+            client.Start();
         }
 
         public void UpdateQueueClient(IQueueClient queueClient)

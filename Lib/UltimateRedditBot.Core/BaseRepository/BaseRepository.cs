@@ -125,7 +125,15 @@ namespace UltimateRedditBot.Core.BaseRepository
 
         private async Task SaveChanges()
         {
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+
+            }
+
         }
 
         public int Count()

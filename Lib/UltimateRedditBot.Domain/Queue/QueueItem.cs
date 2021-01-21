@@ -18,6 +18,8 @@ namespace UltimateRedditBot.Domain.Queue
 
         public int AmountOfPosts { get; set; }
 
+        public string LastUsedPostName { get; set; }
+
         #endregion
     }
 }

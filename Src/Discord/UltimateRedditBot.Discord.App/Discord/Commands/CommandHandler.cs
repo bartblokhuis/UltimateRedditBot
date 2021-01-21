@@ -67,21 +67,31 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
                 return;
 
             //Execute the command
-            var result = await _commands.ExecuteAsync(context, argPos, _provider);
-
-            //If sending the message was not successful send the error message.
-            if (!result.IsSuccess)
+            try
             {
-                var errorMessage = result.Error switch
+                var result = await _commands.ExecuteAsync(context, argPos, _provider);
+                //If sending the message was not successful send the error message.
+                if (!result.IsSuccess)
                 {
-                    CommandError.UnknownCommand => "Unknown command",
-                    CommandError.BadArgCount => "The command has to many or not enough arguments",
-                    CommandError.Exception => "Bot error has occured, please try again. If the error keeps happening please contact support.",
-                    _ => "Failed to execute command"
-                };
+                    var errorMessage = result.Error switch
+                    {
+                        CommandError.UnknownCommand => "Unknown command",
+                        CommandError.BadArgCount => "The command has to many or not enough arguments",
+                        CommandError.Exception =>
+                            "Bot error has occured, please try again. If the error keeps happening please contact support.",
+                        _ => "Failed to execute command"
+                    };
 
-                await context.Channel.SendMessageAsync(errorMessage);
+                    await context.Channel.SendMessageAsync(errorMessage);
+                }
             }
+            catch (Exception e)
+            {
+                
+            }
+
+
+
         }
 
         private async Task<string> GetPrefix(ulong id, bool isGuild)
