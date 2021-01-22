@@ -7,7 +7,7 @@ using UltimateRedditBot.Discord.Domain.Dtos;
 using UltimateRedditBot.Discord.Domain.Models;
 using UltimateRedditBot.Infra.BaseRepository;
 
-namespace UltimateRedditBot.Discord.App.Services
+namespace UltimateRedditBot.Discord.App.Services.Guild
 {
     public class GuildService : IGuildService
     {

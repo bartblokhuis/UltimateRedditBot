@@ -4,7 +4,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Constants
 {
     public static class DiscordSettings
     {
-        public static readonly GuildSettingsDto DefaultGuildSettings = new GuildSettingsDto()
+        public static readonly GuildSettingsDto DefaultGuildSettings = new()
         {
             Prefix = "$"
         };

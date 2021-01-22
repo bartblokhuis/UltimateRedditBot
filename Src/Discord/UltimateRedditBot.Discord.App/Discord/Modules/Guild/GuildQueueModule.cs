@@ -29,7 +29,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
         [Command("r"), Alias("r")]
         public async Task AddToQueue(string subreddit)
         {
-            var options = new AddToQueueDiscordOptions()
+            var options = new AddToQueueDiscordOptions
             {
                 Group = DiscordSettings.GenericSettingGuildGroup,
                 ClientId = Context.Guild.Id,
@@ -42,7 +42,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
         [Command("r"), Alias("r")]
         public async Task AddToQueue(string subreddit, int amountOfTimes)
         {
-            var options = new AddToQueueDiscordOptions()
+            var options = new AddToQueueDiscordOptions
             {
                 Group = DiscordSettings.GenericSettingGuildGroup,
                 ClientId = Context.Guild.Id,

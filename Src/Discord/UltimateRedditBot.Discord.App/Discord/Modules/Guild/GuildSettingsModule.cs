@@ -6,6 +6,7 @@ using UltimateRedditBot.Core.Constants;
 using UltimateRedditBot.Discord.App.Discord.Constants;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 using UltimateRedditBot.Discord.App.Services;
+using UltimateRedditBot.Discord.App.Services.Guild;
 using UltimateRedditBot.Discord.Domain.Dtos;
 using UltimateRedditBot.Domain.Models.Settings;
 using UltimateRedditBot.Infra.Services;
@@ -104,11 +105,11 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             var guildId = Context.Guild.Id;
             var bulkSetting =
                 await _genericSettingService.GetSettingByKeyGroupAndKey(DiscordSettings.GenericSettingGuildGroup,
-                    GenericSettingKeyConstants.BulkSettingKey, guildId.ToString()) ?? new GenericSetting()
+                    GenericSettingKeyConstants.BulkSettingKey, guildId.ToString()) ?? new GenericSetting
                 {
                     KeyGroup = DiscordSettings.GenericSettingGuildGroup,
                     Key = GenericSettingKeyConstants.BulkSettingKey,
-                    EntityId = guildId.ToString(),
+                    EntityId = guildId.ToString()
                 };
 
             bulkSetting.Value = value;

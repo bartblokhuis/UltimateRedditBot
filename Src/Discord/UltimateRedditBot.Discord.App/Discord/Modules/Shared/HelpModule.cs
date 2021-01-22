@@ -14,11 +14,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 
         #region Constructor
 
-        public HelpModule()
-        {
-
-        }
-
         #endregion
 
         #region Methods

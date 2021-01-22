@@ -100,11 +100,11 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
             var userId = Context.User.Id;
             var bulkSetting =
                 await _genericSettingService.GetSettingByKeyGroupAndKey(DiscordSettings.GenericSettingDmGroup,
-                    GenericSettingKeyConstants.BulkSettingKey, userId.ToString()) ?? new GenericSetting()
+                    GenericSettingKeyConstants.BulkSettingKey, userId.ToString()) ?? new GenericSetting
                 {
                     KeyGroup = DiscordSettings.GenericSettingDmGroup,
                     Key = GenericSettingKeyConstants.BulkSettingKey,
-                    EntityId = userId.ToString(),
+                    EntityId = userId.ToString()
                 };
 
             bulkSetting.Value = value;

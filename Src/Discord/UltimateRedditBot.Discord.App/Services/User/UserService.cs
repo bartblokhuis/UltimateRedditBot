@@ -45,7 +45,7 @@ namespace UltimateRedditBot.Discord.App.Services.User
             var user = await _userRepository.GetByIdAsync(userSettingsDto.UserId);
             if (user == null)
             {
-                await _userRepository.InsertAsync(new Domain.Models.User()
+                await _userRepository.InsertAsync(new Domain.Models.User
                 {
                     Id = userSettingsDto.UserId
                 });

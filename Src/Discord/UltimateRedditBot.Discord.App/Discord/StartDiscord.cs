@@ -7,6 +7,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 using UltimateRedditBot.Discord.App.Services;
+using UltimateRedditBot.Discord.App.Services.Guild;
 using UltimateRedditBot.Discord.Domain.Dtos;
 
 namespace UltimateRedditBot.Discord.App.Discord

@@ -15,6 +15,7 @@ using UltimateRedditBot.Discord.App.Discord.Modules.Guild;
 using UltimateRedditBot.Discord.App.Discord.Modules.Shared;
 using UltimateRedditBot.Discord.App.Events;
 using UltimateRedditBot.Discord.App.Services;
+using UltimateRedditBot.Discord.App.Services.Guild;
 using UltimateRedditBot.Discord.App.Services.Queue;
 using UltimateRedditBot.Discord.App.Services.User;
 using UltimateRedditBot.Discord.Database;

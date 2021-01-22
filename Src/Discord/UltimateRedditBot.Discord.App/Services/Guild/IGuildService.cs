@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UltimateRedditBot.Discord.Domain.Dtos;
-using UltimateRedditBot.Discord.Domain.Models;
 
-namespace UltimateRedditBot.Discord.App.Services
+namespace UltimateRedditBot.Discord.App.Services.Guild
 {
     public interface IGuildService
     {
@@ -11,7 +10,7 @@ namespace UltimateRedditBot.Discord.App.Services
 
         Task RegisterNewGuilds(IEnumerable<GuildDto> guilds);
 
-        Task<Guild> GetById(ulong guildId);
+        Task<Domain.Models.Guild> GetById(ulong guildId);
 
         Task<GuildSettingsDto> GetGuildSettingsById(ulong guildId);
 

@@ -9,23 +9,20 @@ namespace UltimateRedditBot.App.Services.Queue
     {
         #region Fields
 
-        private List<IQueueClient> _queueClients = new List<IQueueClient>();
+        private readonly List<IQueueClient> _queueClients = new();
 
         #endregion
 
         #region Constructor
-
-        public QueueManager()
-        {
-        }
 
         #endregion
 
         public void AddQueueClient(IQueueClient queueClient)
         {
             _queueClients.Add(queueClient);
-            var  client = queueClient as QueueClient;
-            client.Start();
+            var client = queueClient as QueueClient;
+
+            client?.Start();
         }
 
         public void UpdateQueueClient(IQueueClient queueClient)

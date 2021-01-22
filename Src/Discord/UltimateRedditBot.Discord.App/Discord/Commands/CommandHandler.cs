@@ -5,6 +5,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using UltimateRedditBot.Discord.App.Discord.Constants;
 using UltimateRedditBot.Discord.App.Services;
+using UltimateRedditBot.Discord.App.Services.Guild;
 using UltimateRedditBot.Discord.App.Services.User;
 
 namespace UltimateRedditBot.Discord.App.Discord.Commands
@@ -87,7 +88,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
             }
             catch (Exception e)
             {
-                
+
             }
 
 

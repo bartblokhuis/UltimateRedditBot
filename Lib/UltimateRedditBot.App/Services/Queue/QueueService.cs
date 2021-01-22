@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using UltimateRedditBot.Core.Constants;
 using UltimateRedditBot.Domain.Enums;
@@ -50,7 +49,7 @@ namespace UltimateRedditBot.App.Services.Queue
         protected virtual async Task<QueueItem> PrepareQueueItem(string subredditName, int amountOfPosts = 1)
         {
             var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
-            return new QueueItem()
+            return new QueueItem
             {
                 Id = Guid.NewGuid(),
                 Sort = Sort.Hot,

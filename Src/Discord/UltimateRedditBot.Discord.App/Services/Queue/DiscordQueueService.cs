@@ -14,8 +14,8 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
         #region Fields
 
         private readonly IQueueManager _queueManager;
-        private IRedditApiService _redditApiService;
-        private IEventPublisher _eventPublisher;
+        private readonly IRedditApiService _redditApiService;
+        private readonly IEventPublisher _eventPublisher;
 
         #endregion
 
@@ -60,7 +60,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
             {
                 existingQueueItem.AmountOfPosts += amountOfTimes;
                 _queueManager.UpdateQueueClient(queueClient);
-                return String.Empty;
+                return string.Empty;
             }
 
             var newQeueItem = await PrepareQueueItem(subredditName, amountOfTimes);
@@ -78,13 +78,10 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
         private IQueueClient FindQueueClient(string group, ulong clientId)
         {
             var queueClients = _queueManager.GetQueueClients().OfType<IDiscordQueueClient>().ToList();
-            if (!queueClients.Any())
-                return null;
-
-            return queueClients.FirstOrDefault(x => x.Group == group && x.ClientId == clientId);
+            return !queueClients.Any() ? null : queueClients.FirstOrDefault(x => x.Group == @group && x.ClientId == clientId);
         }
 
-        private DiscordQueueClient CreateDiscordQueueClient(AddToQueueDiscordOptions options)
+        private DiscordQueueClient CreateDiscordQueueClient(IAddToQueueDiscordOptions options)
         {
             return new(_redditApiService, _eventPublisher)
             {

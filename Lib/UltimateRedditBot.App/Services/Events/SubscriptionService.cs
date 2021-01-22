@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
-using UltimateRedditBot.Infra.Services;
 
 namespace UltimateRedditBot.App.Services.Events
 {

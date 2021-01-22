@@ -29,7 +29,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
         [Command("r"), Alias("r")]
         public async Task AddToQueue(string subreddit)
         {
-            var options = new AddToQueueDiscordOptions()
+            var options = new AddToQueueDiscordOptions
             {
                 Group = DiscordSettings.GenericSettingDmGroup,
                 ClientId = Context.User.Id
@@ -41,7 +41,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
         [Command("r"), Alias("r")]
         public async Task AddToQueue(string subreddit, int amountOfTimes)
         {
-            var options = new AddToQueueDiscordOptions()
+            var options = new AddToQueueDiscordOptions
             {
                 Group = DiscordSettings.GenericSettingDmGroup,
                 ClientId = Context.User.Id
