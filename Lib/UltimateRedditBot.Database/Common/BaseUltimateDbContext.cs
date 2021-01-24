@@ -27,17 +27,15 @@ namespace UltimateRedditBot.Database.Common
 
             foreach (var change in changes)
             {
-                if ((change.State == EntityState.Modified || change.State == EntityState.Added) && HasUpdatedTime(change.Entity))
-                {
-                    if (change.Entity is IHasUpdatedDate updateTime)
-                        updateTime.UpdatedAtUTC = DateTime.UtcNow;
-                }
+                if ((change.State == EntityState.Modified || change.State == EntityState.Added) && HasUpdatedTime(change.Entity) && change.Entity is IHasUpdatedDate updateTime)
+                    updateTime.UpdatedAtUTC = DateTime.UtcNow;
 
-                if (change.State == EntityState.Added && HasCreationTime(change.Entity))
-                {
-                    if (change.Entity is IHasCreationDate creationTime)
-                        creationTime.CreatedAtUTC = DateTime.UtcNow;
-                }
+
+                if (change.State != EntityState.Added || !HasCreationTime(change.Entity))
+                    continue;
+
+                if (change.Entity is IHasCreationDate creationTime)
+                    creationTime.CreatedAtUTC = DateTime.UtcNow;
             }
 
             return base.SaveChangesAsync(cancellationToken);

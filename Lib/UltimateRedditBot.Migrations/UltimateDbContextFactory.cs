@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using UltimateRedditBot.Database;
 using UltimateRedditBot.Discord.Database;
 
-namespace UltimateRedditBot.Database
+namespace UltimateRedditBot.Migrations
 {
     public class UltimateDbContextFactory: IDesignTimeDbContextFactory<UltimateDbContext>
     {

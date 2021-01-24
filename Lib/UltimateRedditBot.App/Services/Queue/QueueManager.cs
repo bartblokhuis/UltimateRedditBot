@@ -28,6 +28,13 @@ namespace UltimateRedditBot.App.Services.Queue
         public void UpdateQueueClient(IQueueClient queueClient)
         {
             var oldClient = _queueClients.FirstOrDefault(client => client.ClientId == queueClient.ClientId);
+            if (oldClient == null)
+            {
+                AddQueueClient(queueClient);
+                return;
+            }
+
+            oldClient.QueueItems = queueClient.QueueItems;
         }
 
         public IEnumerable<IQueueClient> GetQueueClients()

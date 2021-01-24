@@ -13,7 +13,7 @@ namespace UltimateRedditBot.Discord.App.Services.Guild
     {
         #region Fields
 
-        private readonly IBaseRepository<Guild, ulong, UltimateDiscordDbContext> _guildRepository;
+        private readonly IBaseRepository<Domain.Models.Guild, ulong, UltimateDiscordDbContext> _guildRepository;
         private readonly IBaseRepository<GuildSettings, int, UltimateDiscordDbContext> _guildSettingsRepository;
         private readonly IMapper _mapper;
 
@@ -21,7 +21,7 @@ namespace UltimateRedditBot.Discord.App.Services.Guild
 
         #region Constructor
 
-        public GuildService(IMapper mapper, IBaseRepository<Guild, ulong, UltimateDiscordDbContext> guildRepository, IBaseRepository<GuildSettings, int, UltimateDiscordDbContext> guildSettingsRepository)
+        public GuildService(IMapper mapper, IBaseRepository<Domain.Models.Guild, ulong, UltimateDiscordDbContext> guildRepository, IBaseRepository<GuildSettings, int, UltimateDiscordDbContext> guildSettingsRepository)
         {
             _guildRepository = guildRepository;
             _guildSettingsRepository = guildSettingsRepository;
@@ -32,7 +32,7 @@ namespace UltimateRedditBot.Discord.App.Services.Guild
 
         public async Task InsertGuild(GuildDto guildDto)
         {
-            var guild = _mapper.Map<Guild>(guildDto);
+            var guild = _mapper.Map<Domain.Models.Guild>(guildDto);
             await _guildRepository.InsertAsync(guild);
         }
 
@@ -40,23 +40,20 @@ namespace UltimateRedditBot.Discord.App.Services.Guild
         {
             var allGuilds = await _guildRepository.GetAllAsync();
             var newGuilds = guilds.Where(dto => allGuilds.All(guild => dto.Id != guild.Id))
-                .Select(dto => _mapper.Map<Guild>(dto)).ToList();
+                .Select(dto => _mapper.Map<Domain.Models.Guild>(dto)).ToList();
 
             await _guildRepository.InsertAsync(newGuilds);
         }
 
-        public Task<Guild> GetById(ulong guildId)
+        public Task<Domain.Models.Guild> GetById(ulong guildId)
         {
             return _guildRepository.GetByIdAsync(guildId);
         }
 
         public async Task<GuildSettingsDto> GetGuildSettingsById(ulong guildId)
         {
-            //TODO Improve db call
-            var settings = await _guildSettingsRepository.GetAllAsync();
-            var guildSettings = settings.FirstOrDefault(setting => setting.GuildId == guildId);
-
-            return guildSettings == null ? null : _mapper.Map<GuildSettingsDto>(guildSettings);
+            var guildSetting = await _guildSettingsRepository.Table.FirstOrDefaultAsync(setting => setting.GuildId == guildId);
+            return guildSetting == null ? null : _mapper.Map<GuildSettingsDto>(guildSetting);
         }
 
         public async Task SaveGuildSettings(GuildSettingsDto guildSettingsDto)

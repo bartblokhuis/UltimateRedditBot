@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UltimateRedditBot.App.Services.Events;
-using UltimateRedditBot.App.Services.Queue;
 using UltimateRedditBot.Domain.Dtos.Reddit;
+using UltimateRedditBot.Domain.Queue;
 using UltimateRedditBot.Infra.Services;
 
-namespace UltimateRedditBot.Domain.Queue
+namespace UltimateRedditBot.App.Services.Queue
 {
     public class QueueClient : IQueueClient
     {
@@ -73,8 +73,6 @@ namespace UltimateRedditBot.Domain.Queue
 
         protected virtual async Task ProcessQueue(IEnumerable<QueueItem> queueItems)
         {
-            //var postDtoTasks = GetPostDtoTasks(queueItems);
-
             var tasks = queueItems.Select(queueItem => GetPostDtoTasks(queueItem).ContinueWith(async post =>
             {
                 queueItem.LastUsedPostName = post.Result.Id;
@@ -89,24 +87,6 @@ namespace UltimateRedditBot.Domain.Queue
             }));
 
             await Task.WhenAll(tasks);
-            return;
-            /*var posts = await Task.WhenAll(postDtoTasks.ToArray());
-
-            foreach (var post in posts)
-            {
-                var queueItem = queueItems.FirstOrDefault(x => x.SubredditDto.Id == post.SubRedditId);
-                if (queueItem == null)
-                    continue;
-
-                queueItem.LastUsedPostName = post.Id;
-                var postMessage = new QueueItemPostReceived
-                {
-                    PostDto = post,
-                    QueueClient = this,
-                    QueueItem = queueItem
-                };
-
-                await _eventPublisher.Publish(postMessage);*/
         }
 
         protected virtual IEnumerable<Task<PostDto>> GetPostDtoTasks(IEnumerable<QueueItem> queueItems)

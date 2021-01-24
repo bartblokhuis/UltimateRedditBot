@@ -8,7 +8,6 @@ using Newtonsoft.Json.Linq;
 using UltimateRedditBot.Core.Constants;
 using UltimateRedditBot.Domain.Dtos.Reddit;
 using UltimateRedditBot.Domain.Enums;
-using UltimateRedditBot.Domain.Models.Reddit;
 using UltimateRedditBot.Infra.Services;
 
 namespace UltimateRedditBot.Core.Services
@@ -50,10 +49,7 @@ namespace UltimateRedditBot.Core.Services
 
         public async Task<PostDto> GetOldPost(string subRedditName, string previousName, Sort sort, PostType postType, Guid id)
         {
-            var post = await Process(1, subRedditName, "after", previousName, sort, postType);
-            if (post is null)
-                return null;
-            return post;
+            return await Process(1, subRedditName, "after", previousName, sort, postType);
         }
 
         private async Task<PostDto> Process(int maximumAttempts, string subRedditName, string beforeOrAfter, string previousName, Sort sort, PostType postType = PostType.Image)

@@ -7,7 +7,7 @@ using UltimateRedditBot.Infra.Services;
 
 namespace UltimateRedditBot.App.Services.Queue
 {
-    public class QueueService : IQueueService
+    public abstract class QueueService : IQueueService
     {
         #region Fields
 

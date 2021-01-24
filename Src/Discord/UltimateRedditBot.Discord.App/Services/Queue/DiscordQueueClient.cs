@@ -1,4 +1,5 @@
 ﻿using UltimateRedditBot.App.Services.Events;
+using UltimateRedditBot.App.Services.Queue;
 using UltimateRedditBot.Domain.Queue;
 using UltimateRedditBot.Infra.Services;
 

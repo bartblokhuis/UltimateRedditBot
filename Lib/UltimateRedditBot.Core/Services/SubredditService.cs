@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -35,8 +34,7 @@ namespace UltimateRedditBot.Core.Services
 
         public async Task<SubredditDto> GetSubredditDtoByName(string subredditName)
         {
-            var subreddit = await _subredditRepo.Table.FirstOrDefaultAsync(x =>
-                x.Name.ToLower() == subredditName.ToLower());
+            var subreddit = await _subredditRepo.Table.FirstOrDefaultAsync(x => x.Name.ToLower() == subredditName.ToLower());
 
             SubredditDto subredditDto;
             if (subreddit != null)
