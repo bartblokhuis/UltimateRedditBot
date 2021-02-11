@@ -10,7 +10,8 @@ namespace UltimateRedditBot.Discord.Domain.Models
 
         //Empty ctor for ef core
         public Guild()
-        { }
+        {
+        }
 
         public Guild(ulong guildId)
         {
@@ -27,8 +28,8 @@ namespace UltimateRedditBot.Discord.Domain.Models
         public DateTime CreatedAtUTC { get; set; }
 
         public virtual ICollection<DiscordChannel> Channels { get; set; }
+        public virtual ICollection<PostHistory> PostHistories { get; set; }
 
         #endregion
-
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using UltimateRedditBot.Domain.Dtos.Common;
 using UltimateRedditBot.Domain.Models.Reddit;
 

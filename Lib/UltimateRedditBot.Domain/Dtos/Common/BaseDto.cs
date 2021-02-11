@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace UltimateRedditBot.Domain.Dtos.Common
 {
     public abstract class BaseDto<TKey> : IBaseDto<TKey>
@@ -9,8 +5,7 @@ namespace UltimateRedditBot.Domain.Dtos.Common
         public virtual TKey Id { get; set; }
     }
 
-    public abstract class BaseDto: BaseDto<int>
+    public abstract class BaseDto : BaseDto<int>
     {
-
     }
 }

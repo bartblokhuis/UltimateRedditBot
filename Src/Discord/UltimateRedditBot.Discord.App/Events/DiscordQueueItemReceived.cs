@@ -6,7 +6,9 @@ using Discord.WebSocket;
 using UltimateRedditBot.App.Services.Events;
 using UltimateRedditBot.App.Services.Queue;
 using UltimateRedditBot.Discord.App.Discord.Constants;
+using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.App.Services.Queue;
+using UltimateRedditBot.Discord.Domain.Models;
 using UltimateRedditBot.Domain.Dtos.Reddit;
 using UltimateRedditBot.Domain.Queue;
 
@@ -14,17 +16,12 @@ namespace UltimateRedditBot.Discord.App.Events
 {
     public class DiscordQueueItemReceived : IConsumer<QueueItemPostReceived>
     {
-        #region Fields
-
-        private readonly DiscordSocketClient _discordSocketClient;
-
-        #endregion
-
         #region Constructor
 
-        public DiscordQueueItemReceived(DiscordSocketClient discordSocketClient)
+        public DiscordQueueItemReceived(DiscordSocketClient discordSocketClient, IPostHistoryService postHistoryService)
         {
             _discordSocketClient = discordSocketClient;
+            _postHistoryService = postHistoryService;
         }
 
         #endregion
@@ -36,11 +33,48 @@ namespace UltimateRedditBot.Discord.App.Events
             if (!(eventMessage.QueueClient is IDiscordQueueClient discordQueueClient))
                 throw new ApplicationException("");
 
-            if (discordQueueClient.Group.Equals(DiscordSettings.GenericSettingDmGroup))
+            var isForGuild = discordQueueClient.Group.Equals(DiscordSettings.GenericSettingGuildGroup);
+            if (!isForGuild)
                 await HandleDiscordDmEvent(discordQueueClient, eventMessage.PostDto);
             else
                 await HandleDiscordGuildEvent(discordQueueClient, eventMessage.PostDto);
+
+            //Since we still have to remove 1 in the queue service it means that here 1 is the last post item.
+            if (eventMessage.QueueItem.AmountOfPosts == 1)
+            {
+                var id = Convert.ToUInt64(eventMessage.QueueClient.ClientId);
+
+                var postHistory = await _postHistoryService.GetPostHistory(isForGuild, id,
+                    eventMessage.QueueItem.SubredditDto.Id);
+
+                if (postHistory != null)
+                {
+                    postHistory.PostId = eventMessage.PostDto.Id;
+                    await _postHistoryService.SavePostHistory(postHistory);
+                    return;
+                }
+
+                postHistory = new PostHistory
+                {
+                    PostId = eventMessage.PostDto.Id,
+                    SubredditId = eventMessage.QueueItem.SubredditDto.Id
+                };
+
+                if (isForGuild)
+                    postHistory.GuildId = id;
+                else
+                    postHistory.UserId = id;
+
+                await _postHistoryService.SavePostHistory(postHistory);
+            }
         }
+
+        #endregion
+
+        #region Fields
+
+        private readonly DiscordSocketClient _discordSocketClient;
+        private readonly IPostHistoryService _postHistoryService;
 
         #endregion
 
@@ -67,7 +101,5 @@ namespace UltimateRedditBot.Discord.App.Events
         }
 
         #endregion
-
-
     }
 }

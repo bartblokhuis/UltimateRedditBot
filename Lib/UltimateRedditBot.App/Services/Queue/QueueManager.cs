@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UltimateRedditBot.Domain.Queue;
 
@@ -10,10 +9,6 @@ namespace UltimateRedditBot.App.Services.Queue
         #region Fields
 
         private readonly List<IQueueClient> _queueClients = new();
-
-        #endregion
-
-        #region Constructor
 
         #endregion
 
@@ -41,5 +36,9 @@ namespace UltimateRedditBot.App.Services.Queue
         {
             return _queueClients;
         }
+
+        #region Constructor
+
+        #endregion
     }
 }

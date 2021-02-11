@@ -6,12 +6,37 @@ namespace UltimateRedditBot.Domain.Models.Reddit
 {
     public class Post : BaseEntity<string>, IFullyAuditedObject
     {
+        #region Methods
+
+        public PostType GetPostType()
+        {
+            if (Url is null)
+                return PostType;
+
+            var url = Url.ToString();
+
+            if (url.Contains(".gif") || url.Contains("https://gfycat") || url.Contains("https://redgifs"))
+                PostType = PostType.Gif;
+
+            if (url.Contains(".jpg") || url.Contains(".png") || url.Contains(".jpeg"))
+                PostType = PostType.Gif;
+
+            if (url.Contains(".mp4"))
+                PostType = PostType.Video;
+
+            return PostType;
+        }
+
+        #endregion
+
         #region Constructor
 
         public Post()
-        { }
+        {
+        }
 
-        public Post(string postId, string author, int downs, int ups, bool isOver18, string title, string postLink, Uri thumbnail, string selfText, Uri url, PostType postType)
+        public Post(string postId, string author, int downs, int ups, bool isOver18, string title, string postLink,
+            Uri thumbnail, string selfText, Uri url, PostType postType)
         {
             Id = postId;
             Author = author;
@@ -57,29 +82,6 @@ namespace UltimateRedditBot.Domain.Models.Reddit
         public DateTime UpdatedAtUTC { get; set; }
 
         public DateTime CreatedAtUTC { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        public PostType GetPostType()
-        {
-            if (Url is null)
-                return PostType;
-
-            var url = Url.ToString();
-
-            if (url.Contains(".gif") || url.Contains("https://gfycat") || url.Contains("https://redgifs"))
-                PostType = PostType.Gif;
-
-            if (url.Contains(".jpg") || url.Contains(".png") || url.Contains(".jpeg"))
-                PostType = PostType.Gif;
-
-            if (url.Contains(".mp4"))
-                PostType = PostType.Video;
-
-            return PostType;
-        }
 
         #endregion
     }

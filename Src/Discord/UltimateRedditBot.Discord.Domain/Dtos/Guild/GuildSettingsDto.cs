@@ -7,7 +7,6 @@ namespace UltimateRedditBot.Discord.Domain.Dtos
     {
         public GuildSettingsDto()
         {
-
         }
 
         public GuildSettingsDto(ulong guildId)

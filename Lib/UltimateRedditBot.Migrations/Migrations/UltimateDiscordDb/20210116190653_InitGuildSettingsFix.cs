@@ -8,24 +8,24 @@ namespace UltimateRedditBot.Migrations.Migrations.UltimateDiscordDb
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "CreatedAtUTC",
-                table: "DiscordChannels");
+                "CreatedAtUTC",
+                "DiscordChannels");
 
             migrationBuilder.DropColumn(
-                name: "UpdatedAtUTC",
-                table: "DiscordChannels");
+                "UpdatedAtUTC",
+                "DiscordChannels");
 
             migrationBuilder.AddColumn<DateTime>(
-                name: "CreatedAtUTC",
-                table: "GuildSettings",
-                type: "datetime2",
+                "CreatedAtUTC",
+                "GuildSettings",
+                "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.AddColumn<DateTime>(
-                name: "UpdatedAtUTC",
-                table: "GuildSettings",
-                type: "datetime2",
+                "UpdatedAtUTC",
+                "GuildSettings",
+                "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
         }
@@ -33,24 +33,24 @@ namespace UltimateRedditBot.Migrations.Migrations.UltimateDiscordDb
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "CreatedAtUTC",
-                table: "GuildSettings");
+                "CreatedAtUTC",
+                "GuildSettings");
 
             migrationBuilder.DropColumn(
-                name: "UpdatedAtUTC",
-                table: "GuildSettings");
+                "UpdatedAtUTC",
+                "GuildSettings");
 
             migrationBuilder.AddColumn<DateTime>(
-                name: "CreatedAtUTC",
-                table: "DiscordChannels",
-                type: "datetime2",
+                "CreatedAtUTC",
+                "DiscordChannels",
+                "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.AddColumn<DateTime>(
-                name: "UpdatedAtUTC",
-                table: "DiscordChannels",
-                type: "datetime2",
+                "UpdatedAtUTC",
+                "DiscordChannels",
+                "datetime2",
                 nullable: false,
                 defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
         }

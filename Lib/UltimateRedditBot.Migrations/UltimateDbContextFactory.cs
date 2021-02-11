@@ -6,7 +6,7 @@ using UltimateRedditBot.Discord.Database;
 
 namespace UltimateRedditBot.Migrations
 {
-    public class UltimateDbContextFactory: IDesignTimeDbContextFactory<UltimateDbContext>
+    public class UltimateDbContextFactory : IDesignTimeDbContextFactory<UltimateDbContext>
     {
         public UltimateDbContext CreateDbContext(string[] args)
         {

@@ -7,13 +7,9 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
     {
         #region Fields
 
-
-
         #endregion
 
         #region Constructor
-
-
 
         #endregion
 
@@ -25,7 +21,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 
         public async Task GetSubreddits(int page)
         {
-
         }
 
         #endregion

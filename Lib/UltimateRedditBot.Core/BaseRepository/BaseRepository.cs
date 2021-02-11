@@ -1,9 +1,9 @@
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Database;
 using UltimateRedditBot.Domain.Models.Common;
 using UltimateRedditBot.Infra.BaseRepository;
@@ -19,7 +19,8 @@ namespace UltimateRedditBot.Core.BaseRepository
         }
     }
 
-    public class BaseRepository<TEntity, TKey> : BaseRepository<TEntity, TKey, UltimateDbContext>, IBaseRepository<TEntity, TKey>
+    public class BaseRepository<TEntity, TKey> : BaseRepository<TEntity, TKey, UltimateDbContext>,
+        IBaseRepository<TEntity, TKey>
         where TEntity : class, IBaseEntity<TKey>
     {
         public BaseRepository(UltimateDbContext context)
@@ -55,7 +56,8 @@ namespace UltimateRedditBot.Core.BaseRepository
                 query = query.Where(filter);
 
             if (includeProperties != null)
-                query = includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+                query = includeProperties.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries).Aggregate(query,
+                    (current, includeProperty) => current.Include(includeProperty));
 
             if (orderBy != null)
                 return orderBy(query).ToList();
@@ -118,12 +120,7 @@ namespace UltimateRedditBot.Core.BaseRepository
             return await query.AsNoTracking().ToListAsync();
         }
 
-        protected IQueryable<TEntity> QueryableAsync()
-        {
-            return _dbSet.AsQueryable();
-        }
-
-        private async Task SaveChanges()
+        public async Task SaveChanges()
         {
             try
             {
@@ -131,12 +128,17 @@ namespace UltimateRedditBot.Core.BaseRepository
             }
             catch (Exception e)
             {
-
             }
-
         }
 
         public int Count()
-            => _dbSet.Count();
+        {
+            return _dbSet.Count();
+        }
+
+        protected IQueryable<TEntity> QueryableAsync()
+        {
+            return _dbSet.AsQueryable();
+        }
     }
 }

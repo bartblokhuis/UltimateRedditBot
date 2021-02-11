@@ -11,13 +11,11 @@ namespace UltimateRedditBot.Infra.BaseRepository
     public interface IBaseRepository<TEntity> : IBaseRepository<TEntity, int>
         where TEntity : class
     {
-
     }
 
     public interface IBaseRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey, UltimateDbContext>
         where TEntity : class
     {
-
     }
 
     public interface IBaseRepository<TEntity, TKey, TDbContext>
@@ -46,6 +44,8 @@ namespace UltimateRedditBot.Infra.BaseRepository
         Task DeleteAsync(TKey id);
 
         Task<TEntity> GetByIdAsync(TKey id);
+
+        Task SaveChanges();
 
         int Count();
     }

@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using UltimateRedditBot.Discord.Domain.Dtos;
+using UltimateRedditBot.Discord.Domain.Dtos.PostHistory;
 using UltimateRedditBot.Discord.Domain.Models;
 
 namespace UltimateRedditBot.Discord.App.AutoMapper
 {
-    public class DiscordAutoMapperProfile: Profile
+    public class DiscordAutoMapperProfile : Profile
     {
         public DiscordAutoMapperProfile()
         {
@@ -19,6 +20,9 @@ namespace UltimateRedditBot.Discord.App.AutoMapper
 
             CreateMap<UserSettings, UserSettingsDto>();
             CreateMap<UserSettingsDto, UserSettings>();
+
+            CreateMap<PostHistory, PostHistoryDto>();
+            CreateMap<PostHistoryDto, PostHistory>();
         }
     }
 }

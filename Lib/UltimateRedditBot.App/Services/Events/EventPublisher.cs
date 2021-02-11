@@ -28,7 +28,6 @@ namespace UltimateRedditBot.App.Services.Events
             var subscribers = _subscriptionService.GetSubscriptions<T>().ToList();
 
             foreach (var subscriber in subscribers)
-            {
                 try
                 {
                     await subscriber.HandleEvent(eventMessage);
@@ -37,7 +36,6 @@ namespace UltimateRedditBot.App.Services.Events
                 {
                     //TODO Log the exception
                 }
-            }
         }
 
         #endregion

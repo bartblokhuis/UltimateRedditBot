@@ -7,7 +7,6 @@ namespace UltimateRedditBot.Discord.Domain.Dtos
     {
         public UserSettingsDto()
         {
-
         }
 
         public UserSettingsDto(ulong userId)

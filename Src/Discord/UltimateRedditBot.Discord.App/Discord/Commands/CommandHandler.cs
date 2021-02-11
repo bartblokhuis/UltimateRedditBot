@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Discord.Commands;
 using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
 using UltimateRedditBot.Discord.App.Discord.Constants;
-using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.App.Services.Guild;
 using UltimateRedditBot.Discord.App.Services.User;
 
@@ -12,17 +11,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
 {
     public class CommandHandler
     {
-        #region Fields
-
-        private readonly DiscordSocketClient _discord;
-        private readonly CommandService _commands;
-        private readonly IConfiguration _config;
-        private readonly IServiceProvider _provider;
-        private readonly IGuildService _guildService;
-        private readonly IUserService _userService;
-
-        #endregion
-
         public CommandHandler(DiscordSocketClient discord,
             CommandService commands,
             IConfiguration config,
@@ -39,10 +27,21 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
             _discord.MessageReceived += OnMessageReceivedAsync;
         }
 
+        #region Fields
+
+        private readonly DiscordSocketClient _discord;
+        private readonly CommandService _commands;
+        private readonly IConfiguration _config;
+        private readonly IServiceProvider _provider;
+        private readonly IGuildService _guildService;
+        private readonly IUserService _userService;
+
+        #endregion
+
         #region Methods
 
         /// <summary>
-        /// Used to handle the on message received call.
+        ///     Used to handle the on message received call.
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
@@ -88,11 +87,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
             }
             catch (Exception e)
             {
-
             }
-
-
-
         }
 
         private async Task<string> GetPrefix(ulong id, bool isGuild)

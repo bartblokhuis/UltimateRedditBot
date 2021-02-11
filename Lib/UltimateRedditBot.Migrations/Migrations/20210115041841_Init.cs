@@ -8,83 +8,77 @@ namespace UltimateRedditBot.Migrations.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "GenericSettings",
-                columns: table => new
+                "GenericSettings",
+                table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>("int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EntityId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    KeyGroup = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Key = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    EntityId = table.Column<string>("nvarchar(max)", nullable: true),
+                    KeyGroup = table.Column<string>("nvarchar(max)", nullable: true),
+                    Key = table.Column<string>("nvarchar(max)", nullable: true),
+                    Value = table.Column<string>("nvarchar(max)", nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GenericSettings", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_GenericSettings", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "Subreddits",
-                columns: table => new
+                "Subreddits",
+                table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>("int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsNsfw = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Name = table.Column<string>("nvarchar(max)", nullable: true),
+                    IsNsfw = table.Column<bool>("bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>("datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>("datetime2", nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Subreddits", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Subreddits", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "Posts",
-                columns: table => new
+                "Posts",
+                table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Author = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Downs = table.Column<int>(type: "int", nullable: false),
-                    Ups = table.Column<int>(type: "int", nullable: false),
-                    IsOver18 = table.Column<bool>(type: "bit", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PostLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Thumbnail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Selftext = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubRedditId = table.Column<int>(type: "int", nullable: false),
-                    PostType = table.Column<int>(type: "int", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<string>("nvarchar(450)", nullable: false),
+                    Author = table.Column<string>("nvarchar(max)", nullable: true),
+                    Downs = table.Column<int>("int", nullable: false),
+                    Ups = table.Column<int>("int", nullable: false),
+                    IsOver18 = table.Column<bool>("bit", nullable: false),
+                    Title = table.Column<string>("nvarchar(max)", nullable: true),
+                    PostLink = table.Column<string>("nvarchar(max)", nullable: true),
+                    Thumbnail = table.Column<string>("nvarchar(max)", nullable: true),
+                    Selftext = table.Column<string>("nvarchar(max)", nullable: true),
+                    Url = table.Column<string>("nvarchar(max)", nullable: true),
+                    SubRedditId = table.Column<int>("int", nullable: false),
+                    PostType = table.Column<int>("int", nullable: false),
+                    UpdatedAt = table.Column<DateTime>("datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>("datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Posts_Subreddits_SubRedditId",
-                        column: x => x.SubRedditId,
-                        principalTable: "Subreddits",
-                        principalColumn: "Id",
+                        "FK_Posts_Subreddits_SubRedditId",
+                        x => x.SubRedditId,
+                        "Subreddits",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_SubRedditId",
-                table: "Posts",
-                column: "SubRedditId");
+                "IX_Posts_SubRedditId",
+                "Posts",
+                "SubRedditId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "GenericSettings");
+                "GenericSettings");
 
             migrationBuilder.DropTable(
-                name: "Posts");
+                "Posts");
 
             migrationBuilder.DropTable(
-                name: "Subreddits");
+                "Subreddits");
         }
     }
 }

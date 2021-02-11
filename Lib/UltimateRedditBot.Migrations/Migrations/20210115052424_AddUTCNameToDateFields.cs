@@ -7,47 +7,47 @@ namespace UltimateRedditBot.Migrations.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "UpdatedAt",
-                table: "Subreddits",
-                newName: "UpdatedAtUTC");
+                "UpdatedAt",
+                "Subreddits",
+                "UpdatedAtUTC");
 
             migrationBuilder.RenameColumn(
-                name: "CreatedAt",
-                table: "Subreddits",
-                newName: "CreatedAtUTC");
+                "CreatedAt",
+                "Subreddits",
+                "CreatedAtUTC");
 
             migrationBuilder.RenameColumn(
-                name: "UpdatedAt",
-                table: "Posts",
-                newName: "UpdatedAtUTC");
+                "UpdatedAt",
+                "Posts",
+                "UpdatedAtUTC");
 
             migrationBuilder.RenameColumn(
-                name: "CreatedAt",
-                table: "Posts",
-                newName: "CreatedAtUTC");
+                "CreatedAt",
+                "Posts",
+                "CreatedAtUTC");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "UpdatedAtUTC",
-                table: "Subreddits",
-                newName: "UpdatedAt");
+                "UpdatedAtUTC",
+                "Subreddits",
+                "UpdatedAt");
 
             migrationBuilder.RenameColumn(
-                name: "CreatedAtUTC",
-                table: "Subreddits",
-                newName: "CreatedAt");
+                "CreatedAtUTC",
+                "Subreddits",
+                "CreatedAt");
 
             migrationBuilder.RenameColumn(
-                name: "UpdatedAtUTC",
-                table: "Posts",
-                newName: "UpdatedAt");
+                "UpdatedAtUTC",
+                "Posts",
+                "UpdatedAt");
 
             migrationBuilder.RenameColumn(
-                name: "CreatedAtUTC",
-                table: "Posts",
-                newName: "CreatedAt");
+                "CreatedAtUTC",
+                "Posts",
+                "CreatedAt");
         }
     }
 }

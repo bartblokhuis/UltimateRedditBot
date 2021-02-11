@@ -6,9 +6,6 @@ namespace UltimateRedditBot.Domain.Models.Settings
     {
         #region Constructors
 
-        public GenericSetting()
-        { }
-
         #endregion
 
         #region Properties

@@ -11,6 +11,16 @@ namespace UltimateRedditBot.App.Services.Queue
 {
     public class QueueClient : IQueueClient
     {
+        #region Constructor
+
+        public QueueClient(IRedditApiService redditApiService, IEventPublisher eventPublisher)
+        {
+            _redditApiService = redditApiService;
+            _eventPublisher = eventPublisher;
+        }
+
+        #endregion
+
         #region Fields
 
         public ulong ClientId { get; set; }
@@ -23,28 +33,16 @@ namespace UltimateRedditBot.App.Services.Queue
 
         #endregion
 
-        #region Constructor
-
-        public QueueClient(IRedditApiService redditApiService, IEventPublisher eventPublisher)
-        {
-            _redditApiService = redditApiService;
-            _eventPublisher = eventPublisher;
-        }
-
-        #endregion
-
         #region Methods
 
         public async Task Start()
         {
             if (QueueItems.Any())
-            {
                 await Task.Run(async () =>
                 {
                     var queueItems = QueueItems.DistinctBy(x => x.SubredditDto.Id).ToList();
                     await Process(queueItems);
                 });
-            }
 
             //Wait one second before starting again
             await Task.Delay(1000);
@@ -63,7 +61,7 @@ namespace UltimateRedditBot.App.Services.Queue
             {
                 var realQueueItem = QueueItems.FirstOrDefault(x => x.Id == queueItem.Id);
                 if (realQueueItem is null)
-                    continue; //Item has been removed.
+                    continue;
 
                 realQueueItem.AmountOfPosts--;
             }
@@ -71,53 +69,46 @@ namespace UltimateRedditBot.App.Services.Queue
             QueueItems = QueueItems.Where(x => x.AmountOfPosts != 0);
         }
 
-        protected virtual async Task ProcessQueue(IEnumerable<QueueItem> queueItems)
+        protected virtual Task ProcessQueue(IEnumerable<QueueItem> queueItems)
         {
-            var tasks = queueItems.Select(queueItem => GetPostDtoTasks(queueItem).ContinueWith(async post =>
+            var postDtos = queueItems.Select(GetPostDtoTasks);
+            return Task.WhenAll(postDtos);
+        }
+
+        //TODO Better method naming and documentation
+        protected virtual async Task<PostDto> GetPostDtoTasks(QueueItem queueItem)
+        {
+            var postDto = await _redditApiService.GetOldPost(queueItem.SubredditDto.Name, queueItem.LastUsedPostName,
+                queueItem.Sort, queueItem.PostType, queueItem.Id);
+            if (postDto == null)
+                return null;
+
+            queueItem.LastUsedPostName = postDto.Id;
+            var postMessage = new QueueItemPostReceived
             {
-                queueItem.LastUsedPostName = post.Result.Id;
-                var postMessage = new QueueItemPostReceived
-                {
-                    PostDto = post.Result,
-                    QueueClient = this,
-                    QueueItem = queueItem
-                };
+                PostDto = postDto,
+                QueueClient = this,
+                QueueItem = queueItem
+            };
 
-                await _eventPublisher.Publish(postMessage);
-            }));
-
-            await Task.WhenAll(tasks);
-        }
-
-        protected virtual IEnumerable<Task<PostDto>> GetPostDtoTasks(IEnumerable<QueueItem> queueItems)
-        {
-            return queueItems.Select(queueItem => _redditApiService.GetOldPost(queueItem.SubredditDto.Name, queueItem.LastUsedPostName, queueItem.Sort, queueItem.PostType, queueItem.Id)).ToList();
-        }
-
-        protected virtual Task<PostDto> GetPostDtoTasks(QueueItem queueItem)
-        {
-            return _redditApiService.GetOldPost(queueItem.SubredditDto.Name, queueItem.LastUsedPostName, queueItem.Sort, queueItem.PostType, queueItem.Id);
+            await _eventPublisher.Publish(postMessage);
+            return postDto;
         }
 
         #endregion
-
-
 
         #endregion
     }
 
     internal static class MicrosoftExtensions
     {
-        internal static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> keySelector)
+        internal static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector)
         {
             var seenKeys = new HashSet<TKey>();
             foreach (var element in source)
-            {
                 if (seenKeys.Add(keySelector(element)))
-                {
                     yield return element;
-                }
-            }
         }
     }
 }

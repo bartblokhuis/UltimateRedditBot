@@ -26,7 +26,8 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 
         #region Methods
 
-        [Command("r"), Alias("r")]
+        [Command("r")]
+        [Alias("r")]
         public async Task AddToQueue(string subreddit)
         {
             var options = new AddToQueueDiscordOptions
@@ -39,7 +40,8 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             await ReplyAsync(result);
         }
 
-        [Command("r"), Alias("r")]
+        [Command("r")]
+        [Alias("r")]
         public async Task AddToQueue(string subreddit, int amountOfTimes)
         {
             var options = new AddToQueueDiscordOptions
@@ -52,12 +54,14 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             await ReplyAsync(result);
         }
 
-        [Command("r-remove"), Alias("r-remove")]
+        [Command("r-remove")]
+        [Alias("r-remove")]
         public async Task RemoveFromQueue(string subreddit)
         {
         }
 
-        [Command("r-clear"), Alias("r-clear")]
+        [Command("r-clear")]
+        [Alias("r-clear")]
         public async Task ClearQueue()
         {
         }

@@ -8,77 +8,74 @@ namespace UltimateRedditBot.Migrations.Migrations.UltimateDiscordDb
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Guilds",
-                columns: table => new
+                "Guilds",
+                table => new
                 {
-                    Id = table.Column<decimal>(type: "decimal(20,0)", nullable: false),
-                    UpdatedAtUTC = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedAtUTC = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Id = table.Column<decimal>("decimal(20,0)", nullable: false),
+                    UpdatedAtUTC = table.Column<DateTime>("datetime2", nullable: false),
+                    CreatedAtUTC = table.Column<DateTime>("datetime2", nullable: false)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Guilds", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Guilds", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "DiscordChannels",
-                columns: table => new
+                "DiscordChannels",
+                table => new
                 {
-                    Id = table.Column<decimal>(type: "decimal(20,0)", nullable: false),
-                    GuildId = table.Column<decimal>(type: "decimal(20,0)", nullable: false)
+                    Id = table.Column<decimal>("decimal(20,0)", nullable: false),
+                    GuildId = table.Column<decimal>("decimal(20,0)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DiscordChannels", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DiscordChannels_Guilds_GuildId",
-                        column: x => x.GuildId,
-                        principalTable: "Guilds",
-                        principalColumn: "Id",
+                        "FK_DiscordChannels_Guilds_GuildId",
+                        x => x.GuildId,
+                        "Guilds",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "GuildSettings",
-                columns: table => new
+                "GuildSettings",
+                table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>("int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Prefix = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    GuildId = table.Column<decimal>(type: "decimal(20,0)", nullable: false)
+                    Prefix = table.Column<string>("nvarchar(max)", nullable: true),
+                    GuildId = table.Column<decimal>("decimal(20,0)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GuildSettings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GuildSettings_Guilds_GuildId",
-                        column: x => x.GuildId,
-                        principalTable: "Guilds",
-                        principalColumn: "Id",
+                        "FK_GuildSettings_Guilds_GuildId",
+                        x => x.GuildId,
+                        "Guilds",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DiscordChannels_GuildId",
-                table: "DiscordChannels",
-                column: "GuildId");
+                "IX_DiscordChannels_GuildId",
+                "DiscordChannels",
+                "GuildId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GuildSettings_GuildId",
-                table: "GuildSettings",
-                column: "GuildId");
+                "IX_GuildSettings_GuildId",
+                "GuildSettings",
+                "GuildId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DiscordChannels");
+                "DiscordChannels");
 
             migrationBuilder.DropTable(
-                name: "GuildSettings");
+                "GuildSettings");
 
             migrationBuilder.DropTable(
-                name: "Guilds");
+                "Guilds");
         }
     }
 }

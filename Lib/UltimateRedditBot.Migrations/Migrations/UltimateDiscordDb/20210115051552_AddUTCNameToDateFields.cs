@@ -7,27 +7,27 @@ namespace UltimateRedditBot.Migrations.Migrations.UltimateDiscordDb
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "UpdatedAt",
-                table: "Guild",
-                newName: "UpdatedAtUTC");
+                "UpdatedAt",
+                "Guild",
+                "UpdatedAtUTC");
 
             migrationBuilder.RenameColumn(
-                name: "CreatedAt",
-                table: "Guild",
-                newName: "CreatedAtUTC");
+                "CreatedAt",
+                "Guild",
+                "CreatedAtUTC");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "UpdatedAtUTC",
-                table: "Guild",
-                newName: "UpdatedAt");
+                "UpdatedAtUTC",
+                "Guild",
+                "UpdatedAt");
 
             migrationBuilder.RenameColumn(
-                name: "CreatedAtUTC",
-                table: "Guild",
-                newName: "CreatedAt");
+                "CreatedAtUTC",
+                "Guild",
+                "CreatedAt");
         }
     }
 }

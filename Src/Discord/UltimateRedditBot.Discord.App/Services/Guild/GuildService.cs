@@ -11,17 +11,11 @@ namespace UltimateRedditBot.Discord.App.Services.Guild
 {
     public class GuildService : IGuildService
     {
-        #region Fields
-
-        private readonly IBaseRepository<Domain.Models.Guild, ulong, UltimateDiscordDbContext> _guildRepository;
-        private readonly IBaseRepository<GuildSettings, int, UltimateDiscordDbContext> _guildSettingsRepository;
-        private readonly IMapper _mapper;
-
-        #endregion
-
         #region Constructor
 
-        public GuildService(IMapper mapper, IBaseRepository<Domain.Models.Guild, ulong, UltimateDiscordDbContext> guildRepository, IBaseRepository<GuildSettings, int, UltimateDiscordDbContext> guildSettingsRepository)
+        public GuildService(IMapper mapper,
+            IBaseRepository<Domain.Models.Guild, ulong, UltimateDiscordDbContext> guildRepository,
+            IBaseRepository<GuildSettings, int, UltimateDiscordDbContext> guildSettingsRepository)
         {
             _guildRepository = guildRepository;
             _guildSettingsRepository = guildSettingsRepository;
@@ -52,7 +46,8 @@ namespace UltimateRedditBot.Discord.App.Services.Guild
 
         public async Task<GuildSettingsDto> GetGuildSettingsById(ulong guildId)
         {
-            var guildSetting = await _guildSettingsRepository.Table.FirstOrDefaultAsync(setting => setting.GuildId == guildId);
+            var guildSetting =
+                await _guildSettingsRepository.Table.FirstOrDefaultAsync(setting => setting.GuildId == guildId);
             return guildSetting == null ? null : _mapper.Map<GuildSettingsDto>(guildSetting);
         }
 
@@ -65,5 +60,13 @@ namespace UltimateRedditBot.Discord.App.Services.Guild
             else
                 await _guildSettingsRepository.InsertAsync(guildSettings);
         }
+
+        #region Fields
+
+        private readonly IBaseRepository<Domain.Models.Guild, ulong, UltimateDiscordDbContext> _guildRepository;
+        private readonly IBaseRepository<GuildSettings, int, UltimateDiscordDbContext> _guildSettingsRepository;
+        private readonly IMapper _mapper;
+
+        #endregion
     }
 }

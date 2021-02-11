@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Domain.Models.Settings;
 using UltimateRedditBot.Infra.BaseRepository;
 using UltimateRedditBot.Infra.Services;
-using Microsoft.EntityFrameworkCore;
 
 namespace UltimateRedditBot.Core.Services
 {
@@ -32,23 +32,23 @@ namespace UltimateRedditBot.Core.Services
                 return default;
 
 
-            if (typeof(TObj).BaseType == typeof(Enum))
-            {
-                return (TObj)Enum.Parse(typeof(TObj), setting.Value, true);
-            }
+            if (typeof(TObj).BaseType == typeof(Enum)) return (TObj) Enum.Parse(typeof(TObj), setting.Value, true);
 
-            return (TObj)Convert.ChangeType(setting.Value, typeof(TObj));
+            return (TObj) Convert.ChangeType(setting.Value, typeof(TObj));
         }
 
         public Task<GenericSetting> GetSettingByKeyGroupAndKey(string keyGroup, string key, string entityId)
         {
             return _genericSettingRepo.Table.FirstOrDefaultAsync(genericSetting =>
-                genericSetting.KeyGroup.Equals(keyGroup) && genericSetting.Key.Equals(key) && genericSetting.EntityId.Equals(entityId));
+                genericSetting.KeyGroup.Equals(keyGroup) && genericSetting.Key.Equals(key) &&
+                genericSetting.EntityId.Equals(entityId));
         }
 
         public Task SaveSetting(GenericSetting setting)
         {
-            return setting.Id == 0 ? _genericSettingRepo.InsertAsync(setting) : _genericSettingRepo.UpdateAsync(setting);
+            return setting.Id == 0
+                ? _genericSettingRepo.InsertAsync(setting)
+                : _genericSettingRepo.UpdateAsync(setting);
         }
     }
 }

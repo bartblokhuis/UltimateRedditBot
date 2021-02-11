@@ -13,7 +13,5 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
         public ulong ClientId { get; set; }
 
         public ulong? ChannelId { get; set; }
-
-
     }
 }

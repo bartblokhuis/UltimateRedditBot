@@ -7,9 +7,8 @@ namespace UltimateRedditBot.Discord.Database
     public class UltimateDiscordDbContext : BaseUltimateDbContext
     {
         public UltimateDiscordDbContext(DbContextOptions<UltimateDiscordDbContext> options)
-            :base(options)
+            : base(options)
         {
-
         }
 
         public DbSet<DiscordChannel> DiscordChannels { get; set; }
@@ -19,7 +18,9 @@ namespace UltimateRedditBot.Discord.Database
         public DbSet<GuildSettings> GuildSettings { get; set; }
 
         public DbSet<User> Users { get; set; }
-        
+
         public DbSet<UserSettings> UserSettings { get; set; }
+
+        public DbSet<PostHistory> PostHistories { get; set; }
     }
 }

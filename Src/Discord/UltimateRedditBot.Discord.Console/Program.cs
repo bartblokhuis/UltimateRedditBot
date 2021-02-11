@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using System.Threading.Tasks;
 using UltimateRedditBot.Discord.Console;
 
 namespace UltimateRedditBot.Discord
@@ -19,13 +19,15 @@ namespace UltimateRedditBot.Discord
             return CreateHostBuilder(args).Build().RunAsync();
         }
 
-        private static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
+        private static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration(options =>
                 {
                     options.AddJsonFile("appsettings.json");
                     options.AddJsonFile("dataSettings.json");
                 })
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());
+        }
     }
 }

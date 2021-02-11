@@ -16,10 +16,7 @@ namespace UltimateRedditBot.App.Extensions.Microsoft
     {
         public static void AddUltimateServices(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<UltimateDbContext>(options =>
-            {
-                options.UseSqlServer(connectionString);
-            });
+            services.AddDbContext<UltimateDbContext>(options => { options.UseSqlServer(connectionString); });
 
             services.AddHttpClient();
             services.AddSingleton<IRedditApiService, RedditApiService>();
@@ -34,6 +31,5 @@ namespace UltimateRedditBot.App.Extensions.Microsoft
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
             services.AddAutoMapper(typeof(UltimateAutoMapperProfile));
         }
-
     }
 }

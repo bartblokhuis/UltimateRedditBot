@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Domain.Dtos.Reddit;
@@ -11,17 +10,10 @@ namespace UltimateRedditBot.Core.Services
 {
     public class SubredditService : ISubredditService
     {
-        #region Fields
-
-        private readonly IBaseRepository<Subreddit> _subredditRepo;
-        private readonly IRedditApiService _redditApiService;
-        private readonly IMapper _mapper;
-
-        #endregion
-
         #region Constructor
 
-        public SubredditService(IBaseRepository<Subreddit> subredditRepo, IRedditApiService redditApiService, IMapper mapper)
+        public SubredditService(IBaseRepository<Subreddit> subredditRepo, IRedditApiService redditApiService,
+            IMapper mapper)
         {
             _subredditRepo = subredditRepo;
             _redditApiService = redditApiService;
@@ -34,7 +26,8 @@ namespace UltimateRedditBot.Core.Services
 
         public async Task<SubredditDto> GetSubredditDtoByName(string subredditName)
         {
-            var subreddit = await _subredditRepo.Table.FirstOrDefaultAsync(x => x.Name.ToLower() == subredditName.ToLower());
+            var subreddit =
+                await _subredditRepo.Table.FirstOrDefaultAsync(x => x.Name.ToLower() == subredditName.ToLower());
 
             SubredditDto subredditDto;
             if (subreddit != null)
@@ -52,8 +45,15 @@ namespace UltimateRedditBot.Core.Services
             }
 
             return subredditDto;
-
         }
+
+        #endregion
+
+        #region Fields
+
+        private readonly IBaseRepository<Subreddit> _subredditRepo;
+        private readonly IRedditApiService _redditApiService;
+        private readonly IMapper _mapper;
 
         #endregion
     }

@@ -15,7 +15,7 @@ namespace UltimateRedditBot.Database.Common
         }
 
         /// <summary>
-        /// Used to update auditable entities.
+        ///     Used to update auditable entities.
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
@@ -27,7 +27,8 @@ namespace UltimateRedditBot.Database.Common
 
             foreach (var change in changes)
             {
-                if ((change.State == EntityState.Modified || change.State == EntityState.Added) && HasUpdatedTime(change.Entity) && change.Entity is IHasUpdatedDate updateTime)
+                if ((change.State == EntityState.Modified || change.State == EntityState.Added) &&
+                    HasUpdatedTime(change.Entity) && change.Entity is IHasUpdatedDate updateTime)
                     updateTime.UpdatedAtUTC = DateTime.UtcNow;
 
 

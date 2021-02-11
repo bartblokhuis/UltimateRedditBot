@@ -6,11 +6,22 @@ namespace UltimateRedditBot.Domain.Models.Reddit
 {
     public class Subreddit : BaseEntity, IFullyAuditedObject
     {
+        #region Methods
+
+        public void Update(string name, bool isNsfw)
+        {
+            Name = name;
+            IsNsfw = isNsfw;
+        }
+
+        #endregion
+
         #region Constructor
 
         //Empty constructor for ef core
         public Subreddit()
-        { }
+        {
+        }
 
         public Subreddit(string name, bool isNsfw)
         {
@@ -32,16 +43,6 @@ namespace UltimateRedditBot.Domain.Models.Reddit
         public DateTime CreatedAtUTC { get; set; }
 
         public DateTime UpdatedAtUTC { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        public void Update(string name, bool isNsfw)
-        {
-            Name = name;
-            IsNsfw = isNsfw;
-        }
 
         #endregion
     }

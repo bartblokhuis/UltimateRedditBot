@@ -9,17 +9,10 @@ namespace UltimateRedditBot.App.Services.Queue
 {
     public abstract class QueueService : IQueueService
     {
-        #region Fields
-
-        private readonly IGenericSettingService _genericSettingService;
-        private readonly ISubredditService _subredditService;
-        private readonly IQueueManager _queueManager;
-
-        #endregion
-
         #region Constructor
 
-        public QueueService(IGenericSettingService genericSettingService, ISubredditService subredditService, IQueueManager queueManager)
+        public QueueService(IGenericSettingService genericSettingService, ISubredditService subredditService,
+            IQueueManager queueManager)
         {
             _genericSettingService = genericSettingService;
             _subredditService = subredditService;
@@ -46,8 +39,10 @@ namespace UltimateRedditBot.App.Services.Queue
             return string.Empty;
         }
 
-        protected virtual async Task<QueueItem> PrepareQueueItem(string subredditName, int amountOfPosts = 1)
+        protected virtual async Task<QueueItem> PrepareQueueItem(string subredditName, string lastPostName,
+            int amountOfPosts = 1)
         {
+            lastPostName ??= "";
             var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
             return new QueueItem
             {
@@ -55,19 +50,22 @@ namespace UltimateRedditBot.App.Services.Queue
                 Sort = Sort.Hot,
                 PostType = PostType.Gif,
                 SubredditDto = subreddit,
-                AmountOfPosts = amountOfPosts
+                AmountOfPosts = amountOfPosts,
+                LastUsedPostName = lastPostName
             };
         }
-
-        /*protected async Task<T> PrepareBaseQueueClient<T>()
-            where T : IQueueClient
-        {
-
-        }*/
 
         protected virtual IQueueClient FindQueueClient(ulong id)
         {
             return null;
         }
+
+        #region Fields
+
+        private readonly IGenericSettingService _genericSettingService;
+        private readonly ISubredditService _subredditService;
+        private readonly IQueueManager _queueManager;
+
+        #endregion
     }
 }

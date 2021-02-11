@@ -26,14 +26,12 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
     {
         public static void AddDiscord(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<UltimateDiscordDbContext>(options =>
-            {
-                options.UseSqlServer(connectionString);
-            });
+            services.AddDbContext<UltimateDiscordDbContext>(options => { options.UseSqlServer(connectionString); });
 
             services.AddAutoMapper(typeof(DiscordAutoMapperProfile));
             services.AddSingleton<IGuildService, GuildService>();
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IPostHistoryService, PostHistoryService>();
 
             services.AddSingleton<IConsumer<QueueItemPostReceived>, DiscordQueueItemReceived>();
             services.Replace(ServiceDescriptor.Singleton<IQueueService, DiscordQueueService>());
@@ -55,7 +53,6 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
                 .AddSingleton<GuildSettingsModule>()
                 .AddSingleton<SubredditModule>()
                 .AddSingleton<DirectMessageSettingsModule>();
-
         }
     }
 }

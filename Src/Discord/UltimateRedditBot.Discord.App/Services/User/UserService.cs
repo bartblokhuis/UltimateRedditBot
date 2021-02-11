@@ -10,22 +10,23 @@ namespace UltimateRedditBot.Discord.App.Services.User
 {
     public class UserService : IUserService
     {
-        #region Fields
-
-        private readonly IBaseRepository<Domain.Models.User, ulong, UltimateDiscordDbContext> _userRepository;
-        private readonly IBaseRepository<UserSettings, int, UltimateDiscordDbContext> _userSettingsRepository;
-        private readonly IMapper _mapper;
-
-        #endregion
-
         #region Constructor
 
-        public UserService(IBaseRepository<Domain.Models.User, ulong, UltimateDiscordDbContext> userRepository, IBaseRepository<UserSettings, int, UltimateDiscordDbContext> userSettingsRepository, IMapper mapper)
+        public UserService(IBaseRepository<Domain.Models.User, ulong, UltimateDiscordDbContext> userRepository,
+            IBaseRepository<UserSettings, int, UltimateDiscordDbContext> userSettingsRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _userSettingsRepository = userSettingsRepository;
             _mapper = mapper;
         }
+
+        #endregion
+
+        #region Fields
+
+        private readonly IBaseRepository<Domain.Models.User, ulong, UltimateDiscordDbContext> _userRepository;
+        private readonly IBaseRepository<UserSettings, int, UltimateDiscordDbContext> _userSettingsRepository;
+        private readonly IMapper _mapper;
 
         #endregion
 
@@ -44,12 +45,10 @@ namespace UltimateRedditBot.Discord.App.Services.User
             //Ensure that the user exists.
             var user = await _userRepository.GetByIdAsync(userSettingsDto.UserId);
             if (user == null)
-            {
                 await _userRepository.InsertAsync(new Domain.Models.User
                 {
                     Id = userSettingsDto.UserId
                 });
-            }
 
             var userSettings = _mapper.Map<UserSettings>(userSettingsDto);
 
@@ -58,7 +57,6 @@ namespace UltimateRedditBot.Discord.App.Services.User
             else
                 await _userSettingsRepository.InsertAsync(userSettings);
         }
-
 
         #endregion
     }

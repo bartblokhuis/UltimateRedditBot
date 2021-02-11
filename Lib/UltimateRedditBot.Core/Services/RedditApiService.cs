@@ -34,12 +34,10 @@ namespace UltimateRedditBot.Core.Services
         public async Task<SubredditDto> GetSubredditByName(string subredditName)
         {
             var client = _clientFactory.CreateClient();
-            var request = await client.GetAsync(string.Format(RedditApiConstants.SearchSubRedditByNameUrl, subredditName));
+            var request =
+                await client.GetAsync(string.Format(RedditApiConstants.SearchSubRedditByNameUrl, subredditName));
 
-            if (!request.IsSuccessStatusCode)
-            {
-                return null;
-            }
+            if (!request.IsSuccessStatusCode) return null;
 
             var responseBody = await request.Content.ReadAsStringAsync();
             client.Dispose();
@@ -47,16 +45,19 @@ namespace UltimateRedditBot.Core.Services
             return ParseSubReddit(subredditName, responseBody);
         }
 
-        public async Task<PostDto> GetOldPost(string subRedditName, string previousName, Sort sort, PostType postType, Guid id)
+        public async Task<PostDto> GetOldPost(string subRedditName, string previousName, Sort sort, PostType postType,
+            Guid id)
         {
             return await Process(1, subRedditName, "after", previousName, sort, postType);
         }
 
-        private async Task<PostDto> Process(int maximumAttempts, string subRedditName, string beforeOrAfter, string previousName, Sort sort, PostType postType = PostType.Image)
+        private async Task<PostDto> Process(int maximumAttempts, string subRedditName, string beforeOrAfter,
+            string previousName, Sort sort, PostType postType = PostType.Image)
         {
             for (var i = 0; i < maximumAttempts; i++)
             {
-                var url = string.Format(RedditApiConstants.GetRedditPostBase, subRedditName, sort.ToString().ToLowerInvariant(), beforeOrAfter, previousName);
+                var url = string.Format(RedditApiConstants.GetRedditPostBase, subRedditName,
+                    sort.ToString().ToLowerInvariant(), beforeOrAfter, previousName);
                 var client = _clientFactory.CreateClient();
 
                 try
@@ -133,15 +134,14 @@ namespace UltimateRedditBot.Core.Services
             try
             {
                 var baseElement = data.data.children[0].data;
-                var displayName = (string)baseElement.display_name;
+                var displayName = (string) baseElement.display_name;
 
                 if (!ValidSubReddit(name, displayName))
                     return null;
 
-                var isOver18 = (bool)baseElement.over18;
+                var isOver18 = (bool) baseElement.over18;
 
                 return new SubredditDto(name, isOver18);
-
             }
             catch (Exception e)
             {
@@ -151,7 +151,9 @@ namespace UltimateRedditBot.Core.Services
         }
 
         private static bool ValidSubReddit(string name, string responseName)
-            => name.Equals(responseName, StringComparison.OrdinalIgnoreCase);
+        {
+            return name.Equals(responseName, StringComparison.OrdinalIgnoreCase);
+        }
 
         #endregion
     }

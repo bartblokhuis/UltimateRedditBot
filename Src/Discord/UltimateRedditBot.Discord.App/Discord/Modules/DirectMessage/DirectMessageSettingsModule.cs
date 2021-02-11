@@ -13,13 +13,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
 {
     public class DirectMessageSettingsModule : UltimateDirectMessageModule
     {
-        #region Fields
-
-        private readonly IUserService _userService;
-        private readonly IGenericSettingService _genericSettingService;
-
-        #endregion
-
         #region Constructor
 
         public DirectMessageSettingsModule(IUserService userService, IGenericSettingService genericSettingService)
@@ -30,9 +23,17 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
 
         #endregion
 
+        #region Fields
+
+        private readonly IUserService _userService;
+        private readonly IGenericSettingService _genericSettingService;
+
+        #endregion
+
         #region Methods
 
-        [Command("setting"), Alias("s")]
+        [Command("setting")]
+        [Alias("s")]
         public async Task GetSetting(string setting)
         {
             if (setting.Equals("Prefix", StringComparison.OrdinalIgnoreCase))
@@ -40,7 +41,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
                 var userSettings = await _userService.GetUserSettingsById(Context.User.Id);
                 if (userSettings == null)
                 {
-                    await ReplyAsync($"Prefix: { DiscordSettings.DefaultGuildSettings.Prefix }");
+                    await ReplyAsync($"Prefix: {DiscordSettings.DefaultGuildSettings.Prefix}");
                     return;
                 }
 
@@ -48,12 +49,15 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
             }
             else if (setting.Equals("Bulk", StringComparison.OrdinalIgnoreCase))
             {
-                var bulkLimit = await _genericSettingService.GetSettingValueByKeyGroupAndKey<int>(DiscordSettings.GenericSettingDmGroup, GenericSettingKeyConstants.BulkSettingKey, Context.User.Id.ToString());
+                var bulkLimit = await _genericSettingService.GetSettingValueByKeyGroupAndKey<int>(
+                    DiscordSettings.GenericSettingDmGroup, GenericSettingKeyConstants.BulkSettingKey,
+                    Context.User.Id.ToString());
                 await ReplyAsync(bulkLimit.ToString());
             }
         }
 
-        [Command("setting"), Alias("s")]
+        [Command("setting")]
+        [Alias("s")]
         public async Task SaveSettings(string setting, string value)
         {
             if (setting.Equals("Prefix", StringComparison.OrdinalIgnoreCase))

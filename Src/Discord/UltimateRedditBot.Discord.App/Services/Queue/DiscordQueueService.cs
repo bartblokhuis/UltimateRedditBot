@@ -4,29 +4,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using UltimateRedditBot.App.Services.Events;
 using UltimateRedditBot.App.Services.Queue;
+using UltimateRedditBot.Discord.App.Discord.Constants;
+using UltimateRedditBot.Discord.Database;
+using UltimateRedditBot.Discord.Domain.Models;
 using UltimateRedditBot.Domain.Queue;
+using UltimateRedditBot.Infra.BaseRepository;
 using UltimateRedditBot.Infra.Services;
 
 namespace UltimateRedditBot.Discord.App.Services.Queue
 {
     public class DiscordQueueService : QueueService
     {
-        #region Fields
-
-        private readonly IQueueManager _queueManager;
-        private readonly IRedditApiService _redditApiService;
-        private readonly IEventPublisher _eventPublisher;
-
-        #endregion
-
         #region Constructor
 
-        public DiscordQueueService(IGenericSettingService genericSettingService, ISubredditService subredditService, IQueueManager queueManager, IRedditApiService redditApiService, IEventPublisher eventPublisher)
+        public DiscordQueueService(IGenericSettingService genericSettingService, ISubredditService subredditService,
+            IQueueManager queueManager, IRedditApiService redditApiService, IEventPublisher eventPublisher,
+            IBaseRepository<PostHistory, int, UltimateDiscordDbContext> postHistoryRepo,
+            IPostHistoryService postHistoryService)
             : base(genericSettingService, subredditService, queueManager)
         {
+            _subredditService = subredditService;
             _queueManager = queueManager;
             _redditApiService = redditApiService;
             _eventPublisher = eventPublisher;
+            _postHistoryService = postHistoryService;
         }
 
         #endregion
@@ -38,10 +39,16 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
             if (!(options is AddToQueueDiscordOptions discordClientOptions))
                 throw new Exception("Discord queue options didn't parse correctly");
 
+            var isGuild = (options as AddToQueueDiscordOptions).Group.Equals(DiscordSettings.GenericSettingGuildGroup);
+            var id = Convert.ToUInt64((options as AddToQueueDiscordOptions).ClientId);
+
+            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
+            var postHistory = _postHistoryService.GetPostHistoryName(isGuild, id, subreddit.Id);
+
             var queueClient = FindQueueClient(options.Group, options.ClientId);
             if (queueClient == null)
             {
-                var queueItem = await PrepareQueueItem(subredditName, amountOfTimes);
+                var queueItem = await PrepareQueueItem(subredditName, postHistory, amountOfTimes);
                 if (queueItem.SubredditDto == null)
                     return "Subreddit could not be found";
 
@@ -63,7 +70,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
                 return string.Empty;
             }
 
-            var newQeueItem = await PrepareQueueItem(subredditName, amountOfTimes);
+            var newQeueItem = await PrepareQueueItem(subredditName, postHistory, amountOfTimes);
             if (newQeueItem.SubredditDto == null)
                 return "Subreddit could not be found";
 
@@ -78,7 +85,9 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
         private IQueueClient FindQueueClient(string group, ulong clientId)
         {
             var queueClients = _queueManager.GetQueueClients().OfType<IDiscordQueueClient>().ToList();
-            return !queueClients.Any() ? null : queueClients.FirstOrDefault(x => x.Group == @group && x.ClientId == clientId);
+            return !queueClients.Any()
+                ? null
+                : queueClients.FirstOrDefault(x => x.Group == group && x.ClientId == clientId);
         }
 
         private DiscordQueueClient CreateDiscordQueueClient(IAddToQueueDiscordOptions options)
@@ -91,5 +100,15 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
                 QueueItems = new List<QueueItem>()
             };
         }
+
+        #region Fields
+
+        private readonly IQueueManager _queueManager;
+        private readonly IRedditApiService _redditApiService;
+        private readonly IEventPublisher _eventPublisher;
+        private readonly IPostHistoryService _postHistoryService;
+        private readonly ISubredditService _subredditService;
+
+        #endregion
     }
 }
