@@ -9,6 +9,7 @@ using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 using UltimateRedditBot.Discord.App.Discord.Modules.Helpers;
 using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.App.Services.Queue;
+using UltimateRedditBot.Infra.Services;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 {
@@ -18,15 +19,19 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 
         private readonly IBannedSubredditService _bannedSubredditService;
         private readonly IQueueService _queueService;
+        private readonly IPostHistoryService _postHistoryService;
+        private readonly ISubredditService _subredditService;
 
         #endregion
 
         #region Constructor
 
-        public GuildQueueModule(IQueueService queueService, IBannedSubredditService bannedSubredditService)
+        public GuildQueueModule(IQueueService queueService, IBannedSubredditService bannedSubredditService, IPostHistoryService postHistoryService, ISubredditService subredditService)
         {
             _queueService = queueService;
             _bannedSubredditService = bannedSubredditService;
+            _postHistoryService = postHistoryService;
+            _subredditService = subredditService;
         }
 
         #endregion
@@ -118,6 +123,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 
         #endregion
 
+        #region Remove subreddit from queue
 
         [Command("q-remove")]
         [Alias("q-r")]
@@ -134,6 +140,10 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             await ReplyAsync(result);
         }
 
+        #endregion
+
+        #region Clear Queue
+
         [Command("q-clear")]
         [Alias("q-c")]
         public async Task ClearQueue()
@@ -148,6 +158,27 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             var result = _queueService.ClearQueue(options);
             await ReplyAsync(result);
         }
+
+
+        #endregion
+
+        #region Reset post history
+
+        [Command("reset")]
+        [Alias("reset")]
+        public async Task ResetPostHistory(string subredditName)
+        {
+            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
+            if (subreddit == null)
+            {
+                await ReplyAsync("Subreddit doesn't exist");
+                return;
+            }
+            await _postHistoryService.ClearPostHistory(true, Context.Guild.Id, subreddit.Id);
+            await ReplyAsync("Cleared the history");
+        }
+
+        #endregion
 
         #endregion
     }

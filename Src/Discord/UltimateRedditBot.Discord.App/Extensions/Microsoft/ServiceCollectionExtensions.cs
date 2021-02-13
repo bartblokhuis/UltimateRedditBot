@@ -31,7 +31,7 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
             services.AddAutoMapper(typeof(DiscordAutoMapperProfile));
             services.AddSingleton<IGuildService, GuildService>();
             services.AddSingleton<IUserService, UserService>();
-            services.AddSingleton<IPostHistoryService, PostHistoryService>();
+            services.AddScoped<IPostHistoryService, PostHistoryService>();
             services.AddSingleton<IBannedSubredditService, BannedSubredditService>();
             services.AddSingleton<IGuildModService, GuildModService>();
 

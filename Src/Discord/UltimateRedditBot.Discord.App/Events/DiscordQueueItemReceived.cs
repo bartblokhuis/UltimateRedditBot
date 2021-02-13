@@ -44,7 +44,7 @@ namespace UltimateRedditBot.Discord.App.Events
             {
                 var id = Convert.ToUInt64(eventMessage.QueueClient.ClientId);
 
-                var postHistory = await _postHistoryService.GetPostHistory(isForGuild, id,
+                var postHistory = _postHistoryService.GetPostHistory(isForGuild, id,
                     eventMessage.QueueItem.SubredditDto.Id);
 
                 if (postHistory != null)

@@ -30,7 +30,7 @@ namespace UltimateRedditBot.Discord.App.Services
 
         #region Methods
 
-        public async Task<PostHistory> GetPostHistory(bool isForGuild, ulong id, int subredditId)
+        public PostHistory GetPostHistory(bool isForGuild, ulong id, int subredditId)
         {
             var postHistory = isForGuild
                 ? _postHistoryRepo.Table.FirstOrDefault(x => x.SubredditId == subredditId && x.GuildId == id)
@@ -55,9 +55,9 @@ namespace UltimateRedditBot.Discord.App.Services
                 : _postHistoryRepo.SaveChanges();
         }
 
-        public async Task ClearPostHistoryHistory(bool isForGuild, ulong id, int subredditId)
+        public async Task ClearPostHistory(bool isForGuild, ulong id, int subredditId)
         {
-            var postHistory = await GetPostHistory(isForGuild, id, subredditId);
+            var postHistory = GetPostHistory(isForGuild, id, subredditId);
             await _postHistoryRepo.DeleteAsync(postHistory);
         }
 
