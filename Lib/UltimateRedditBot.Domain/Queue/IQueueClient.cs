@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace UltimateRedditBot.Domain.Queue
 {
@@ -6,8 +7,10 @@ namespace UltimateRedditBot.Domain.Queue
     {
         ulong ClientId { get; set; }
 
-        IEnumerable<QueueItem> QueueItems { get; set; }
+        ICollection<QueueItem> QueueItems { get; set; }
 
-        bool HasQueueItems { get; }
+        bool HasQueueItems { get; set; }
+
+        Task Start();
     }
 }

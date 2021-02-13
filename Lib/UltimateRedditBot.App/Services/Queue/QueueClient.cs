@@ -24,7 +24,7 @@ namespace UltimateRedditBot.App.Services.Queue
         #region Fields
 
         public ulong ClientId { get; set; }
-        public IEnumerable<QueueItem> QueueItems { get; set; }
+        public ICollection<QueueItem> QueueItems { get; set; }
 
         public bool HasQueueItems { get; set; }
 
@@ -37,53 +37,52 @@ namespace UltimateRedditBot.App.Services.Queue
 
         public async Task Start()
         {
-            if (QueueItems.Any())
-                await Task.Run(async () =>
-                {
-                    var queueItems = QueueItems.DistinctBy(x => x.SubredditDto.Id).ToList();
-                    await Process(queueItems);
-                });
+            if (!QueueItems.Any())
+                return;
 
-            //Wait one second before starting again
-            await Task.Delay(1000);
-            Start();
+            var tasks = new List<Task>();
+            while (QueueItems.Any())
+            {
+                var queueItems = QueueItems.Where(x => !x.IsGettingPost && x.AmountOfPosts > 0).ToList();
+                foreach (var queueItem in queueItems)
+                {
+                    queueItem.IsGettingPost = true;
+                    await Task.Run(() =>
+                    {
+                        tasks.Add(ProcessQueueItem(queueItem)
+                            .ContinueWith((postDtoTask) =>
+                            {
+                                var postDto = postDtoTask.Result;
+                                if (postDto == null)
+                                    return;
+
+                                queueItem.AmountOfPosts--;
+                                queueItem.LastUsedPostName = postDto.Id;
+                                queueItem.IsGettingPost = false;
+
+                                if (queueItem.AmountOfPosts == 0)
+                                    QueueItems.Remove(queueItem);
+                            }));
+                    });
+                }
+
+                await Task.Delay(1000);
+            }
+
+            await Task.WhenAll(tasks);
+            HasQueueItems = false;
         }
 
         #region Process
 
-        protected virtual async Task Process(ICollection<QueueItem> queueItems)
-        {
-            if (!queueItems.Any())
-                return;
-
-            await ProcessQueue(queueItems);
-            foreach (var queueItem in queueItems)
-            {
-                var realQueueItem = QueueItems.FirstOrDefault(x => x.Id == queueItem.Id);
-                if (realQueueItem is null)
-                    continue;
-
-                realQueueItem.AmountOfPosts--;
-            }
-
-            QueueItems = QueueItems.Where(x => x.AmountOfPosts != 0);
-        }
-
-        protected virtual Task ProcessQueue(IEnumerable<QueueItem> queueItems)
-        {
-            var postDtos = queueItems.Select(GetPostDtoTasks);
-            return Task.WhenAll(postDtos);
-        }
-
-        //TODO Better method naming and documentation
-        protected virtual async Task<PostDto> GetPostDtoTasks(QueueItem queueItem)
+        protected virtual async Task<PostDto> ProcessQueueItem(QueueItem queueItem)
         {
             var postDto = await _redditApiService.GetOldPost(queueItem.SubredditDto.Name, queueItem.LastUsedPostName,
                 queueItem.Sort, queueItem.PostType, queueItem.Id);
+
             if (postDto == null)
                 return null;
 
-            queueItem.LastUsedPostName = postDto.Id;
             var postMessage = new QueueItemPostReceived
             {
                 PostDto = postDto,
@@ -98,17 +97,5 @@ namespace UltimateRedditBot.App.Services.Queue
         #endregion
 
         #endregion
-    }
-
-    internal static class MicrosoftExtensions
-    {
-        internal static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source,
-            Func<TSource, TKey> keySelector)
-        {
-            var seenKeys = new HashSet<TKey>();
-            foreach (var element in source)
-                if (seenKeys.Add(keySelector(element)))
-                    yield return element;
-        }
     }
 }

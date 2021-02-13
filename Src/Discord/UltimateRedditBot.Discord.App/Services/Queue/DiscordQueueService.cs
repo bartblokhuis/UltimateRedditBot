@@ -54,8 +54,8 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
 
 
                 queueClient = CreateDiscordQueueClient(discordClientOptions);
-                queueClient.QueueItems = queueClient.QueueItems.Append(queueItem);
-                _queueManager.AddQueueClient(queueClient);
+                queueClient.QueueItems.Add(queueItem);
+                await _queueManager.AddQueueClient(queueClient);
                 return "";
             }
 
@@ -74,7 +74,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
             if (newQeueItem.SubredditDto == null)
                 return "Subreddit could not be found";
 
-            queueClient.QueueItems = queueClient.QueueItems.Append(newQeueItem);
+            queueClient.QueueItems.Add(newQeueItem);
             _queueManager.UpdateQueueClient(queueClient);
 
             return "";

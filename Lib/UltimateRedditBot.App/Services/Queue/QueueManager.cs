@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UltimateRedditBot.Domain.Queue;
 
 namespace UltimateRedditBot.App.Services.Queue
@@ -12,12 +14,13 @@ namespace UltimateRedditBot.App.Services.Queue
 
         #endregion
 
-        public void AddQueueClient(IQueueClient queueClient)
+        public async Task AddQueueClient(IQueueClient queueClient)
         {
             _queueClients.Add(queueClient);
-            var client = queueClient as QueueClient;
+            if (!(queueClient is QueueClient client))
+                throw new ApplicationException();
 
-            client?.Start();
+            await client.Start();
         }
 
         public void UpdateQueueClient(IQueueClient queueClient)
@@ -30,6 +33,14 @@ namespace UltimateRedditBot.App.Services.Queue
             }
 
             oldClient.QueueItems = queueClient.QueueItems;
+
+            if (!queueClient.HasQueueItems)
+            {
+                queueClient.HasQueueItems = true;
+                queueClient.Start();
+
+            }
+
         }
 
         public IEnumerable<IQueueClient> GetQueueClients()

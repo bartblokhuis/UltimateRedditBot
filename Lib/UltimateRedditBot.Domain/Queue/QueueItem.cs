@@ -20,6 +20,8 @@ namespace UltimateRedditBot.Domain.Queue
 
         public string LastUsedPostName { get; set; }
 
+        public bool IsGettingPost { get; set; }
+
         #endregion
     }
 }

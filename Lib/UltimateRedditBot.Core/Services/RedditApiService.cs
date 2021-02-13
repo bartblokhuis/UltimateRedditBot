@@ -48,33 +48,31 @@ namespace UltimateRedditBot.Core.Services
         public async Task<PostDto> GetOldPost(string subRedditName, string previousName, Sort sort, PostType postType,
             Guid id)
         {
-            return await Process(1, subRedditName, "after", previousName, sort, postType);
+            return await Process(subRedditName, "after", previousName, sort, postType);
         }
 
-        private async Task<PostDto> Process(int maximumAttempts, string subRedditName, string beforeOrAfter,
+        private async Task<PostDto> Process(string subRedditName, string beforeOrAfter,
             string previousName, Sort sort, PostType postType = PostType.Image)
         {
-            for (var i = 0; i < maximumAttempts; i++)
+            var url = string.Format(RedditApiConstants.GetRedditPostBase, subRedditName,
+                sort.ToString().ToLowerInvariant(), beforeOrAfter, previousName);
+
+            var client = _clientFactory.CreateClient();
+            try
             {
-                var url = string.Format(RedditApiConstants.GetRedditPostBase, subRedditName,
-                    sort.ToString().ToLowerInvariant(), beforeOrAfter, previousName);
-                var client = _clientFactory.CreateClient();
+                var request = await client.GetAsync(url);
+                request.EnsureSuccessStatusCode();
 
-                try
-                {
-                    var request = await client.GetAsync(url);
-                    request.EnsureSuccessStatusCode();
+                var responseBody = await request.Content.ReadAsStringAsync();
+                var post = ProcessRequest(responseBody, out previousName, postType);
 
-                    var responseBody = await request.Content.ReadAsStringAsync();
-                    var post = ProcessRequest(responseBody, out previousName, postType);
-
-                    if (post is not null)
-                        return post;
-                }
-                catch (Exception e)
-                {
-                    //_logger.LogError($"Error getting new post. {url}, {e.Message}");
-                }
+                if (post is not null)
+                    return post;
+            }
+            catch (Exception e)
+            {
+                //TODO Implement logger
+                //_logger.LogError($"Error getting new post. {url}, {e.Message}");
             }
 
             //If we got this far we are not able to find any posts.

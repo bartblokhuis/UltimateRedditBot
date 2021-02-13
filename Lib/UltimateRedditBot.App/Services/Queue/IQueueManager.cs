@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UltimateRedditBot.Domain.Queue;
 
 namespace UltimateRedditBot.App.Services.Queue
 {
     public interface IQueueManager
     {
-        void AddQueueClient(IQueueClient queueClient);
+        Task AddQueueClient(IQueueClient queueClient);
 
         void UpdateQueueClient(IQueueClient queueClient);
 
