@@ -61,7 +61,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
         [Alias("q")]
         public async Task GetQueue()
         {
-            var options = new GetQueueDto
+            var options = new QueueOptions
             {
                 Id = Context.User.Id,
                 Group = DiscordSettings.GenericSettingDmGroup
@@ -87,16 +87,32 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
 
         #endregion
 
-        [Command("r-remove")]
-        [Alias("r-remove")]
+        [Command("q-remove")]
+        [Alias("q-remove")]
         public async Task RemoveFromQueue(string subreddit)
         {
+            var options = new QueueOptions
+            {
+                Id = Context.User.Id,
+                Group = DiscordSettings.GenericSettingDmGroup
+            };
+
+            var result = await _queueService.RemoveFromQueue(options, subreddit);
+            await ReplyAsync(result);
         }
 
-        [Command("r-clear")]
-        [Alias("r-clear")]
+        [Command("q-clear")]
+        [Alias("q-clear")]
         public async Task ClearQueue()
         {
+            var options = new QueueOptions
+            {
+                Id = Context.User.Id,
+                Group = DiscordSettings.GenericSettingDmGroup
+            };
+
+            var result = _queueService.ClearQueue(options);
+            await ReplyAsync(result);
         }
 
         #endregion

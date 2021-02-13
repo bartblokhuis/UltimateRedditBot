@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -9,7 +8,6 @@ using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 using UltimateRedditBot.Discord.App.Discord.Modules.Helpers;
 using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.App.Services.Queue;
-using UltimateRedditBot.Domain.Queue;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 {
@@ -84,7 +82,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
         [Alias("q")]
         public async Task GetQueue()
         {
-            var options = new GetQueueDto
+            var options = new QueueOptions
             {
                 Id = Context.Guild.Id,
                 ChannelId = Context.Channel.Id,
@@ -112,16 +110,34 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
         #endregion
 
 
-        [Command("r-remove")]
-        [Alias("r-remove")]
+        [Command("q-remove")]
+        [Alias("q-r")]
         public async Task RemoveFromQueue(string subreddit)
         {
+            var options = new QueueOptions
+            {
+                Id = Context.Guild.Id,
+                ChannelId = Context.Channel.Id,
+                Group = DiscordSettings.GenericSettingGuildGroup
+            };
+
+            var result = await _queueService.RemoveFromQueue(options, subreddit);
+            await ReplyAsync(result);
         }
 
-        [Command("r-clear")]
-        [Alias("r-clear")]
+        [Command("q-clear")]
+        [Alias("q-c")]
         public async Task ClearQueue()
         {
+            var options = new QueueOptions
+            {
+                Id = Context.Guild.Id,
+                ChannelId = Context.Channel.Id,
+                Group = DiscordSettings.GenericSettingGuildGroup
+            };
+
+            var result = _queueService.ClearQueue(options);
+            await ReplyAsync(result);
         }
 
         #endregion

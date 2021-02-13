@@ -1,6 +1,6 @@
 ﻿namespace UltimateRedditBot.Discord.App.Services.Queue
 {
-    public class GetQueueDto
+    public class QueueOptions
     {
         public ulong Id { get; set; }
 

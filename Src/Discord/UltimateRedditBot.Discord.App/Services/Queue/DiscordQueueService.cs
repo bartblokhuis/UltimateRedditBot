@@ -44,12 +44,12 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
 
         #region Methods
 
-        #region Add TO queue
+        #region Add to queue
 
-        public override async Task<string> AddToQueue<T>(T options, string subredditName, int amountOfTimes)
+        public override async Task<string> AddToQueue<T>(T addOptions, string subredditName, int amountOfTimes)
         {
-            if (!(options is AddToQueueDiscordOptions discordClientOptions))
-                throw new Exception("Discord queue options didn't parse correctly");
+            if (!(addOptions is AddToQueueDiscordOptions options))
+                throw new ApplicationException();
 
             var isGuild = (options as AddToQueueDiscordOptions).Group.Equals(DiscordSettings.GenericSettingGuildGroup);
             var id = Convert.ToUInt64((options as AddToQueueDiscordOptions).ClientId);
@@ -57,7 +57,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
             var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
             var postHistory = _postHistoryService.GetPostHistoryName(isGuild, id, subreddit.Id);
 
-            var queueClient = FindQueueClient(options.Group, options.ClientId);
+            var queueClient = FindQueueClient(options.Group, options.ClientId, options.ChannelId);
             if (queueClient == null)
             {
                 var queueItem = await PrepareQueueItem(subredditName, postHistory, amountOfTimes);
@@ -65,7 +65,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
                     return "Subreddit could not be found";
 
 
-                queueClient = CreateDiscordQueueClient(discordClientOptions);
+                queueClient = CreateDiscordQueueClient(options);
                 queueClient.QueueItems.Add(queueItem);
                 await _queueManager.AddQueueClient(queueClient);
                 return "";
@@ -98,7 +98,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
 
         public override IQueueClient GetQueueClient<T>(T getOptions)
         {
-            if (!(getOptions is GetQueueDto options))
+            if (!(getOptions is QueueOptions options))
                 throw new ApplicationException();
 
             return FindQueueClient(options.Group, options.Id, options.ChannelId);
@@ -110,8 +110,40 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
 
         public override string ClearQueue<T>(T identifier)
         {
-            if (!(identifier is GetQueueDto options))
+            if (!(identifier is QueueOptions options))
                 throw new ApplicationException();
+
+            var queClient = FindQueueClient(options.Group, options.Id, options.ChannelId);
+            if (queClient == null)
+                return "No items in the queue";
+
+            queClient.QueueItems = new List<QueueItem>();
+            return "Cleared the queue";
+        }
+
+        #endregion
+
+        #region Remove from queue
+
+        public override async Task<string> RemoveFromQueue<T>(T identifier, string subredditName)
+        {
+            if (!(identifier is QueueOptions options))
+                throw new ApplicationException();
+
+            var queClient = FindQueueClient(options.Group, options.Id, options.ChannelId);
+            if (queClient == null)
+                return "No items in the queue";
+
+            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
+            if (subreddit == null)
+                return "Subreddit doesn't exist";
+
+            var queueItem = queClient.QueueItems.FirstOrDefault(x => x.SubredditDto.Id == subreddit.Id);
+            if (queueItem == null)
+                return "Subreddit not in queue";
+
+            queClient.QueueItems.Remove(queueItem);
+            return "Removed subreddit from queue";
         }
 
         #endregion
@@ -123,10 +155,15 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
         private IQueueClient FindQueueClient(string group, ulong clientId, ulong? channelId = null)
         {
             var queueClients = _queueManager.GetQueueClients().OfType<IDiscordQueueClient>().ToList();
-            return !queueClients.Any()
-                ? null
-                : queueClients.FirstOrDefault(x => x.Group == group && x.ClientId == clientId
-                                                                    && (channelId.HasValue)? x.ChannelId == channelId: true );
+
+            if (!queueClients.Any())
+                return null;
+
+            return (group == DiscordSettings.GenericSettingGuildGroup)
+                ? queueClients.FirstOrDefault(x =>
+                    x.Group == group && x.ClientId == clientId && x.ChannelId == channelId)
+
+                : queueClients.FirstOrDefault(x => x.Group == group && x.ClientId == clientId);
         }
 
         private DiscordQueueClient CreateDiscordQueueClient(IAddToQueueDiscordOptions options)

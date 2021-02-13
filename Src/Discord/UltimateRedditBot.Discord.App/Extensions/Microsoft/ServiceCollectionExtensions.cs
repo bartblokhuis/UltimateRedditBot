@@ -54,6 +54,7 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
                 .AddSingleton<GuildSettingsModule>()
                 .AddSingleton<SubredditModule>()
                 .AddSingleton<DirectMessageSettingsModule>()
+                .AddSingleton<DirectMessagesCleanModule>()
                 .AddSingleton<BanSubredditModule>();
         }
     }

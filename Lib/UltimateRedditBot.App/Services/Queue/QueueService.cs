@@ -58,6 +58,11 @@ namespace UltimateRedditBot.App.Services.Queue
             throw new NotImplementedException();
         }
 
+        public virtual Task<string> RemoveFromQueue<T>(T identifier, string subredditName)
+        {
+            throw new NotImplementedException();
+        }
+
         protected virtual async Task<QueueItem> PrepareQueueItem(string subredditName, string lastPostName,
             int amountOfPosts = 1)
         {
