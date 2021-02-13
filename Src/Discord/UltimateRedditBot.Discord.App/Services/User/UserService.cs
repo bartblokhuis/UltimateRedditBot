@@ -58,6 +58,21 @@ namespace UltimateRedditBot.Discord.App.Services.User
                 await _userSettingsRepository.InsertAsync(userSettings);
         }
 
+        public async Task<UserDto> GetById(ulong userId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+                return null;
+
+            return _mapper.Map<UserDto>(user);
+        }
+
+
+        public Task RegisterUser(ulong userId)
+        {
+            return _userRepository.InsertAsync(new Domain.Models.User {Id = userId});
+        }
+
         #endregion
     }
 }

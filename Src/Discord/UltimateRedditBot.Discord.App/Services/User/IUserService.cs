@@ -8,5 +8,11 @@ namespace UltimateRedditBot.Discord.App.Services.User
         Task<UserSettingsDto> GetUserSettingsById(ulong userId);
 
         Task SaveUserSettings(UserSettingsDto userSettingsDto);
+
+        Task<UserDto> GetById(ulong userId);
+
+        Task RegisterUser(ulong userId);
+
+
     }
 }
