@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UltimateRedditBot.Domain.Queue;
 
 namespace UltimateRedditBot.App.Services.Queue
@@ -7,5 +8,8 @@ namespace UltimateRedditBot.App.Services.Queue
     {
         Task<string> AddToQueue<T>(T options, string subredditName, int amountOfTimes)
             where T : IAddToQueueOptions;
+
+        IQueueClient GetQueueClient<T>(T identifier);
+        string ClearQueue<T>(T identifier);
     }
 }

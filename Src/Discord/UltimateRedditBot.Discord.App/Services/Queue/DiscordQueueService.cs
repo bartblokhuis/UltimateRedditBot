@@ -15,6 +15,16 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
 {
     public class DiscordQueueService : QueueService
     {
+        #region Fields
+
+        private readonly IQueueManager _queueManager;
+        private readonly IRedditApiService _redditApiService;
+        private readonly IEventPublisher _eventPublisher;
+        private readonly IPostHistoryService _postHistoryService;
+        private readonly ISubredditService _subredditService;
+
+        #endregion
+
         #region Constructor
 
         public DiscordQueueService(IGenericSettingService genericSettingService, ISubredditService subredditService,
@@ -33,6 +43,8 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
         #endregion
 
         #region Methods
+
+        #region Add TO queue
 
         public override async Task<string> AddToQueue<T>(T options, string subredditName, int amountOfTimes)
         {
@@ -82,12 +94,39 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
 
         #endregion
 
-        private IQueueClient FindQueueClient(string group, ulong clientId)
+        #region Get Queue Client
+
+        public override IQueueClient GetQueueClient<T>(T getOptions)
+        {
+            if (!(getOptions is GetQueueDto options))
+                throw new ApplicationException();
+
+            return FindQueueClient(options.Group, options.Id, options.ChannelId);
+        }
+
+        #endregion
+
+        #region Clear queue
+
+        public override string ClearQueue<T>(T identifier)
+        {
+            if (!(identifier is GetQueueDto options))
+                throw new ApplicationException();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Utils
+
+        private IQueueClient FindQueueClient(string group, ulong clientId, ulong? channelId = null)
         {
             var queueClients = _queueManager.GetQueueClients().OfType<IDiscordQueueClient>().ToList();
             return !queueClients.Any()
                 ? null
-                : queueClients.FirstOrDefault(x => x.Group == group && x.ClientId == clientId);
+                : queueClients.FirstOrDefault(x => x.Group == group && x.ClientId == clientId
+                                                                    && (channelId.HasValue)? x.ChannelId == channelId: true );
         }
 
         private DiscordQueueClient CreateDiscordQueueClient(IAddToQueueDiscordOptions options)
@@ -101,14 +140,10 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
             };
         }
 
-        #region Fields
-
-        private readonly IQueueManager _queueManager;
-        private readonly IRedditApiService _redditApiService;
-        private readonly IEventPublisher _eventPublisher;
-        private readonly IPostHistoryService _postHistoryService;
-        private readonly ISubredditService _subredditService;
-
         #endregion
+
+
+
+
     }
 }

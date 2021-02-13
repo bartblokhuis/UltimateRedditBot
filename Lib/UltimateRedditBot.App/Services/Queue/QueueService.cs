@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UltimateRedditBot.Core.Constants;
 using UltimateRedditBot.Domain.Enums;
@@ -9,6 +10,14 @@ namespace UltimateRedditBot.App.Services.Queue
 {
     public abstract class QueueService : IQueueService
     {
+        #region Fields
+
+        private readonly IGenericSettingService _genericSettingService;
+        private readonly ISubredditService _subredditService;
+        private readonly IQueueManager _queueManager;
+
+        #endregion
+
         #region Constructor
 
         public QueueService(IGenericSettingService genericSettingService, ISubredditService subredditService,
@@ -39,6 +48,16 @@ namespace UltimateRedditBot.App.Services.Queue
             return string.Empty;
         }
 
+        public virtual IQueueClient GetQueueClient<T>(T identifier)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual string ClearQueue<T>(T identifier)
+        {
+            throw new NotImplementedException();
+        }
+
         protected virtual async Task<QueueItem> PrepareQueueItem(string subredditName, string lastPostName,
             int amountOfPosts = 1)
         {
@@ -59,13 +78,5 @@ namespace UltimateRedditBot.App.Services.Queue
         {
             return null;
         }
-
-        #region Fields
-
-        private readonly IGenericSettingService _genericSettingService;
-        private readonly ISubredditService _subredditService;
-        private readonly IQueueManager _queueManager;
-
-        #endregion
     }
 }
