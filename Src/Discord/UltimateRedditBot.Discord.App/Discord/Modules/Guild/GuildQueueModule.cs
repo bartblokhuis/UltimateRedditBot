@@ -3,6 +3,7 @@ using Discord.Commands;
 using UltimateRedditBot.App.Services.Queue;
 using UltimateRedditBot.Discord.App.Discord.Constants;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
+using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.App.Services.Queue;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
@@ -11,15 +12,17 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
     {
         #region Fields
 
+        private readonly IBannedSubredditService _bannedSubredditService;
         private readonly IQueueService _queueService;
 
         #endregion
 
         #region Constructor
 
-        public GuildQueueModule(IQueueService queueService)
+        public GuildQueueModule(IQueueService queueService, IBannedSubredditService bannedSubredditService)
         {
             _queueService = queueService;
+            _bannedSubredditService = bannedSubredditService;
         }
 
         #endregion
@@ -36,8 +39,8 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
                 ClientId = Context.Guild.Id,
                 ChannelId = Context.Channel.Id
             };
-            var result = await _queueService.AddToQueue(options, subreddit, 1);
-            await ReplyAsync(result);
+
+            await AddToQueue(options, subreddit, 1);
         }
 
         [Command("r")]
@@ -50,7 +53,19 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
                 ClientId = Context.Guild.Id,
                 ChannelId = Context.Channel.Id
             };
-            var result = await _queueService.AddToQueue(options, subreddit, amountOfTimes);
+
+            await AddToQueue(options, subreddit, amountOfTimes);
+        }
+
+        private async Task AddToQueue(AddToQueueDiscordOptions options, string subredditName, int amountOfTimes)
+        {
+            if (await _bannedSubredditService.IsSubredditBanned(Context.Guild.Id, subredditName))
+            {
+                await ReplyAsync("This subreddit is banned");
+                return;
+            }
+
+            var result = await _queueService.AddToQueue(options, subredditName, amountOfTimes);
             await ReplyAsync(result);
         }
 
