@@ -22,5 +22,7 @@ namespace UltimateRedditBot.Discord.Database
         public DbSet<UserSettings> UserSettings { get; set; }
 
         public DbSet<PostHistory> PostHistories { get; set; }
+
+        public DbSet<BannedSubreddit> BannedSubreddits { get; set; }
     }
 }
