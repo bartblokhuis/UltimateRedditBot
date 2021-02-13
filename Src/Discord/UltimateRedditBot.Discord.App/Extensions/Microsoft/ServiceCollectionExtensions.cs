@@ -32,6 +32,7 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
             services.AddSingleton<IGuildService, GuildService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IPostHistoryService, PostHistoryService>();
+            services.AddSingleton<IBannedSubredditService, BannedSubredditService>();
 
             services.AddSingleton<IConsumer<QueueItemPostReceived>, DiscordQueueItemReceived>();
             services.Replace(ServiceDescriptor.Singleton<IQueueService, DiscordQueueService>());
@@ -52,7 +53,8 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
                 .AddSingleton<GuildQueueModule>()
                 .AddSingleton<GuildSettingsModule>()
                 .AddSingleton<SubredditModule>()
-                .AddSingleton<DirectMessageSettingsModule>();
+                .AddSingleton<DirectMessageSettingsModule>()
+                .AddSingleton<BanSubredditModule>();
         }
     }
 }
