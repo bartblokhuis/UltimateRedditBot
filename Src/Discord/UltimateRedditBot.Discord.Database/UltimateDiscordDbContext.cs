@@ -24,5 +24,7 @@ namespace UltimateRedditBot.Discord.Database
         public DbSet<PostHistory> PostHistories { get; set; }
 
         public DbSet<BannedSubreddit> BannedSubreddits { get; set; }
+
+        public DbSet<GuildMod> GuildMods { get; set; }
     }
 }
