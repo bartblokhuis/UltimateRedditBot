@@ -104,8 +104,9 @@ namespace UltimateRedditBot.Core.BaseRepository
 
         public async Task UpdateAsync(TEntity entity)
         {
-            _dbSet.Update(entity);
+            _context.Entry(entity).State = EntityState.Modified;
             await SaveChanges();
+
         }
 
         public async Task UpdateRangeAsync(IEnumerable<TEntity> entities)

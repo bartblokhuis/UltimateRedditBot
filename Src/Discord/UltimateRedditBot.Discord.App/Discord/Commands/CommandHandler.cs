@@ -95,9 +95,9 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
             var prefix = DiscordSettings.DefaultGuildSettings.Prefix;
             if (isGuild)
             {
-                var guildSettings = await _guildService.GetGuildSettingsById(id);
-                if (guildSettings is not null && !string.IsNullOrEmpty(guildSettings.Prefix))
-                    prefix = guildSettings.Prefix;
+                var guildPrefix = _guildService.GetPrefix(id);
+                if (!string.IsNullOrEmpty(guildPrefix))
+                    prefix = guildPrefix;
             }
             else
             {

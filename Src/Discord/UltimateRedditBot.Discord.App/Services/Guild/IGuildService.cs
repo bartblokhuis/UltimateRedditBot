@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UltimateRedditBot.Discord.Domain.Dtos;
+using UltimateRedditBot.Discord.Domain.Models;
 
 namespace UltimateRedditBot.Discord.App.Services.Guild
 {
@@ -12,8 +13,10 @@ namespace UltimateRedditBot.Discord.App.Services.Guild
 
         Task<Domain.Models.Guild> GetById(ulong guildId);
 
-        Task<GuildSettingsDto> GetGuildSettingsById(ulong guildId);
+        GuildSettings GetGuildSettingsById(ulong guildId);
 
-        Task SaveGuildSettings(GuildSettingsDto guildSettingsDto);
+        Task SaveGuildSettings(GuildSettings guildSettingsDto);
+
+        string GetPrefix(ulong guildId);
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Discord.Database;
 using UltimateRedditBot.Discord.Domain.Dtos;
 using UltimateRedditBot.Discord.Domain.Models;
@@ -44,19 +45,21 @@ namespace UltimateRedditBot.Discord.App.Services.Guild
             return _guildRepository.GetByIdAsync(guildId);
         }
 
-        public async Task<GuildSettingsDto> GetGuildSettingsById(ulong guildId)
+        public string GetPrefix(ulong guildId)
         {
-            var guildSetting =
-                await _guildSettingsRepository.Table.FirstOrDefaultAsync(setting => setting.GuildId == guildId);
-            return guildSetting == null ? null : _mapper.Map<GuildSettingsDto>(guildSetting);
+            return _guildSettingsRepository.Table.AsNoTracking().FirstOrDefault(x => x.GuildId == guildId)?.Prefix;
         }
 
-        public async Task SaveGuildSettings(GuildSettingsDto guildSettingsDto)
+        public GuildSettings GetGuildSettingsById(ulong guildId)
         {
-            var guildSettings = _mapper.Map<GuildSettings>(guildSettingsDto);
+            var guildSetting = _guildSettingsRepository.Table.AsTracking().FirstOrDefault(setting => setting.GuildId == guildId);
+            return guildSetting;
+        }
 
+        public async Task SaveGuildSettings(GuildSettings guildSettings)
+        {
             if (guildSettings.Id != 0)
-                await _guildSettingsRepository.UpdateAsync(guildSettings);
+                await _guildSettingsRepository.SaveChanges();
             else
                 await _guildSettingsRepository.InsertAsync(guildSettings);
         }

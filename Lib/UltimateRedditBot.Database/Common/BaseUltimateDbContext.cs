@@ -19,7 +19,7 @@ namespace UltimateRedditBot.Database.Common
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var changes = from e in ChangeTracker.Entries()
                 where e.State != EntityState.Unchanged
@@ -31,7 +31,6 @@ namespace UltimateRedditBot.Database.Common
                     HasUpdatedTime(change.Entity) && change.Entity is IHasUpdatedDate updateTime)
                     updateTime.UpdatedAtUTC = DateTime.UtcNow;
 
-
                 if (change.State != EntityState.Added || !HasCreationTime(change.Entity))
                     continue;
 
@@ -39,7 +38,7 @@ namespace UltimateRedditBot.Database.Common
                     creationTime.CreatedAtUTC = DateTime.UtcNow;
             }
 
-            return base.SaveChangesAsync(cancellationToken);
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
         #region Helpers

@@ -5,8 +5,10 @@ using Discord.WebSocket;
 using UltimateRedditBot.Core.Constants;
 using UltimateRedditBot.Discord.App.Discord.Constants;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
+using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.App.Services.Guild;
 using UltimateRedditBot.Discord.Domain.Dtos;
+using UltimateRedditBot.Discord.Domain.Models;
 using UltimateRedditBot.Domain.Models.Settings;
 using UltimateRedditBot.Infra.Services;
 
@@ -16,11 +18,20 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
     {
         #region Constructor
 
-        public GuildSettingsModule(IGuildService guildService, IGenericSettingService genericSettingService)
+        public GuildSettingsModule(IGuildService guildService, IGenericSettingService genericSettingService, IGuildModService guildModService)
         {
             _guildService = guildService;
             _genericSettingService = genericSettingService;
+            _guildModService = guildModService;
         }
+
+        #endregion
+
+        #region Fields
+
+        private readonly IGuildService _guildService;
+        private readonly IGenericSettingService _genericSettingService;
+        private readonly IGuildModService _guildModService;
 
         #endregion
 
@@ -55,12 +66,10 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             await _genericSettingService.SaveSetting(bulkSetting);
         }
 
-        #endregion
-
-        #region Fields
-
-        private readonly IGuildService _guildService;
-        private readonly IGenericSettingService _genericSettingService;
+        private bool IsMod()
+        {
+            return _guildModService.IsMod(Context.User.Id, Context.Guild.Id);
+        }
 
         #endregion
 
@@ -73,14 +82,14 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             var guild = ((SocketGuildChannel) Context.Channel).Guild;
             if (setting.Equals("Prefix", StringComparison.OrdinalIgnoreCase))
             {
-                var guildSettings = await _guildService.GetGuildSettingsById(guild.Id);
-                if (guildSettings == null)
+                var guildPrefix = _guildService.GetPrefix(guild.Id);
+                if (string.IsNullOrEmpty(guildPrefix))
                 {
                     await ReplyAsync($"Prefix: {DiscordSettings.DefaultGuildSettings.Prefix}");
                     return;
                 }
 
-                await ReplyAsync(guildSettings.Prefix);
+                await ReplyAsync(guildPrefix);
             }
             else if (setting.Equals("Bulk", StringComparison.OrdinalIgnoreCase))
             {
@@ -95,14 +104,21 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
         [Alias("s")]
         public async Task SaveSettings(string setting, string value)
         {
+            if (!IsMod())
+            {
+                await ReplyAsync("Only mods can edit settings");
+                return;
+            }
+
             var guild = ((SocketGuildChannel) Context.Channel).Guild;
             if (setting.Equals("Prefix", StringComparison.OrdinalIgnoreCase))
             {
                 //TODO Check if the user attempting to change the setting has the permissions to do so.
-                var guildSettings = await _guildService.GetGuildSettingsById(guild.Id);
+                var guildSettings = _guildService.GetGuildSettingsById(guild.Id);
                 if (guildSettings == null)
-                    guildSettings = new GuildSettingsDto(guild.Id)
+                    guildSettings = new GuildSettings
                     {
+                        GuildId = guild.Id,
                         Prefix = value
                     };
                 else

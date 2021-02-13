@@ -34,10 +34,10 @@ namespace UltimateRedditBot.App.Services.Queue
 
             oldClient.QueueItems = queueClient.QueueItems;
 
-            if (!queueClient.HasQueueItems)
+            if (!oldClient.HasQueueItems)
             {
-                queueClient.HasQueueItems = true;
-                queueClient.Start();
+                oldClient.HasQueueItems = true;
+                oldClient.Start();
 
             }
 

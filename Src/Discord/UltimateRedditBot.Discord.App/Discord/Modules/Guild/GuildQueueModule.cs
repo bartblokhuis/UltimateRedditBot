@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -70,8 +71,16 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
                 return;
             }
 
-            var result = await _queueService.AddToQueue(options, subredditName, amountOfTimes);
-            await ReplyAsync(result);
+            try
+            {
+                var result = await _queueService.AddToQueue(options, subredditName, amountOfTimes);
+                //await ReplyAsync(result);
+            }
+            catch (Exception e)
+            {
+
+            }
+
         }
 
         #endregion
