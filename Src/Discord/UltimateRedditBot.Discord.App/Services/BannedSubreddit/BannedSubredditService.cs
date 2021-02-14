@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Discord.Database;
 using UltimateRedditBot.Discord.Domain.Models;
 using UltimateRedditBot.Infra.BaseRepository;
@@ -65,6 +67,12 @@ namespace UltimateRedditBot.Discord.App.Services
 
             await _bannedSubredditRepo.DeleteAsync(banRecord);
             return $"Unbanned the {subredditName} subreddit";
+        }
+
+        public Task<List<int>> GetBannedSubredditIds(ulong guildId)
+        {
+            return _bannedSubredditRepo.Table.AsQueryable().Where(x => x.GuildId == guildId)?
+                .Select(x => x.SubredditId).ToListAsync();
         }
 
         #endregion

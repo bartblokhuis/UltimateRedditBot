@@ -29,11 +29,11 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
             services.AddDbContext<UltimateDiscordDbContext>(options => { options.UseSqlServer(connectionString); });
 
             services.AddAutoMapper(typeof(DiscordAutoMapperProfile));
-            services.AddSingleton<IGuildService, GuildService>();
-            services.AddSingleton<IUserService, UserService>();
+            services.AddScoped<IGuildService, GuildService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPostHistoryService, PostHistoryService>();
-            services.AddSingleton<IBannedSubredditService, BannedSubredditService>();
-            services.AddSingleton<IGuildModService, GuildModService>();
+            services.AddScoped<IBannedSubredditService, BannedSubredditService>();
+            services.AddScoped<IGuildModService, GuildModService>();
 
             services.AddSingleton<IConsumer<QueueItemPostReceived>, DiscordQueueItemReceived>();
             services.Replace(ServiceDescriptor.Singleton<IQueueService, DiscordQueueService>());
@@ -55,7 +55,7 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
                 .AddSingleton<GuildSettingsModule>()
                 .AddSingleton<SubredditModule>()
                 .AddSingleton<DirectMessageSettingsModule>()
-                .AddSingleton<DirectMessagesCleanModule>()
+                .AddSingleton<CleanModule>()
                 .AddSingleton<GuildModModule>()
                 .AddSingleton<BanSubredditModule>();
         }

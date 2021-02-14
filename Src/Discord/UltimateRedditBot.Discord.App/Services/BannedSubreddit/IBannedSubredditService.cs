@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using UltimateRedditBot.Discord.Domain.Models;
 
 namespace UltimateRedditBot.Discord.App.Services
 {
@@ -9,5 +11,7 @@ namespace UltimateRedditBot.Discord.App.Services
         Task<bool> IsSubredditBanned(ulong id, string subredditName);
 
         Task<string> UnbanSubreddit(ulong id, string subredditName);
+
+        Task<List<int>> GetBannedSubredditIds(ulong guildId);
     }
 }

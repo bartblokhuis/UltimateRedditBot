@@ -68,6 +68,23 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             await AddToQueue(options, subreddit, amountOfTimes);
         }
 
+        [Command("r-random")]
+        [Alias("r-r")]
+
+        public async Task AddRandomToQueue()
+        {
+            var options = new AddToQueueDiscordOptions
+            {
+                Group = DiscordSettings.GenericSettingGuildGroup,
+                ClientId = Context.Guild.Id,
+                ChannelId = Context.Channel.Id
+            };
+
+            var bannedSubreddits = await _bannedSubredditService.GetBannedSubredditIds(Context.Guild.Id);
+            var subredditName = await _subredditService.GetRandomSubredditName(((ITextChannel) Context.Channel).IsNsfw, bannedSubreddits);
+            await AddToQueue(options, subredditName, 1);
+        }
+
         private async Task AddToQueue(AddToQueueDiscordOptions options, string subredditName, int amountOfTimes)
         {
             if (await _bannedSubredditService.IsSubredditBanned(Context.Guild.Id, subredditName))
@@ -76,16 +93,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
                 return;
             }
 
-            try
-            {
-                var result = await _queueService.AddToQueue(options, subredditName, amountOfTimes);
-                //await ReplyAsync(result);
-            }
-            catch (Exception e)
-            {
-
-            }
-
+            await _queueService.AddToQueue(options, subredditName, amountOfTimes); ;
         }
 
         #endregion

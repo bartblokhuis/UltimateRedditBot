@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Domain.Dtos.Reddit;
@@ -10,6 +13,14 @@ namespace UltimateRedditBot.Core.Services
 {
     public class SubredditService : ISubredditService
     {
+        #region Fields
+
+        private readonly IBaseRepository<Subreddit> _subredditRepo;
+        private readonly IRedditApiService _redditApiService;
+        private readonly IMapper _mapper;
+
+        #endregion
+
         #region Constructor
 
         public SubredditService(IBaseRepository<Subreddit> subredditRepo, IRedditApiService redditApiService,
@@ -47,13 +58,23 @@ namespace UltimateRedditBot.Core.Services
             return subredditDto;
         }
 
-        #endregion
+        public async Task<string> GetRandomSubredditName(bool isOver18, IEnumerable<int> bannedSubredditIds = null)
+        {
+            bannedSubredditIds ??= new List<int>();
+            bannedSubredditIds = bannedSubredditIds.ToList();
 
-        #region Fields
+            var subreddits = _subredditRepo.Table.AsQueryable().Where(x => !bannedSubredditIds.Contains(x.Id));
 
-        private readonly IBaseRepository<Subreddit> _subredditRepo;
-        private readonly IRedditApiService _redditApiService;
-        private readonly IMapper _mapper;
+            if (!isOver18)
+                subreddits = subreddits.Where(x => !x.IsNsfw);
+
+            var amountOfMappedSubreddits = await subreddits.CountAsync();
+
+            var randomGen = new Random();
+            var sub = randomGen.Next(amountOfMappedSubreddits);
+
+           return subreddits.Skip(sub -1).First().Name;
+        }
 
         #endregion
     }
