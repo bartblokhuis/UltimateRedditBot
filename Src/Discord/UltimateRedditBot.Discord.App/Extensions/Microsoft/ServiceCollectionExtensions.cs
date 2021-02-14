@@ -51,6 +51,7 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
                 .AddSingleton<CommandHandler>()
                 .AddSingleton<HelpModule>()
                 .AddSingleton<GuildQueueModule>()
+                .AddSingleton<GuildQueueModule>()
                 .AddSingleton<GuildSettingsModule>()
                 .AddSingleton<SubredditModule>()
                 .AddSingleton<DirectMessageSettingsModule>()

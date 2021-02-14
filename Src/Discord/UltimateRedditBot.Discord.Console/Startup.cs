@@ -19,6 +19,7 @@ namespace UltimateRedditBot.Discord.Console
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(Configuration);
             services.AddUltimateServices(Configuration["ConnectionString:DefaultConnection"]);
             services.AddDiscord(Configuration["ConnectionString:DiscordConnection"]);
 

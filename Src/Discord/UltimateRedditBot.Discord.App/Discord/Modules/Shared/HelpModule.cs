@@ -1,11 +1,27 @@
 ﻿using System.Threading.Tasks;
 using Discord.Commands;
+using Microsoft.Extensions.Configuration;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 {
     public class HelpModule : UltimateCommandModule
     {
+        #region Fields
+
+        private readonly IConfiguration _configuration;
+
+        #endregion
+
+        #region Constructor
+
+        public HelpModule(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        #endregion
+
         #region Methods
 
         [Command("help")]
@@ -14,13 +30,20 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
         {
         }
 
-        #endregion
+        [Command("invite")]
+        [Alias("inv")]
+        public async Task Invite()
+        {
+            var inviteLink = _configuration["InviteLink"];
 
-        #region Fields
+            if (string.IsNullOrEmpty(inviteLink))
+            {
+                await ReplyAsync("No invite link has been set.");
+                return;
+            }
 
-        #endregion
-
-        #region Constructor
+            await ReplyAsync(inviteLink);
+        }
 
         #endregion
     }
