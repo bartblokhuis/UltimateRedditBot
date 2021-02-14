@@ -30,6 +30,7 @@ namespace UltimateRedditBot.App.Services.Queue
 
         private readonly IRedditApiService _redditApiService;
         private readonly IEventPublisher _eventPublisher;
+        private bool _started = true;
 
         #endregion
 
@@ -37,7 +38,7 @@ namespace UltimateRedditBot.App.Services.Queue
 
         public async Task Start()
         {
-            if (!QueueItems.Any())
+            if (!QueueItems.Any() || _started)
                 return;
 
             var tasks = new List<Task>();
@@ -71,6 +72,7 @@ namespace UltimateRedditBot.App.Services.Queue
 
             await Task.WhenAll(tasks);
             HasQueueItems = false;
+            _started = false;
         }
 
         #region Process
