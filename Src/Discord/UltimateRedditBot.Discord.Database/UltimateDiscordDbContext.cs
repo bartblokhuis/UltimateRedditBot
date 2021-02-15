@@ -28,5 +28,8 @@ namespace UltimateRedditBot.Discord.Database
         public DbSet<GuildMod> GuildMods { get; set; }
 
         public DbSet<TextChannel> TextChannels { get; set; }
+
+        public DbSet<TextChannelSubscription> TextChannelSubscriptions { get; set; }
+
     }
 }
