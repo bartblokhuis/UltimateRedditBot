@@ -17,5 +17,7 @@ namespace UltimateRedditBot.Database
         public DbSet<Subreddit> Subreddits { get; set; }
 
         public DbSet<GenericSetting> GenericSettings { get; set; }
+
+        public DbSet<Subscription> Subscriptions { get; set; }
     }
 }

@@ -28,12 +28,12 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
         {
             services.AddDbContext<UltimateDiscordDbContext>(options => { options.UseSqlServer(connectionString); });
 
-            services.AddAutoMapper(typeof(DiscordAutoMapperProfile));
-            services.AddScoped<IGuildService, GuildService>();
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IPostHistoryService, PostHistoryService>();
-            services.AddScoped<IBannedSubredditService, BannedSubredditService>();
-            services.AddScoped<IGuildModService, GuildModService>();
+            services.AddAutoMapper(typeof(DiscordAutoMapperProfile))
+                .AddScoped<IGuildService, GuildService>()
+                .AddScoped<IUserService, UserService>()
+                .AddScoped<IPostHistoryService, PostHistoryService>()
+                .AddScoped<IBannedSubredditService, BannedSubredditService>()
+                .AddScoped<IGuildModService, GuildModService>();
 
             services.AddSingleton<IConsumer<QueueItemPostReceived>, DiscordQueueItemReceived>();
             services.Replace(ServiceDescriptor.Singleton<IQueueService, DiscordQueueService>());
