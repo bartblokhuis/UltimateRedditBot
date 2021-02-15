@@ -26,5 +26,7 @@ namespace UltimateRedditBot.Discord.Database
         public DbSet<BannedSubreddit> BannedSubreddits { get; set; }
 
         public DbSet<GuildMod> GuildMods { get; set; }
+
+        public DbSet<TextChannel> TextChannels { get; set; }
     }
 }
