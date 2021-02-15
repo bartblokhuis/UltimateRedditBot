@@ -17,6 +17,7 @@ using UltimateRedditBot.Discord.App.Events;
 using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.App.Services.Guild;
 using UltimateRedditBot.Discord.App.Services.Queue;
+using UltimateRedditBot.Discord.App.Services.TextChannelService;
 using UltimateRedditBot.Discord.App.Services.User;
 using UltimateRedditBot.Discord.Database;
 
@@ -32,6 +33,7 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
                 .AddScoped<IGuildService, GuildService>()
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<IPostHistoryService, PostHistoryService>()
+                .AddScoped<ITextChannelService, TextChannelService>()
                 .AddScoped<IBannedSubredditService, BannedSubredditService>()
                 .AddScoped<IGuildModService, GuildModService>();
 
@@ -51,12 +53,13 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
                 .AddSingleton<CommandHandler>()
                 .AddSingleton<HelpModule>()
                 .AddSingleton<GuildQueueModule>()
-                .AddSingleton<GuildQueueModule>()
+                .AddSingleton<SharedQueueModule>()
                 .AddSingleton<GuildSettingsModule>()
                 .AddSingleton<SubredditModule>()
                 .AddSingleton<DirectMessageSettingsModule>()
                 .AddSingleton<CleanModule>()
                 .AddSingleton<GuildModModule>()
+                .AddSingleton<SubscribeModule>()
                 .AddSingleton<BanSubredditModule>();
         }
     }

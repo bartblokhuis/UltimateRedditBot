@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
@@ -19,18 +18,16 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 
         private readonly IBannedSubredditService _bannedSubredditService;
         private readonly IQueueService _queueService;
-        private readonly IPostHistoryService _postHistoryService;
         private readonly ISubredditService _subredditService;
 
         #endregion
 
         #region Constructor
 
-        public GuildQueueModule(IQueueService queueService, IBannedSubredditService bannedSubredditService, IPostHistoryService postHistoryService, ISubredditService subredditService)
+        public GuildQueueModule(IQueueService queueService, IBannedSubredditService bannedSubredditService, ISubredditService subredditService)
         {
             _queueService = queueService;
             _bannedSubredditService = bannedSubredditService;
-            _postHistoryService = postHistoryService;
             _subredditService = subredditService;
         }
 
@@ -167,24 +164,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             await ReplyAsync(result);
         }
 
-
-        #endregion
-
-        #region Reset post history
-
-        [Command("reset")]
-        [Alias("reset")]
-        public async Task ResetPostHistory(string subredditName)
-        {
-            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
-            if (subreddit == null)
-            {
-                await ReplyAsync("Subreddit doesn't exist");
-                return;
-            }
-            await _postHistoryService.ClearPostHistory(true, Context.Guild.Id, subreddit.Id);
-            await ReplyAsync("Cleared the history");
-        }
 
         #endregion
 
