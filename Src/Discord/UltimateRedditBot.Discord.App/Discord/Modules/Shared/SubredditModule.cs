@@ -3,7 +3,7 @@ using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 {
-    public class SubredditModule : UltimateCommandModule
+    public class SubredditModule : SharedCommandModule
     {
         #region Fields
 

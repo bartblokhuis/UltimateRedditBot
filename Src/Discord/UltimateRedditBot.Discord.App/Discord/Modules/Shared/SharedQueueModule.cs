@@ -6,7 +6,7 @@ using UltimateRedditBot.Infra.Services;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 {
-    public class SharedQueueModule : UltimateCommandModule
+    public class SharedQueueModule : SharedCommandModule
     {
         #region Fields
 
@@ -21,15 +21,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
         {
             _subredditService = subredditService;
             _postHistoryService = postHistoryService;
-        }
-
-        #endregion
-
-        #region Utils
-
-        private bool IsForGuild()
-        {
-            return Context.Guild != null;
         }
 
         #endregion

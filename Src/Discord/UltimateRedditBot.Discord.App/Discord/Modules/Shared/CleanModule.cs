@@ -7,7 +7,7 @@ using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 {
-    public class CleanModule : UltimateCommandModule
+    public class CleanModule : SharedCommandModule
 
     {
 

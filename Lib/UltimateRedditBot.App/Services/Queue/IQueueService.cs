@@ -10,6 +10,7 @@ namespace UltimateRedditBot.App.Services.Queue
             where T : IAddToQueueOptions;
 
         IQueueClient GetQueueClient<T>(T identifier);
+
         string ClearQueue<T>(T identifier);
 
         Task<string> RemoveFromQueue<T>(T identifier, string subredditName);

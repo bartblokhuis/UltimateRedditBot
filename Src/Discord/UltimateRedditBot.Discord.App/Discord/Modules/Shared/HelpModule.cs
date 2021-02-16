@@ -5,7 +5,7 @@ using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 {
-    public class HelpModule : UltimateCommandModule
+    public class HelpModule : SharedCommandModule
     {
         #region Fields
 

@@ -6,7 +6,7 @@ using UltimateRedditBot.Discord.Domain.Models;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 {
-    public class SubscribeModule : UltimateCommandModule
+    public class SubscribeModule : SharedCommandModule
     {
         #region Fields
 
