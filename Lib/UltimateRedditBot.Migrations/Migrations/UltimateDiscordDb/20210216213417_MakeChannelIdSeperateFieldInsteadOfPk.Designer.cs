@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UltimateRedditBot.Discord.Database;
 
 namespace UltimateRedditBot.Migrations.Migrations.UltimateDiscordDb
 {
     [DbContext(typeof(UltimateDiscordDbContext))]
-    partial class UltimateDiscordDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210216213417_MakeChannelIdSeperateFieldInsteadOfPk")]
+    partial class MakeChannelIdSeperateFieldInsteadOfPk
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,10 +154,10 @@ namespace UltimateRedditBot.Migrations.Migrations.UltimateDiscordDb
 
             modelBuilder.Entity("UltimateRedditBot.Discord.Domain.Models.TextChannel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<decimal>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("decimal(20,0)")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.None);
 
                     b.Property<decimal?>("GuildId")
                         .HasColumnType("decimal(20,0)");
@@ -188,12 +190,9 @@ namespace UltimateRedditBot.Migrations.Migrations.UltimateDiscordDb
                     b.Property<decimal>("TextChannelId")
                         .HasColumnType("decimal(20,0)");
 
-                    b.Property<int?>("TextChannelId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("TextChannelId1");
+                    b.HasIndex("TextChannelId");
 
                     b.ToTable("TextChannelSubscriptions");
                 });
@@ -316,7 +315,9 @@ namespace UltimateRedditBot.Migrations.Migrations.UltimateDiscordDb
                 {
                     b.HasOne("UltimateRedditBot.Discord.Domain.Models.TextChannel", "TextChannel")
                         .WithMany()
-                        .HasForeignKey("TextChannelId1");
+                        .HasForeignKey("TextChannelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("TextChannel");
                 });

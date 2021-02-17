@@ -2,10 +2,10 @@
 
 namespace UltimateRedditBot.Discord.Domain.Models
 {
-    public class TextChannel : BaseEntity<ulong>
+    public class TextChannel : BaseEntity
     {
-        public ulong ChannelId { get; set; }
-        
+        public ulong TextChannelId { get; set; }
+
         public ulong? UserId { get; set; }
         public User User { get; set; }
 

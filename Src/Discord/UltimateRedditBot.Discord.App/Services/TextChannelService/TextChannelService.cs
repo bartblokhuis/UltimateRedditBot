@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Discord.Database;
 using UltimateRedditBot.Discord.Domain.Models;
 using UltimateRedditBot.Infra.BaseRepository;
@@ -9,13 +11,13 @@ namespace UltimateRedditBot.Discord.App.Services.TextChannelService
     {
         #region Fields
 
-        private readonly IBaseRepository<TextChannel, ulong, UltimateDiscordDbContext> _textChannelBaseRepo;
+        private readonly IBaseRepository<TextChannel, int, UltimateDiscordDbContext> _textChannelBaseRepo;
 
         #endregion
 
         #region Constructor
 
-        public TextChannelService(IBaseRepository<TextChannel, ulong, UltimateDiscordDbContext> textChannelBaseRepo)
+        public TextChannelService(IBaseRepository<TextChannel, int, UltimateDiscordDbContext> textChannelBaseRepo)
         {
             _textChannelBaseRepo = textChannelBaseRepo;
         }
@@ -24,21 +26,23 @@ namespace UltimateRedditBot.Discord.App.Services.TextChannelService
 
         #region Methods
 
-        public Task<TextChannel> GetTextChannelById(ulong id)
+        public Task<TextChannel> GetTextChannelById(ulong id, ulong? guildId, ulong? userId)
         {
-            return _textChannelBaseRepo.GetByIdAsync(id);
+            return _textChannelBaseRepo.Table.AsQueryable()
+                .FirstOrDefaultAsync(x => x.TextChannelId == id && x.GuildId == guildId && x.UserId == userId);
         }
 
-        public Task RegisterTextChannel(ulong id, ulong? userId, ulong? guilId)
+        public async Task<TextChannel> RegisterTextChannel(ulong id, ulong? guildId, ulong? userId)
         {
             var textChannel = new TextChannel
             {
-                Id = id,
+                TextChannelId = id,
                 UserId = userId,
-                GuildId = guilId
+                GuildId = guildId
             };
 
-            return _textChannelBaseRepo.InsertAsync(textChannel);
+            await _textChannelBaseRepo.InsertAsync(textChannel);
+            return textChannel;
         }
 
         #endregion

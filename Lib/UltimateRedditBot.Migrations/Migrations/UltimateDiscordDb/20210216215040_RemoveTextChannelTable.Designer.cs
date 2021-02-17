@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UltimateRedditBot.Discord.Database;
 
 namespace UltimateRedditBot.Migrations.Migrations.UltimateDiscordDb
 {
     [DbContext(typeof(UltimateDiscordDbContext))]
-    partial class UltimateDiscordDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210216215040_RemoveTextChannelTable")]
+    partial class RemoveTextChannelTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,29 +177,6 @@ namespace UltimateRedditBot.Migrations.Migrations.UltimateDiscordDb
                     b.ToTable("TextChannels");
                 });
 
-            modelBuilder.Entity("UltimateRedditBot.Discord.Domain.Models.TextChannelSubscription", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("SubscriptionId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TextChannelId")
-                        .HasColumnType("decimal(20,0)");
-
-                    b.Property<int?>("TextChannelId1")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TextChannelId1");
-
-                    b.ToTable("TextChannelSubscriptions");
-                });
-
             modelBuilder.Entity("UltimateRedditBot.Discord.Domain.Models.User", b =>
                 {
                     b.Property<decimal>("Id")
@@ -310,15 +289,6 @@ namespace UltimateRedditBot.Migrations.Migrations.UltimateDiscordDb
                     b.Navigation("Guild");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("UltimateRedditBot.Discord.Domain.Models.TextChannelSubscription", b =>
-                {
-                    b.HasOne("UltimateRedditBot.Discord.Domain.Models.TextChannel", "TextChannel")
-                        .WithMany()
-                        .HasForeignKey("TextChannelId1");
-
-                    b.Navigation("TextChannel");
                 });
 
             modelBuilder.Entity("UltimateRedditBot.Discord.Domain.Models.UserSettings", b =>

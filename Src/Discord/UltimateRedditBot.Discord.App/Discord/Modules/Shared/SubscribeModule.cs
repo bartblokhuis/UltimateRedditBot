@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Discord.Commands;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 using UltimateRedditBot.Discord.App.Services.TextChannelService;
@@ -29,13 +30,14 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
         [Alias("Sub")]
         public async Task Subscribe(string subreddit)
         {
-            TextChannel textChannel;
-            if (Context.Guild != null)
-            {
-                textChannel = await _textChannelService.GetTextChannelById(Context.Channel.Id);
-            }
+            ulong? userId = IsForGuild() ? null : Context.User.Id;
+            var textChannel = await _textChannelService.GetTextChannelById(Context.Channel.Id, Context.Guild?.Id, userId);
 
-            await ReplyAsync("patat");
+            if (textChannel == null)
+            {
+                await _textChannelService.RegisterTextChannel(Context.Channel.Id, Context.Guild?.Id, userId);
+                textChannel = await _textChannelService.GetTextChannelById(Context.Channel.Id, Context?.Guild.Id, userId);
+            }
         }
 
         [Command("unsubscribe")]
