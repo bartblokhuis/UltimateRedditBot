@@ -18,18 +18,20 @@ namespace UltimateRedditBot.App.Extensions.Microsoft
         {
             services.AddDbContext<UltimateDbContext>(options => { options.UseSqlServer(connectionString); });
 
-            services.AddHttpClient();
-            services.AddSingleton<IRedditApiService, RedditApiService>();
-            services.AddSingleton<IQueueManager, QueueManager>();
-            services.AddSingleton<IQueueService, QueueService>();
-            services.AddSingleton<IGenericSettingService, GenericSettingService>();
-            services.AddSingleton<IEventPublisher, EventPublisher>();
-            services.AddSingleton<ISubscriptionService, SubscriptionService>();
-            services.AddSingleton<ISubredditService, SubredditService>();
-            services.AddScoped(typeof(IBaseRepository<,,>), typeof(BaseRepository<,,>));
-            services.AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>));
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            services.AddAutoMapper(typeof(UltimateAutoMapperProfile));
+            services.AddHttpClient()
+                .AddSingleton<IRedditApiService, RedditApiService>()
+                .AddSingleton<IQueueManager, QueueManager>()
+                .AddSingleton<IQueueService, QueueService>()
+                .AddSingleton<IGenericSettingService, GenericSettingService>()
+                .AddSingleton<IEventPublisher, EventPublisher>()
+                .AddSingleton<ISubscriptionService, SubscriptionService>()
+                .AddSingleton<IRedditSubscriptionService, RedditSubscriptionService>()
+                .AddSingleton<ISubredditService, SubredditService>()
+                .AddSingleton<IRedditSubscriptionService, RedditSubscriptionService>()
+                .AddScoped(typeof(IBaseRepository<,,>), typeof(BaseRepository<,,>))
+                .AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>))
+                .AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>))
+                .AddAutoMapper(typeof(UltimateAutoMapperProfile));
         }
     }
 }

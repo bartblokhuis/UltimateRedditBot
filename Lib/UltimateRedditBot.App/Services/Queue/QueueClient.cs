@@ -30,7 +30,7 @@ namespace UltimateRedditBot.App.Services.Queue
 
         private readonly IRedditApiService _redditApiService;
         private readonly IEventPublisher _eventPublisher;
-        private bool _started = true;
+        private bool _started;
 
         #endregion
 
@@ -40,6 +40,8 @@ namespace UltimateRedditBot.App.Services.Queue
         {
             if (!QueueItems.Any() || _started)
                 return;
+
+            _started = true;
 
             var tasks = new List<Task>();
             while (QueueItems.Any())

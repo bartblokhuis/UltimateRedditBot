@@ -90,6 +90,14 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
                 return;
             }
 
+            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
+            if (subreddit != null && subreddit.IsNsfw && !((ITextChannel) Context.Channel).IsNsfw)
+            {
+                //TODO better response message.
+                await ReplyAsync("No.");
+                return;
+            }
+
             await _queueService.AddToQueue(options, subredditName, amountOfTimes); ;
         }
 

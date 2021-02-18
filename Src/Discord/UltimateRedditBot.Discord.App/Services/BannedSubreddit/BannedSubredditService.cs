@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Discord.Database;
 using UltimateRedditBot.Discord.Domain.Models;
+using UltimateRedditBot.Domain.Models.Reddit;
 using UltimateRedditBot.Infra.BaseRepository;
 using UltimateRedditBot.Infra.Services;
 
