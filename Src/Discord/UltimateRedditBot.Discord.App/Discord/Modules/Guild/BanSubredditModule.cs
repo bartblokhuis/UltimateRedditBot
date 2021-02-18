@@ -1,7 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Discord;
 using Discord.Commands;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
+using UltimateRedditBot.Discord.App.Discord.Modules.Helpers;
 using UltimateRedditBot.Discord.App.Services;
+using UltimateRedditBot.Domain.Dtos.Reddit;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 {
@@ -58,7 +64,30 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
         [Command("bans")]
         public async Task Bans()
         {
-            await ReplyAsync("Coming soon");
+            var bannedSubreddits = (await _bannedSubredditService.GetBannedSubreddits(Context.Guild.Id)).ToList();
+            var bannedSubredditsBuilder = new EmbedBuilder
+            {
+                Title = $"Banned subreddits in: {Context.Guild.Name}:",
+                Fields = new List<EmbedFieldBuilder>(),
+                Footer = new EmbedFooterBuilder()
+                {
+                    Text = $"Total banned subreddits: {bannedSubreddits.Count()}"
+                }
+            };
+
+            var valueBuilder = new StringBuilder();
+            foreach (var subredditDto in bannedSubreddits)
+            {
+                valueBuilder.Append(subredditDto.Name + "\n");
+            }
+
+            bannedSubredditsBuilder.Fields.Add(new EmbedFieldBuilder()
+            {
+                Name = "Subreddits",
+                Value = valueBuilder.ToString()
+            });
+
+            await ReplyAsync("", false, bannedSubredditsBuilder.Build());
         }
 
         #endregion

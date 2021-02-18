@@ -178,7 +178,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             await ReplyAsync(result);
         }
 
-
         #endregion
 
         #endregion

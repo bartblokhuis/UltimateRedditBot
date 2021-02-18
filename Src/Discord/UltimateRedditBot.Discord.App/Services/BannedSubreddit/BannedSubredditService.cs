@@ -82,6 +82,12 @@ namespace UltimateRedditBot.Discord.App.Services
                 .Select(x => x.SubredditId).ToListAsync();
         }
 
+        public async Task<IEnumerable<SubredditDto>> GetBannedSubreddits(ulong guildId)
+        {
+            var bannedSubredditIds = await GetBannedSubredditIds(guildId);
+            return await _subredditService.GetAllByIds(bannedSubredditIds);
+        }
+
         #endregion
 
         #region Utils

@@ -9,5 +9,7 @@ namespace UltimateRedditBot.Infra.Services
         Task<SubredditDto> GetSubredditDtoByName(string subredditName);
 
         Task<SubredditDto> GetRandomSubreddit(bool isOver18, IEnumerable<int> bannedSubredditIds = null);
+
+        Task<IEnumerable<SubredditDto>> GetAllByIds(IEnumerable<int> ids);
     }
 }

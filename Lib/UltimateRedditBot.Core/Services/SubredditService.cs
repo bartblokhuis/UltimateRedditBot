@@ -76,6 +76,12 @@ namespace UltimateRedditBot.Core.Services
             return _mapper.Map<SubredditDto>(subreddits.OrderBy(x => x.Id).Skip(sub - 1).First());
         }
 
+        public async Task<IEnumerable<SubredditDto>> GetAllByIds(IEnumerable<int> ids)
+        {
+            var subreddits = await _subredditRepo.Table.AsQueryable().Where(x => ids.Contains(x.Id)).ToListAsync();
+            return _mapper.Map<IEnumerable<SubredditDto>>(subreddits);
+        }
+
         #endregion
     }
 }
