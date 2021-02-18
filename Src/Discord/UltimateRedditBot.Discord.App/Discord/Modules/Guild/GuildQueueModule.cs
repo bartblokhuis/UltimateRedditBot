@@ -84,21 +84,26 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 
         private async Task AddToQueue(AddToQueueDiscordOptions options, string subredditName, int amountOfTimes)
         {
-            if (await _bannedSubredditService.IsSubredditBanned(Context.Guild.Id, subredditName))
+            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
+            if (subreddit == null)
+            {
+                await ReplyAsync("Subreddit doesn't exist");
+                return;
+            }
+
+            if (_bannedSubredditService.IsSubredditBanned(Context.Guild.Id, subreddit))
             {
                 await ReplyAsync("This subreddit is banned");
                 return;
             }
 
-            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
-            if (subreddit != null && subreddit.IsNsfw && !((ITextChannel) Context.Channel).IsNsfw)
+            if (subreddit.IsNsfw && !((ITextChannel) Context.Channel).IsNsfw)
             {
-                //TODO better response message.
-                await ReplyAsync("No.");
+                await ReplyAsync("Can't post nsfw subreddits in a non nsfw channel");
                 return;
             }
 
-            await _queueService.AddToQueue(options, subredditName, amountOfTimes); ;
+            await _queueService.AddToQueue(options, subreddit, amountOfTimes); ;
         }
 
         #endregion

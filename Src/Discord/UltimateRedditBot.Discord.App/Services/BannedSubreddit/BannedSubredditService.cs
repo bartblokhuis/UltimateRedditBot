@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Discord.Database;
 using UltimateRedditBot.Discord.Domain.Models;
+using UltimateRedditBot.Domain.Dtos.Reddit;
 using UltimateRedditBot.Domain.Models.Reddit;
 using UltimateRedditBot.Infra.BaseRepository;
 using UltimateRedditBot.Infra.Services;
@@ -53,6 +54,11 @@ namespace UltimateRedditBot.Discord.App.Services
         public async Task<bool> IsSubredditBanned(ulong id, string subredditName)
         {
             var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
+            return subreddit != null && IsSubredditBanned(id, subreddit.Id);
+        }
+
+        public bool IsSubredditBanned(ulong id, SubredditDto subreddit)
+        {
             return subreddit != null && IsSubredditBanned(id, subreddit.Id);
         }
 

@@ -7,6 +7,7 @@ using UltimateRedditBot.App.Services.Queue;
 using UltimateRedditBot.Discord.App.Discord.Constants;
 using UltimateRedditBot.Discord.Database;
 using UltimateRedditBot.Discord.Domain.Models;
+using UltimateRedditBot.Domain.Dtos.Reddit;
 using UltimateRedditBot.Domain.Queue;
 using UltimateRedditBot.Infra.BaseRepository;
 using UltimateRedditBot.Infra.Services;
@@ -46,21 +47,20 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
 
         #region Add to queue
 
-        public override async Task<string> AddToQueue<T>(T addOptions, string subredditName, int amountOfTimes)
+        public override async Task<string> AddToQueue<T>(T addOptions, SubredditDto subreddit, int amountOfTimes)
         {
             if (!(addOptions is AddToQueueDiscordOptions options))
                 throw new ApplicationException();
 
-            var isGuild = (options as AddToQueueDiscordOptions).Group.Equals(DiscordSettings.GenericSettingGuildGroup);
-            var id = Convert.ToUInt64((options as AddToQueueDiscordOptions).ClientId);
+            var isGuild = options.Group.Equals(DiscordSettings.GenericSettingGuildGroup);
+            var id = Convert.ToUInt64(options.ClientId);
 
-            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
             var postHistory = _postHistoryService.GetPostHistoryName(isGuild, id, subreddit.Id);
 
             var queueClient = FindQueueClient(options.Group, options.ClientId, options.ChannelId);
             if (queueClient == null)
             {
-                var queueItem = await PrepareQueueItem(subredditName, postHistory, amountOfTimes);
+                var queueItem = await PrepareQueueItem(subreddit, postHistory, amountOfTimes);
                 if (queueItem.SubredditDto == null)
                     return "Subreddit could not be found";
 
@@ -73,7 +73,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
 
             //Check if there is an existing queue item with the same subreddit
             var existingQueueItem = queueClient.QueueItems.FirstOrDefault(clientItem =>
-                clientItem.SubredditDto.Name.Equals(subredditName, StringComparison.OrdinalIgnoreCase));
+                clientItem.SubredditDto.Name.Equals(subreddit.Name, StringComparison.OrdinalIgnoreCase));
 
             if (existingQueueItem != null)
             {
@@ -82,7 +82,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
                 return string.Empty;
             }
 
-            var newQeueItem = await PrepareQueueItem(subredditName, postHistory, amountOfTimes);
+            var newQeueItem = await PrepareQueueItem(subreddit, postHistory, amountOfTimes);
             if (newQeueItem.SubredditDto == null)
                 return "Subreddit could not be found";
 

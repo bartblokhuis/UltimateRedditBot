@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UltimateRedditBot.Core.Constants;
+using UltimateRedditBot.Domain.Dtos.Reddit;
 using UltimateRedditBot.Domain.Enums;
 using UltimateRedditBot.Domain.Queue;
 using UltimateRedditBot.Infra.Services;
@@ -30,21 +31,9 @@ namespace UltimateRedditBot.App.Services.Queue
 
         #endregion
 
-        public virtual async Task<string> AddToQueue<T>(T options, string subredditName, int amountOfTimes)
+        public virtual async Task<string> AddToQueue<T>(T options, SubredditDto subreddit, int amountOfTimes)
             where T : IAddToQueueOptions
         {
-            var max = await _genericSettingService.GetSettingValueByKeyGroupAndKey<int>(options.Group,
-                GenericSettingKeyConstants.BulkSettingKey, options.ClientId.ToString());
-
-            if (max > amountOfTimes)
-                amountOfTimes = max;
-
-            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
-            if (subreddit == null)
-                return "Subreddit doesn't exist";
-
-            var queueClient = FindQueueClient(1);
-
             return string.Empty;
         }
 
@@ -63,11 +52,10 @@ namespace UltimateRedditBot.App.Services.Queue
             throw new NotImplementedException();
         }
 
-        protected virtual async Task<QueueItem> PrepareQueueItem(string subredditName, string lastPostName,
+        protected virtual async Task<QueueItem> PrepareQueueItem(SubredditDto subreddit, string lastPostName,
             int amountOfPosts = 1)
         {
             lastPostName ??= "";
-            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
             return new QueueItem
             {
                 Id = Guid.NewGuid(),
