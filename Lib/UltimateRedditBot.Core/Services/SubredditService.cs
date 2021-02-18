@@ -58,7 +58,7 @@ namespace UltimateRedditBot.Core.Services
             return subredditDto;
         }
 
-        public async Task<string> GetRandomSubredditName(bool isOver18, IEnumerable<int> bannedSubredditIds = null)
+        public async Task<SubredditDto> GetRandomSubreddit(bool isOver18, IEnumerable<int> bannedSubredditIds = null)
         {
             bannedSubredditIds ??= new List<int>();
             bannedSubredditIds = bannedSubredditIds.ToList();
@@ -73,7 +73,7 @@ namespace UltimateRedditBot.Core.Services
             var randomGen = new Random();
             var sub = randomGen.Next(amountOfMappedSubreddits);
 
-           return subreddits.Skip(sub -1).First().Name;
+            return _mapper.Map<SubredditDto>(subreddits.OrderBy(x => x.Id).Skip(sub - 1).First());
         }
 
         #endregion

@@ -78,8 +78,9 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             };
 
             var bannedSubreddits = await _bannedSubredditService.GetBannedSubredditIds(Context.Guild.Id);
-            var subredditName = await _subredditService.GetRandomSubredditName(((ITextChannel) Context.Channel).IsNsfw, bannedSubreddits);
-            await AddToQueue(options, subredditName, 1);
+            var subreddit = await _subredditService.GetRandomSubreddit(((ITextChannel) Context.Channel).IsNsfw, bannedSubreddits);
+
+            await _queueService.AddToQueue(options, subreddit, 1);
         }
 
         private async Task AddToQueue(AddToQueueDiscordOptions options, string subredditName, int amountOfTimes)
