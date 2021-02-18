@@ -7,6 +7,7 @@ using UltimateRedditBot.Discord.App.Discord.Constants;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 using UltimateRedditBot.Discord.App.Discord.Modules.Helpers;
 using UltimateRedditBot.Discord.App.Services.Queue;
+using UltimateRedditBot.Infra.Services;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
 {
@@ -15,14 +16,16 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
         #region Fields
 
         private readonly IQueueService _queueService;
+        private readonly ISubredditService _subredditService;
 
         #endregion
 
         #region Constructor
 
-        public DirectMessagesQueueModule(IQueueService queueService)
+        public DirectMessagesQueueModule(IQueueService queueService, ISubredditService subredditService)
         {
             _queueService = queueService;
+            _subredditService = subredditService;
         }
 
         #endregion
@@ -31,28 +34,42 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.DirectMessage
 
         [Command("r")]
         [Alias("r")]
-        public async Task AddToQueue(string subreddit)
+        public async Task AddToQueue(string subredditName)
         {
             var options = new AddToQueueDiscordOptions
             {
                 Group = DiscordSettings.GenericSettingDmGroup,
                 ClientId = Context.User.Id
             };
-            var result = await _queueService.AddToQueue(options, subreddit, 1);
-            await ReplyAsync(result);
+
+            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
+            if (subreddit == null)
+            {
+                await ReplyAsync("Subreddit doesn't exist");
+                return;
+            }
+
+            await _queueService.AddToQueue(options, subreddit, 1);
         }
 
         [Command("r")]
         [Alias("r")]
-        public async Task AddToQueue(string subreddit, int amountOfTimes)
+        public async Task AddToQueue(string subredditName, int amountOfTimes)
         {
             var options = new AddToQueueDiscordOptions
             {
                 Group = DiscordSettings.GenericSettingDmGroup,
                 ClientId = Context.User.Id
             };
-            var result = await _queueService.AddToQueue(options, subreddit, amountOfTimes);
-            await ReplyAsync(result);
+
+            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
+            if (subreddit == null)
+            {
+                await ReplyAsync("Subreddit doesn't exist");
+                return;
+            }
+
+            await _queueService.AddToQueue(options, subreddit, amountOfTimes);
         }
 
         #region Get Queue

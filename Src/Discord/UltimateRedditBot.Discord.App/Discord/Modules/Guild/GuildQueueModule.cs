@@ -103,7 +103,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
                 return;
             }
 
-            await _queueService.AddToQueue(options, subreddit, amountOfTimes); ;
+            await _queueService.AddToQueue(options, subreddit, amountOfTimes);
         }
 
         #endregion
