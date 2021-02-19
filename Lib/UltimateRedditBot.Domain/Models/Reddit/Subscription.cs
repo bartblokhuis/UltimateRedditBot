@@ -11,7 +11,7 @@ namespace UltimateRedditBot.Domain.Models.Reddit
 
         public string LastPostId { get; set; }
 
-        public ulong SubredditId { get; set; }
+        public int SubredditId { get; set; }
         public Subreddit Subreddit { get; set; }
 
         #endregion

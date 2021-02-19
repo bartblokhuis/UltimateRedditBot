@@ -39,7 +39,7 @@ namespace UltimateRedditBot.Core.Services
             return subscriptions;
         }
 
-        public async Task<Subscription> CreateAndGetSubscription(ulong subredditId, Sort sort)
+        public async Task<Subscription> CreateAndGetSubscription(int subredditId, Sort sort)
         {
             var subscription = new Subscription
             {
@@ -49,6 +49,11 @@ namespace UltimateRedditBot.Core.Services
 
             await _subscriptionRepo.InsertAsync(subscription);
             return subscription;
+        }
+
+        public Task<List<Subscription>> GetSubscriptionBySubredditAndSort(int subredditId, Sort sort)
+        {
+            return _subscriptionRepo.Table.AsQueryable().Where(x => x.SubredditId == subredditId && x.Sort == sort).ToListAsync();
         }
 
         #endregion

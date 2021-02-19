@@ -11,6 +11,8 @@ namespace UltimateRedditBot.Infra.Services
 
         Task<IEnumerable<Subscription>> GetSubscriptionByIds(IEnumerable<int> ids);
 
-        Task<Subscription> CreateAndGetSubscription(ulong subredditId, Sort sort);
+        Task<Subscription> CreateAndGetSubscription(int subredditId, Sort sort);
+
+        Task<List<Subscription>> GetSubscriptionBySubredditAndSort(int subredditId, Sort sort);
     }
 }

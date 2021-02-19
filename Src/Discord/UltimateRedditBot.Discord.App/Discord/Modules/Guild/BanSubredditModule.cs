@@ -69,9 +69,9 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
             {
                 Title = $"Banned subreddits in: {Context.Guild.Name}:",
                 Fields = new List<EmbedFieldBuilder>(),
-                Footer = new EmbedFooterBuilder()
+                Footer = new EmbedFooterBuilder
                 {
-                    Text = $"Total banned subreddits: {bannedSubreddits.Count()}"
+                    Text = $"Total banned subreddits: {bannedSubreddits.Count}"
                 }
             };
 
