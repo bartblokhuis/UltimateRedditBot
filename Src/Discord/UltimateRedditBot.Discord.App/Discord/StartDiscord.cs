@@ -5,6 +5,8 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 using UltimateRedditBot.Discord.App.Services.Guild;
 using UltimateRedditBot.Discord.Domain.Dtos;
@@ -13,22 +15,6 @@ namespace UltimateRedditBot.Discord.App.Discord
 {
     public class StartDiscord
     {
-        #region Constructor
-
-        public StartDiscord(IConfiguration config, CommandService commands, DiscordSocketClient discord,
-            IServiceProvider provider, IGuildService guildService)
-        {
-            _config = config;
-            _commands = commands;
-            _discord = discord;
-            _provider = provider;
-            _guildService = guildService;
-
-            _discord.JoinedGuild += OnGuildJoin;
-        }
-
-        #endregion
-
         #region Fields
 
         private readonly IServiceProvider _provider;
@@ -36,6 +22,24 @@ namespace UltimateRedditBot.Discord.App.Discord
         private readonly CommandService _commands;
         private readonly IConfiguration _config;
         private readonly IGuildService _guildService;
+        private readonly ILogger<StartDiscord> _logger;
+
+        #endregion
+
+        #region Constructor
+
+        public StartDiscord(IConfiguration config, CommandService commands, DiscordSocketClient discord,
+            IServiceProvider provider, IGuildService guildService, ILogger<StartDiscord> logger)
+        {
+            _config = config;
+            _commands = commands;
+            _discord = discord;
+            _provider = provider;
+            _guildService = guildService;
+            _logger = logger;
+
+            _discord.JoinedGuild += OnGuildJoin;
+        }
 
         #endregion
 
@@ -75,8 +79,10 @@ namespace UltimateRedditBot.Discord.App.Discord
                 throw new Exception(
                     "Please enter your bot's token into the `appsettings.json` file found in the applications root directory.");
 
+            _logger.LogInformation("Connecting to discord...");
             await _discord.LoginAsync(TokenType.Bot, discordToken);
             await _discord.StartAsync();
+            _logger.LogInformation("Connected to discord.");
         }
 
         private async Task RegisterNewGuilds()

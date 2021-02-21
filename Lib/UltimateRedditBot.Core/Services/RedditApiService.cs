@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UltimateRedditBot.Core.Constants;
@@ -17,14 +18,16 @@ namespace UltimateRedditBot.Core.Services
         #region Fields
 
         private readonly IHttpClientFactory _clientFactory;
+        private readonly ILogger<RedditApiService> _logger;
 
         #endregion
 
         #region Constructor
 
-        public RedditApiService(IHttpClientFactory clientFactory)
+        public RedditApiService(IHttpClientFactory clientFactory, ILogger<RedditApiService> logger)
         {
             _clientFactory = clientFactory;
+            _logger = logger;
         }
 
         #endregion
@@ -71,8 +74,7 @@ namespace UltimateRedditBot.Core.Services
             }
             catch (Exception e)
             {
-                //TODO Implement logger
-                //_logger.LogError($"Error getting new post. {url}, {e.Message}");
+                _logger.LogError($"Error getting new post. {url}, {e.Message}");
             }
 
             //If we got this far we are not able to find any posts.

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace UltimateRedditBot.App.Services.Events
 {
@@ -9,14 +10,16 @@ namespace UltimateRedditBot.App.Services.Events
         #region Fields
 
         private readonly ISubscriptionService _subscriptionService;
+        private readonly ILogger<EventPublisher> _logger;
 
         #endregion
 
         #region Constructor
 
-        public EventPublisher(ISubscriptionService subscriptionService)
+        public EventPublisher(ISubscriptionService subscriptionService, ILogger<EventPublisher> logger)
         {
             _subscriptionService = subscriptionService;
+            _logger = logger;
         }
 
         #endregion
@@ -34,7 +37,7 @@ namespace UltimateRedditBot.App.Services.Events
                 }
                 catch (Exception e)
                 {
-                    //TODO Log the exception
+                    _logger.LogError(e.Message);
                 }
         }
 
