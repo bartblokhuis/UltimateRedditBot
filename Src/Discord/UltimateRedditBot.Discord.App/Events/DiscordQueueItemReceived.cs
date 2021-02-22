@@ -96,8 +96,9 @@ namespace UltimateRedditBot.Discord.App.Events
             if (!(guild?.Channels.FirstOrDefault(x => x.Id == queueClient.ChannelId) is ITextChannel channel))
                 return;
 
-            channel.EnterTypingState();
+            await channel.TriggerTypingAsync();
             await channel.SendMessageAsync(postDto.Url.ToString());
+
         }
 
         #endregion

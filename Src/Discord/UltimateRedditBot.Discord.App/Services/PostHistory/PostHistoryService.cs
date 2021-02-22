@@ -58,6 +58,9 @@ namespace UltimateRedditBot.Discord.App.Services
         public async Task ClearPostHistory(bool isForGuild, ulong id, int subredditId)
         {
             var postHistory = GetPostHistory(isForGuild, id, subredditId);
+            if (postHistory == null)
+                return;
+
             await _postHistoryRepo.DeleteAsync(postHistory);
         }
 
