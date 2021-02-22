@@ -34,7 +34,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
         [Alias("Mod")]
         public async Task Mod(string userTag)
         {
-            if (!userTag.StartsWith("<@!") || !userTag.EndsWith(">"))
+            if (!userTag.StartsWith("<") || !userTag.EndsWith(">"))
             {
                 await ReplyAsync("Invalid user.");
                 return;
