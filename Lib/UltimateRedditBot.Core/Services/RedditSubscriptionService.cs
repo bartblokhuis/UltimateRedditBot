@@ -51,9 +51,9 @@ namespace UltimateRedditBot.Core.Services
             return subscription;
         }
 
-        public Task<List<Subscription>> GetSubscriptionBySubredditAndSort(int subredditId, Sort sort)
+        public Task<Subscription> GetSubscriptionBySubredditAndSort(int subredditId, Sort sort)
         {
-            return _subscriptionRepo.Table.AsQueryable().Where(x => x.SubredditId == subredditId && x.Sort == sort).ToListAsync();
+            return _subscriptionRepo.Table.AsQueryable().FirstOrDefaultAsync(x => x.SubredditId == subredditId && x.Sort == sort);
         }
 
         #endregion

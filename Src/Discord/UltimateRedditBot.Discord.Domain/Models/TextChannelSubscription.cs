@@ -6,7 +6,7 @@ namespace UltimateRedditBot.Discord.Domain.Models
     {
         #region Properties
 
-        public ulong TextChannelId { get; set; }
+        public int TextChannelId { get; set; }
         public TextChannel TextChannel { get; set; }
 
         public int SubscriptionId { get; set; }

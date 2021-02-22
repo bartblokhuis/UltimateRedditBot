@@ -13,6 +13,6 @@ namespace UltimateRedditBot.Infra.Services
 
         Task<Subscription> CreateAndGetSubscription(int subredditId, Sort sort);
 
-        Task<List<Subscription>> GetSubscriptionBySubredditAndSort(int subredditId, Sort sort);
+        Task<Subscription> GetSubscriptionBySubredditAndSort(int subredditId, Sort sort);
     }
 }

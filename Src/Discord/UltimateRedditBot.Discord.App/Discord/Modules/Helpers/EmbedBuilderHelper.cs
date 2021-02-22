@@ -15,7 +15,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Helpers
                 embedBuilder.Add(new EmbedFieldBuilder
                 {
                     Name = queueItem.SubredditDto.Name,
-                    Value = $"{queueItem.AmountOfPosts}, {((queueItem.AmountOfPosts > 1) ? "times" : "time")} in the queue"
+                    Value = $"{queueItem.AmountOfPosts}, {(queueItem.AmountOfPosts > 1 ? "times" : "time")} in the queue"
                 });
             }
 

@@ -35,7 +35,8 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
                 .AddScoped<IPostHistoryService, PostHistoryService>()
                 .AddScoped<ITextChannelService, TextChannelService>()
                 .AddScoped<IBannedSubredditService, BannedSubredditService>()
-                .AddScoped<IGuildModService, GuildModService>();
+                .AddScoped<IGuildModService, GuildModService>()
+                .AddScoped<ITextChannelSubscriptionService, TextChannelSubscriptionService>();
 
             services.AddSingleton<IConsumer<QueueItemPostReceived>, DiscordQueueItemReceived>();
             services.Replace(ServiceDescriptor.Singleton<IQueueService, DiscordQueueService>());
