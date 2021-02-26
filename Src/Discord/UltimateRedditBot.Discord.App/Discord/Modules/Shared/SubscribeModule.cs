@@ -93,12 +93,55 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 
         #endregion
 
+        #region Unsub
+
         [Command("unsubscribe")]
         [Alias("unsub")]
         public async Task Unsubscribe(string subreddit)
         {
-            await ReplyAsync("");
+            await Unsubscribe(subreddit, Sort.Hot);
         }
+
+        [Command("unsubscribe")]
+        [Alias("unsub")]
+        public async Task Unsubscribe(string subreddit, string sort)
+        {
+            if(Enum.TryParse(typeof(Sort), sort, true, out var enumSort))
+                await Unsubscribe(subreddit, (Sort)enumSort);
+        }
+
+        private async Task Unsubscribe(string subredditName, Sort sort)
+        {
+            var subreddit = _subredditService.GetSubredditDtoByName(subredditName);
+            if (subreddit == null)
+            {
+                await ReplyAsync("Subreddit not found");
+                return;
+            }
+
+            ulong? userId = IsForGuild() ? null : Context.User.Id;
+            var textChannel = await _textChannelService.GetTextChannelById(Context.Channel.Id, Context.Guild?.Id, userId);
+            var subscription = await _redditSubscriptionService.GetSubscriptionBySubredditAndSort(subreddit.Id, sort);
+            if (subscription == null || textChannel == null)
+            {
+                await ReplyAsync($"Not subscribed to {subredditName}");
+                return;
+            }
+
+            var textChannelSubscription =
+                await _channelSubscriptionService.GetTextChannelSubscription(textChannel.Id, subscription.Id);
+
+            if (textChannelSubscription == null)
+            {
+                await ReplyAsync($"Not subscribed to {subredditName}");
+                return;
+            }
+
+            await _channelSubscriptionService.Unsubscribe(textChannelSubscription);
+            await ReplyAsync("Unsubscribed");
+        }
+
+        #endregion
 
 
         [Command("subscriptions")]
@@ -107,6 +150,8 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
         {
             await ReplyAsync("");
         }
+
+
 
         #endregion
     }

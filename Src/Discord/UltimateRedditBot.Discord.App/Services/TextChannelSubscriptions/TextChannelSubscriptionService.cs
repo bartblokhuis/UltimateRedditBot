@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Discord.Database;
@@ -42,14 +41,21 @@ namespace UltimateRedditBot.Discord.App.Services
             });
         }
 
-        public Task Unsubscribe(int textChannelId, int subscriptionId)
+        public async Task Unsubscribe(TextChannelSubscription textChannelSubscription)
         {
-            throw new System.NotImplementedException();
+            if (textChannelSubscription != null)
+                await _textChannelSubsRepo.DeleteAsync(textChannelSubscription);
         }
 
         public Task<List<TextChannelSubscription>> GetTextChannelSubscriptions()
         {
             return _textChannelSubsRepo.Table.Include(x => x.TextChannel).ToListAsync();
+        }
+
+        public Task<TextChannelSubscription> GetTextChannelSubscription(int textChannelId, int subscriptionId)
+        {
+            return _textChannelSubsRepo.Table.FirstOrDefaultAsync(x =>
+                x.TextChannelId == textChannelId && x.SubscriptionId == subscriptionId);
         }
 
         #endregion

@@ -12,8 +12,10 @@ namespace UltimateRedditBot.Discord.App.Services
 
         Task Subscribe(int textChannelId, int subscriptionId);
 
-        Task Unsubscribe(int textChannelId, int subscriptionId);
+        Task Unsubscribe(TextChannelSubscription subscription);
 
         Task<List<TextChannelSubscription>> GetTextChannelSubscriptions();
+
+        Task<TextChannelSubscription> GetTextChannelSubscription(int channelId, int subscriptionId);
     }
 }

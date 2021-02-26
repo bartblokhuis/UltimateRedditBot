@@ -103,7 +103,7 @@ namespace UltimateRedditBot.App.Services.Subscriptions
 
             if (post != null)
             {
-                return new SubscriptionPost()
+                return new SubscriptionPost
                 {
                     Subscription = subscription,
                     PostDto = post
