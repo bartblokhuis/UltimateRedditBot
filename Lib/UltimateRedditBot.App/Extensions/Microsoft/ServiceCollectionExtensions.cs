@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using UltimateRedditBot.App.Services.Events;
 using UltimateRedditBot.App.Services.Queue;
+using UltimateRedditBot.App.Services.Subscriptions;
 using UltimateRedditBot.Core.AutoMapper;
 using UltimateRedditBot.Core.BaseRepository;
 using UltimateRedditBot.Core.Services;
@@ -32,6 +33,8 @@ namespace UltimateRedditBot.App.Extensions.Microsoft
                 .AddScoped(typeof(IBaseRepository<,>), typeof(BaseRepository<,>))
                 .AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>))
                 .AddAutoMapper(typeof(UltimateAutoMapperProfile));
+
+            services.AddSingleton<RedditSubscriptionHostedService>();
         }
     }
 }

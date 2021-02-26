@@ -11,7 +11,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
 {
     public class CommandHandler
     {
-        public CommandHandler(DiscordSocketClient discord,
+        public CommandHandler(DiscordShardedClient discord,
             CommandService commands,
             IConfiguration config,
             IServiceProvider provider,
@@ -29,7 +29,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
 
         #region Fields
 
-        private readonly DiscordSocketClient _discord;
+        private readonly DiscordShardedClient _discord;
         private readonly CommandService _commands;
         private readonly IConfiguration _config;
         private readonly IServiceProvider _provider;
@@ -52,7 +52,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Commands
                 return;
 
             //Set the command context.
-            var context = new SocketCommandContext(_discord, msg);
+            var context = new ShardedCommandContext(_discord, msg);
 
             //Ensure that the message being sent had the configured prefix.
             var argPos = 0;

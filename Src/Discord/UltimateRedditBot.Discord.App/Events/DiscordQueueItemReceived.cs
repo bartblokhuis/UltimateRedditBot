@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -18,9 +19,9 @@ namespace UltimateRedditBot.Discord.App.Events
     {
         #region Constructor
 
-        public DiscordQueueItemReceived(DiscordSocketClient discordSocketClient, IPostHistoryService postHistoryService)
+        public DiscordQueueItemReceived(DiscordShardedClient DiscordShardedClient, IPostHistoryService postHistoryService)
         {
-            _discordSocketClient = discordSocketClient;
+            _discord = DiscordShardedClient;
             _postHistoryService = postHistoryService;
         }
 
@@ -73,7 +74,7 @@ namespace UltimateRedditBot.Discord.App.Events
 
         #region Fields
 
-        private readonly DiscordSocketClient _discordSocketClient;
+        private readonly DiscordShardedClient _discord;
         private readonly IPostHistoryService _postHistoryService;
 
         #endregion
@@ -82,18 +83,19 @@ namespace UltimateRedditBot.Discord.App.Events
 
         private async Task HandleDiscordDmEvent(IQueueClient queueClient, PostDto postDto)
         {
-            var dmChannel = _discordSocketClient.DMChannels.FirstOrDefault(x =>
-                x.Users.FirstOrDefault(y => y.Id == queueClient.ClientId) != null);
-
-            if (dmChannel != null)
-                await dmChannel.SendMessageAsync(postDto.Url.ToString());
+            var user = _discord.GetUser(queueClient.ClientId);
+            if (user != null)
+                await user.SendMessageAsync(postDto.Url.ToString());
         }
 
         private async Task HandleDiscordGuildEvent(IDiscordQueueClient queueClient, PostDto postDto)
         {
-            var guild = _discordSocketClient.Guilds.FirstOrDefault(x => x.Id == queueClient.ClientId);
+            var guild = _discord.GetGuild(queueClient.ClientId);
 
-            if (!(guild?.Channels.FirstOrDefault(x => x.Id == queueClient.ChannelId) is ITextChannel channel))
+            Debug.Assert(queueClient.ChannelId != null, "queueClient.ChannelId != null");
+            var channel = guild?.GetTextChannel((ulong)queueClient.ChannelId);
+
+            if (channel == null)
                 return;
 
             await channel.TriggerTypingAsync();

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Discord.Database;
 using UltimateRedditBot.Discord.Domain.Models;
@@ -43,6 +45,11 @@ namespace UltimateRedditBot.Discord.App.Services
         public Task Unsubscribe(int textChannelId, int subscriptionId)
         {
             throw new System.NotImplementedException();
+        }
+
+        public Task<List<TextChannelSubscription>> GetTextChannelSubscriptions()
+        {
+            return _textChannelSubsRepo.Table.Include(x => x.TextChannel).ToListAsync();
         }
 
         #endregion

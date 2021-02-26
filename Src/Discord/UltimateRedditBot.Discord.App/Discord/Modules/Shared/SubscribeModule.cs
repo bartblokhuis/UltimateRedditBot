@@ -35,9 +35,24 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 
         #region Methods
 
+        #region Subscriptions
+
         [Command("Subscribe")]
         [Alias("Sub")]
         public async Task Subscribe(string subredditName)
+        {
+            await Subscribe(subredditName, Sort.Hot);
+        }
+
+        [Command("Subscribe")]
+        [Alias("Sub")]
+        public async Task Subscribe(string subredditName, string sort)
+        {
+            if(Enum.TryParse(typeof(Sort), sort, true, out var enumSort))
+                await Subscribe(subredditName, (Sort)enumSort);
+        }
+
+        private async Task Subscribe(string subredditName, Sort sort)
         {
             ulong? userId = IsForGuild() ? null : Context.User.Id;
             var textChannel = await _textChannelService.GetTextChannelById(Context.Channel.Id, Context.Guild?.Id, userId);
@@ -55,15 +70,15 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
                 return;
             }
 
-            if (subreddit.IsNsfw && Context.Channel is ITextChannel && ((ITextChannel) Context.Channel).IsNsfw)
+            if (subreddit.IsNsfw && !(Context.Channel is ITextChannel && ((ITextChannel) Context.Channel).IsNsfw))
             {
                 await ReplyAsync("Can't subscribe to an nsfw channel in a non nsfw chat.");
                 return;
             }
 
             //TODO Make sort configurable by settings and overwrite method
-            var subscription = await _redditSubscriptionService.GetSubscriptionBySubredditAndSort(subreddit.Id, Sort.Hot);
-            subscription ??= await _redditSubscriptionService.CreateAndGetSubscription(subreddit.Id, Sort.Hot);
+            var subscription = await _redditSubscriptionService.GetSubscriptionBySubredditAndSort(subreddit.Id, sort);
+            subscription ??= await _redditSubscriptionService.CreateAndGetSubscription(subreddit.Id, sort);
 
 
             if (await _channelSubscriptionService.IsSubscribed(textChannel.Id, subscription.Id))
@@ -76,9 +91,19 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
             await ReplyAsync($"Subscribed to {subreddit.Name}");
         }
 
+        #endregion
+
         [Command("unsubscribe")]
         [Alias("unsub")]
         public async Task Unsubscribe(string subreddit)
+        {
+            await ReplyAsync("");
+        }
+
+
+        [Command("subscriptions")]
+        [Alias("subs")]
+        public async Task Subscriptions()
         {
             await ReplyAsync("");
         }

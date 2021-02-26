@@ -14,13 +14,13 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
         #region Fields
 
         private readonly IGuildModService _guildModService;
-        private readonly DiscordSocketClient _discord;
+        private readonly DiscordShardedClient _discord;
 
         #endregion
 
         #region Constructor
 
-        public GuildModModule(IGuildModService guildModService, DiscordSocketClient discord)
+        public GuildModModule(IGuildModService guildModService, DiscordShardedClient discord)
         {
             _guildModService = guildModService;
             _discord = discord;

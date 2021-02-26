@@ -60,7 +60,7 @@ namespace UltimateRedditBot.App.Services.Queue
             {
                 Id = Guid.NewGuid(),
                 Sort = Sort.Hot,
-                PostType = PostType.Gif,
+                PostType = PostType.Image,
                 SubredditDto = subreddit,
                 AmountOfPosts = amountOfPosts,
                 LastUsedPostName = lastPostName

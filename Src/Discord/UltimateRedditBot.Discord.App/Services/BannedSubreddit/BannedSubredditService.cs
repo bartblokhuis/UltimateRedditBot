@@ -94,7 +94,7 @@ namespace UltimateRedditBot.Discord.App.Services
 
         private bool IsSubredditBanned(ulong id, int subredditId)
         {
-            return _bannedSubredditRepo.Table.Any(x => x.GuildId == id && x.SubredditId == subredditId);
+            return _bannedSubredditRepo.Table.AsNoTracking().Any(x => x.GuildId == id && x.SubredditId == subredditId);
         }
 
         #endregion

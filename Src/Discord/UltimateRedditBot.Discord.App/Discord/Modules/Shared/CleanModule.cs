@@ -13,13 +13,13 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 
     #region Fields
 
-    private readonly DiscordSocketClient _discord;
+    private readonly DiscordShardedClient _discord;
 
     #endregion
 
     #region constructor
 
-    public CleanModule(DiscordSocketClient discord)
+    public CleanModule(DiscordShardedClient discord)
     {
         _discord = discord;
     }

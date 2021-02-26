@@ -6,7 +6,6 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 using UltimateRedditBot.Discord.App.Services.Guild;
 using UltimateRedditBot.Discord.Domain.Dtos;
@@ -18,7 +17,7 @@ namespace UltimateRedditBot.Discord.App.Discord
         #region Fields
 
         private readonly IServiceProvider _provider;
-        private readonly DiscordSocketClient _discord;
+        private readonly DiscordShardedClient _discord;
         private readonly CommandService _commands;
         private readonly IConfiguration _config;
         private readonly IGuildService _guildService;
@@ -28,7 +27,7 @@ namespace UltimateRedditBot.Discord.App.Discord
 
         #region Constructor
 
-        public StartDiscord(IConfiguration config, CommandService commands, DiscordSocketClient discord,
+        public StartDiscord(IConfiguration config, CommandService commands, DiscordShardedClient discord,
             IServiceProvider provider, IGuildService guildService, ILogger<StartDiscord> logger)
         {
             _config = config;
@@ -63,6 +62,7 @@ namespace UltimateRedditBot.Discord.App.Discord
             //Set the bot's status.
             await _discord.SetGameAsync($"{_discord.Guilds.Count}, servers", type: ActivityType.Watching);
 
+            //_subscriptionHostedService.StartAsync(new CancellationToken());
             await RegisterNewGuilds();
         }
 

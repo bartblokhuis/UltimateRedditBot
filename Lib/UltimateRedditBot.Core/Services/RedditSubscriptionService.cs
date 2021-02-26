@@ -44,7 +44,8 @@ namespace UltimateRedditBot.Core.Services
             var subscription = new Subscription
             {
                 SubredditId = subredditId,
-                Sort = sort
+                Sort = sort,
+                LastPostId = ""
             };
 
             await _subscriptionRepo.InsertAsync(subscription);
@@ -54,6 +55,16 @@ namespace UltimateRedditBot.Core.Services
         public Task<Subscription> GetSubscriptionBySubredditAndSort(int subredditId, Sort sort)
         {
             return _subscriptionRepo.Table.AsQueryable().FirstOrDefaultAsync(x => x.SubredditId == subredditId && x.Sort == sort);
+        }
+
+        public Task<List<Subscription>> GetSubscriptions()
+        {
+            return _subscriptionRepo.Table.Include(x => x.Subreddit).ToListAsync();
+        }
+
+        public Task Update(IEnumerable<Subscription> subscriptions)
+        {
+            return _subscriptionRepo.UpdateRangeAsync(subscriptions);
         }
 
         #endregion

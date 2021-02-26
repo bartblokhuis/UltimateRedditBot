@@ -14,7 +14,7 @@ namespace UltimateRedditBot.Discord
         private static void Main(string[] args)
         {
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile("appsettings.json", true, false)
                 .AddEnvironmentVariables()
                 .Build();
 
@@ -49,7 +49,6 @@ namespace UltimateRedditBot.Discord
                 .UseSerilog()
                 .ConfigureAppConfiguration(options =>
                 {
-                    options.AddJsonFile("appsettings.json");
                     options.AddJsonFile("dataSettings.json");
                 })
                 .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>());

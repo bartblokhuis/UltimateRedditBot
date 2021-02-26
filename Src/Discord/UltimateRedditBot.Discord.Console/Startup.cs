@@ -1,7 +1,9 @@
+using System.Threading;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UltimateRedditBot.App.Extensions.Microsoft;
+using UltimateRedditBot.App.Services.Subscriptions;
 using UltimateRedditBot.Discord.App.Discord;
 using UltimateRedditBot.Discord.App.Discord.Commands;
 using UltimateRedditBot.Discord.App.Extensions.Microsoft;
@@ -32,6 +34,8 @@ namespace UltimateRedditBot.Discord.Console
 
         public void Configure(IApplicationBuilder app)
         {
+            app.ApplicationServices.GetRequiredService<RedditSubscriptionHostedService>()
+                .StartAsync(new CancellationToken());
         }
     }
 }

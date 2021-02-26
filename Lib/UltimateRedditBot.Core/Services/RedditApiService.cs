@@ -54,6 +54,11 @@ namespace UltimateRedditBot.Core.Services
             return await Process(subRedditName, "after", previousName, sort, postType);
         }
 
+        public Task<PostDto> GetSubscriptionPost(string subredditName, string previousName, Sort sort, PostType postType, Guid id)
+        {
+            return Process(subredditName, "before", previousName, sort, postType);
+        }
+
         private async Task<PostDto> Process(string subRedditName, string beforeOrAfter,
             string previousName, Sort sort, PostType postType = PostType.Image)
         {
@@ -95,12 +100,12 @@ namespace UltimateRedditBot.Core.Services
 
             var post = postType switch
             {
-                PostType.Image => posts.FirstOrDefault(x =>
+                PostType.Image => posts.LastOrDefault(x =>
                     x.GetPostType() == PostType.Gif || x.GetPostType() == PostType.Image ||
                     x.GetPostType() == PostType.Video),
-                PostType.Gif => posts.FirstOrDefault(x => x.GetPostType() == PostType.Gif),
-                PostType.Video => posts.FirstOrDefault(x => x.GetPostType() == PostType.Video),
-                PostType.Post => posts.FirstOrDefault(x => x.GetPostType() == PostType.Post),
+                PostType.Gif => posts.LastOrDefault(x => x.GetPostType() == PostType.Gif),
+                PostType.Video => posts.LastOrDefault(x => x.GetPostType() == PostType.Video),
+                PostType.Post => posts.LastOrDefault(x => x.GetPostType() == PostType.Post),
                 _ => null
             };
 
