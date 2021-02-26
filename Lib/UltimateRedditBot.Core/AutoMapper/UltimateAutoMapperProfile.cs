@@ -10,6 +10,9 @@ namespace UltimateRedditBot.Core.AutoMapper
         {
             CreateMap<Subreddit, SubredditDto>();
             CreateMap<SubredditDto, Subreddit>();
+
+            CreateMap<Post, PostDto>();
+            CreateMap<PostDto, Post>();
         }
     }
 }

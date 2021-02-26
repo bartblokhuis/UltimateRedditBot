@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UltimateRedditBot.Database;
 
 namespace UltimateRedditBot.Migrations.Migrations
 {
     [DbContext(typeof(UltimateDbContext))]
-    partial class UltimateDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210226224549_Subscriptions_Add__Post_Fk_Key")]
+    partial class Subscriptions_Add__Post_Fk_Key
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,6 +102,9 @@ namespace UltimateRedditBot.Migrations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("LastPostId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PostId")
                         .HasColumnType("nvarchar(450)");

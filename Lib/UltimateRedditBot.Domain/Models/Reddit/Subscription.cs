@@ -9,7 +9,8 @@ namespace UltimateRedditBot.Domain.Models.Reddit
 
         public Sort Sort { get; set; }
 
-        public string LastPostId { get; set; }
+        public string? PostId { get; set; }
+        public Post Post { get; set; }
 
         public int SubredditId { get; set; }
         public Subreddit Subreddit { get; set; }

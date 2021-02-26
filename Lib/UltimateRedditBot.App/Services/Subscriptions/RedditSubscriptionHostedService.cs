@@ -19,17 +19,19 @@ namespace UltimateRedditBot.App.Services.Subscriptions
         private readonly IRedditApiService _redditApiService;
         private readonly ILogger<RedditSubscriptionHostedService> _logger;
         private readonly IEventPublisher _eventPublisher;
+        private readonly IPostService _postService;
 
         #endregion
 
         #region Constructor
 
-        public RedditSubscriptionHostedService(IRedditSubscriptionService redditSubscriptionService, IRedditApiService redditApiService, ILogger<RedditSubscriptionHostedService> logger, IEventPublisher eventPublisher)
+        public RedditSubscriptionHostedService(IRedditSubscriptionService redditSubscriptionService, IRedditApiService redditApiService, ILogger<RedditSubscriptionHostedService> logger, IEventPublisher eventPublisher, IPostService postService)
         {
             _redditSubscriptionService = redditSubscriptionService;
             _redditApiService = redditApiService;
             _logger = logger;
             _eventPublisher = eventPublisher;
+            _postService = postService;
 
             _logger.LogInformation("Starting subscription service");
         }
@@ -78,9 +80,14 @@ namespace UltimateRedditBot.App.Services.Subscriptions
             if (postRequests.All(x => x.Result == null))
                 return;
 
+            var posts = postRequests.Select(x => x.Result.PostDto);
+
+            //Save posts
+            await _postService.SavePosts(posts);
+
             //Update last post ids
             foreach (var postRequest in postRequests)
-                postRequest.Result.Subscription.LastPostId = postRequest.Result.PostDto.Id;
+                postRequest.Result.Subscription.PostId = postRequest.Result.PostDto.Id;
 
             await _redditSubscriptionService.Update(postRequests.Select(x => x.Result.Subscription));
 
@@ -98,7 +105,7 @@ namespace UltimateRedditBot.App.Services.Subscriptions
 
         private async Task<SubscriptionPost> GetSubscriptionPost(Subscription subscription)
         {
-            var post = await _redditApiService.GetSubscriptionPost(subscription.Subreddit.Name, subscription.LastPostId,
+            var post = await _redditApiService.GetSubscriptionPost(subscription.Subreddit.Name, subscription.PostId,
                 subscription.Sort, PostType.Image, Guid.Empty);
 
             if (post != null)

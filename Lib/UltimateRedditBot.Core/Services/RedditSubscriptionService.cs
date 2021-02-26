@@ -45,7 +45,7 @@ namespace UltimateRedditBot.Core.Services
             {
                 SubredditId = subredditId,
                 Sort = sort,
-                LastPostId = ""
+                PostId = ""
             };
 
             await _subscriptionRepo.InsertAsync(subscription);
