@@ -32,15 +32,15 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 
         [Command("Mod")]
         [Alias("Mod")]
-        public async Task Mod(string userTag)
+        public async Task Mod(IUser user = null)
         {
-            if (!userTag.StartsWith("<") || !userTag.EndsWith(">"))
+            if (user == null)
             {
                 await ReplyAsync("Invalid user.");
                 return;
             }
 
-            var userId = Convert.ToUInt64(userTag.Substring(3, userTag.Length - 4));
+            var userId = user.Id;
 
             if (!_guildModService.IsMod(Context.User.Id, Context.Guild.Id) && Context.User.Id != Context.Guild.OwnerId)
             {
@@ -54,16 +54,15 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 
         [Command("Unmod")]
         [Alias("Unmod")]
-        public async Task Unmod(string userTag)
+        public async Task Unmod(IUser user = null)
         {
-            if (!userTag.StartsWith("<@!") || !userTag.EndsWith(">"))
+            if (user == null)
             {
                 await ReplyAsync("Invalid user.");
                 return;
             }
 
-            var userId = Convert.ToUInt64(userTag.Substring(3, userTag.Length - 4));
-
+            var userId = user.Id;
             if (Context.Guild.OwnerId == userId)
             {
                 await ReplyAsync("Nice try!");
