@@ -78,7 +78,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
             if (existingQueueItem != null)
             {
                 existingQueueItem.AmountOfPosts += amountOfTimes;
-                _queueManager.UpdateQueueClient(queueClient);
+                _queueManager.UpdateQueueClient(queueClient, client => (client as DiscordQueueClient)?.ChannelId == options.ChannelId && client.ClientId == queueClient.ClientId);
                 return string.Empty;
             }
 
@@ -87,7 +87,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
                 return "Subreddit could not be found";
 
             queueClient.QueueItems.Add(newQeueItem);
-            _queueManager.UpdateQueueClient(queueClient);
+            _queueManager.UpdateQueueClient(queueClient, client => (client as DiscordQueueClient)?.ChannelId == options.ChannelId && client.ClientId == queueClient.ClientId);
 
             return "";
         }

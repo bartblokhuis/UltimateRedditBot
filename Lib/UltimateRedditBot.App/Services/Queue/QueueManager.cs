@@ -23,9 +23,9 @@ namespace UltimateRedditBot.App.Services.Queue
             await client.Start();
         }
 
-        public void UpdateQueueClient(IQueueClient queueClient)
+        public void UpdateQueueClient(IQueueClient queueClient, Func<IQueueClient, bool> predicate)
         {
-            var oldClient = _queueClients.FirstOrDefault(client => client.ClientId == queueClient.ClientId);
+            var oldClient = _queueClients.FirstOrDefault(predicate);
             if (oldClient == null)
             {
                 AddQueueClient(queueClient);
