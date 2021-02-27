@@ -18,17 +18,19 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
         private readonly ISubredditService _subredditService;
         private readonly IRedditSubscriptionService _redditSubscriptionService;
         private readonly ITextChannelSubscriptionService _channelSubscriptionService;
+        private readonly IPostService _postService;
 
         #endregion
 
         #region Constructor
 
-        public SubscribeModule(ITextChannelService textChannelService, IRedditSubscriptionService redditSubscriptionService, ISubredditService subredditService, ITextChannelSubscriptionService channelSubscriptionService)
+        public SubscribeModule(ITextChannelService textChannelService, IRedditSubscriptionService redditSubscriptionService, ISubredditService subredditService, ITextChannelSubscriptionService channelSubscriptionService, IPostService postService)
         {
             _textChannelService = textChannelService;
             _redditSubscriptionService = redditSubscriptionService;
             _subredditService = subredditService;
             _channelSubscriptionService = channelSubscriptionService;
+            _postService = postService;
         }
 
         #endregion
@@ -70,13 +72,12 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
                 return;
             }
 
-            if (subreddit.IsNsfw && !(Context.Channel is ITextChannel && ((ITextChannel) Context.Channel).IsNsfw))
+            if (Context.Guild != null && subreddit.IsNsfw && !(Context.Channel is ITextChannel && ((ITextChannel) Context.Channel).IsNsfw))
             {
                 await ReplyAsync("Can't subscribe to an nsfw channel in a non nsfw chat.");
                 return;
             }
 
-            //TODO Make sort configurable by settings and overwrite method
             var subscription = await _redditSubscriptionService.GetSubscriptionBySubredditAndSort(subreddit.Id, sort);
             subscription ??= await _redditSubscriptionService.CreateAndGetSubscription(subreddit.Id, sort);
 
@@ -88,7 +89,13 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
             }
 
             await _channelSubscriptionService.Subscribe(textChannel.Id, subscription.Id);
-            await ReplyAsync($"Subscribed to {subreddit.Name}");
+
+            var lastPostUrl = subscription?.Post?.Url.ToString();
+            if (!string.IsNullOrEmpty(lastPostUrl))
+            {
+                await ReplyAsync(lastPostUrl);
+            }
+
         }
 
         #endregion
@@ -112,7 +119,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 
         private async Task Unsubscribe(string subredditName, Sort sort)
         {
-            var subreddit = _subredditService.GetSubredditDtoByName(subredditName);
+            var subreddit = await _subredditService.GetSubredditDtoByName(subredditName);
             if (subreddit == null)
             {
                 await ReplyAsync("Subreddit not found");

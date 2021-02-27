@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -8,7 +7,6 @@ using UltimateRedditBot.App.Services.Events;
 using UltimateRedditBot.App.Services.Subscriptions;
 using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.Domain.Models;
-using UltimateRedditBot.Infra.BaseRepository;
 
 namespace UltimateRedditBot.Discord.App.Events
 {
@@ -36,7 +34,7 @@ namespace UltimateRedditBot.Discord.App.Events
         public async Task HandleEvent(IEnumerable<SubscriptionPost> eventMessage)
         {
             var allSubscriptions = await _channelSubscriptionService.GetTextChannelSubscriptions();
-            var allSubscriptionIds = allSubscriptions.Select(x => x.Id).ToList();
+            var allSubscriptionIds = allSubscriptions.Select(x => x.SubscriptionId).ToList();
 
             var subscriptionPosts = eventMessage.Where(x => allSubscriptionIds.Contains(x.Subscription.Id)).ToList();
 

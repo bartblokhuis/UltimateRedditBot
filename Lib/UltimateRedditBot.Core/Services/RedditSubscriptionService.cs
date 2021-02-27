@@ -45,7 +45,7 @@ namespace UltimateRedditBot.Core.Services
             {
                 SubredditId = subredditId,
                 Sort = sort,
-                PostId = ""
+                PostId = null
             };
 
             await _subscriptionRepo.InsertAsync(subscription);
@@ -54,7 +54,7 @@ namespace UltimateRedditBot.Core.Services
 
         public Task<Subscription> GetSubscriptionBySubredditAndSort(int subredditId, Sort sort)
         {
-            return _subscriptionRepo.Table.AsQueryable().FirstOrDefaultAsync(x => x.SubredditId == subredditId && x.Sort == sort);
+            return _subscriptionRepo.Table.AsNoTracking().Include(x => x.Post).AsQueryable().FirstOrDefaultAsync(x => x.SubredditId == subredditId && x.Sort == sort);
         }
 
         public Task<List<Subscription>> GetSubscriptions()

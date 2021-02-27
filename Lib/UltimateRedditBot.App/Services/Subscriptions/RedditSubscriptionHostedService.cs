@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using UltimateRedditBot.App.Services.Events;
+using UltimateRedditBot.Domain.Dtos.Reddit;
 using UltimateRedditBot.Domain.Enums;
 using UltimateRedditBot.Domain.Models.Reddit;
 using UltimateRedditBot.Infra.Services;
@@ -51,7 +53,7 @@ namespace UltimateRedditBot.App.Services.Subscriptions
                 _logger.LogInformation(e.Message);
             }
 
-            await Task.Delay(1000);
+            await Task.Delay(10000);
 
             if (cancellationToken.IsCancellationRequested)
                 return;
@@ -75,19 +77,27 @@ namespace UltimateRedditBot.App.Services.Subscriptions
 
             await Task.WhenAll(postRequests);
 
-            postRequests = postRequests.Where(x => x?.Result?.PostDto != null).ToList();
+            postRequests = postRequests.Where(x => x.Result?.PostDto != null).ToList();
 
             if (postRequests.All(x => x.Result == null))
                 return;
 
-            var posts = postRequests.Select(x => x.Result.PostDto);
-
-            //Save posts
-            await _postService.SavePosts(posts);
+            var posts = new List<PostDto>();
 
             //Update last post ids
             foreach (var postRequest in postRequests)
+            {
+                var post = postRequest.Result.PostDto;
+                post.SubRedditId = postRequest.Result.Subscription.SubredditId;
+
+                if(posts.All(x => x.Id != post.Id))
+                    posts.Add(post);
+
                 postRequest.Result.Subscription.PostId = postRequest.Result.PostDto.Id;
+            }
+
+            await _postService.SavePosts(posts);
+
 
             await _redditSubscriptionService.Update(postRequests.Select(x => x.Result.Subscription));
 

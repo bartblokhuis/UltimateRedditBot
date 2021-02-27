@@ -20,12 +20,12 @@ namespace UltimateRedditBot.App.Extensions.Microsoft
             services.AddDbContext<UltimateDbContext>(options => { options.UseSqlServer(connectionString); });
 
             services.AddHttpClient()
-                .AddSingleton<IRedditApiService, RedditApiService>()
+                .AddScoped<IRedditApiService, RedditApiService>()
                 .AddSingleton<IQueueManager, QueueManager>()
                 .AddSingleton<IQueueService, QueueService>()
                 .AddScoped<IGenericSettingService, GenericSettingService>()
-                .AddSingleton<IEventPublisher, EventPublisher>()
-                .AddSingleton<ISubscriptionService, SubscriptionService>()
+                .AddScoped<IEventPublisher, EventPublisher>()
+                .AddScoped<ISubscriptionService, SubscriptionService>()
                 .AddScoped<ISubredditService, SubredditService>()
                 .AddScoped<IRedditSubscriptionService, RedditSubscriptionService>()
                 .AddScoped<IPostService, PostService>()
