@@ -53,25 +53,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 
         #region Subscriptions
 
-        [Command("test")]
-        public async Task Test(string subName)
-        {
-            var subreddit = await _subredditService.GetSubredditDtoByName(subName);
-            var sub = await _redditSubscriptionService.GetSubscriptionBySubredditAndSort(subreddit.Id, Sort.New);
-
-            var post = await _postService.GetPostDtoById(sub.PostId);
-
-            var res = await _redditApiService.IsPostRemoved(post.PostLink);
-
-            if (res)
-            {
-                await ReplyAsync("removed");
-                return;
-            }
-
-            await ReplyAsync("not removed");
-        }
-
         [Command("Subscribe")]
         [Alias("Sub")]
         public async Task Subscribe(string subredditName)
