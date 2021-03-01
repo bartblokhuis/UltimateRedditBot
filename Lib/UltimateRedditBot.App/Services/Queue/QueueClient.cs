@@ -56,12 +56,13 @@ namespace UltimateRedditBot.App.Services.Queue
                             .ContinueWith((postDtoTask) =>
                             {
                                 var postDto = postDtoTask.Result;
+                                queueItem.IsGettingPost = false;
+
                                 if (postDto == null)
                                     return;
 
                                 queueItem.AmountOfPosts--;
                                 queueItem.LastUsedPostName = postDto.Id;
-                                queueItem.IsGettingPost = false;
 
                                 if (queueItem.AmountOfPosts == 0)
                                     QueueItems.Remove(queueItem);

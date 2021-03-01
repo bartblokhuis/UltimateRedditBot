@@ -35,7 +35,7 @@ namespace UltimateRedditBot.Core.Services
 
         public async Task<IEnumerable<Subscription>> GetSubscriptionByIds(IEnumerable<int> ids)
         {
-            var subscriptions = await _subscriptionRepo.Table.AsQueryable().Where(x => ids.Contains(x.Id)).ToListAsync();
+            var subscriptions = await _subscriptionRepo.Table.AsQueryable().Include(x => x.Subreddit).Where(x => ids.Contains(x.Id)).ToListAsync();
             return subscriptions;
         }
 
