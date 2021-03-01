@@ -22,6 +22,7 @@ namespace UltimateRedditBot.App.Services.Subscriptions
         private readonly ILogger<RedditSubscriptionHostedService> _logger;
         private readonly IEventPublisher _eventPublisher;
         private readonly IPostService _postService;
+        private DateTime _lastCheckRemovedPosts = DateTime.Now.AddMinutes(-1);
 
         #endregion
 
@@ -36,8 +37,6 @@ namespace UltimateRedditBot.App.Services.Subscriptions
             _postService = postService;
 
             _logger.LogInformation("Starting subscription service");
-
-            CheckForRemovedPosts().GetAwaiter().GetResult();
         }
 
         #endregion
@@ -48,6 +47,13 @@ namespace UltimateRedditBot.App.Services.Subscriptions
         {
             try
             {
+                var minutesPassed = (DateTime.Now - _lastCheckRemovedPosts).TotalMinutes;
+                if(minutesPassed >= 1)
+                {
+                    await CheckForRemovedPosts();
+                    _lastCheckRemovedPosts = DateTime.Now;
+                }
+
                 await HandleSubscriptions(cancellationToken);
             }
             catch (Exception e)
