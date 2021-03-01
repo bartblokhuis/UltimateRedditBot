@@ -30,7 +30,6 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
 
         public DiscordQueueService(IGenericSettingService genericSettingService, ISubredditService subredditService,
             IQueueManager queueManager, IRedditApiService redditApiService, IEventPublisher eventPublisher,
-            IBaseRepository<PostHistory, int, UltimateDiscordDbContext> postHistoryRepo,
             IPostHistoryService postHistoryService)
             : base(genericSettingService, subredditService, queueManager)
         {
@@ -55,7 +54,12 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
             var isGuild = options.Group.Equals(DiscordSettings.GenericSettingGuildGroup);
             var id = Convert.ToUInt64(options.ClientId);
 
-            var postHistory = _postHistoryService.GetPostHistoryName(isGuild, id, subreddit.Id);
+            var postHistory = _postHistoryService.GetPostHistoryPostId(isGuild, id, subreddit.Id);
+            if (!string.IsNullOrEmpty(postHistory))
+            {
+                if (await _redditApiService.IsPostRemoved(postHistory))
+                    postHistory = "";
+            }
 
             var queueClient = FindQueueClient(options.Group, options.ClientId, options.ChannelId);
             if (queueClient == null)

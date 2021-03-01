@@ -39,7 +39,7 @@ namespace UltimateRedditBot.Discord.App.Services
             return postHistory;
         }
 
-        public string GetPostHistoryName(bool isForGuild, ulong id, int subredditId)
+        public string GetPostHistoryPostId(bool isForGuild, ulong id, int subredditId)
         {
             return isForGuild
                 ? _postHistoryRepo.Table.AsNoTracking()
