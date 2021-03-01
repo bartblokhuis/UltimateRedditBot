@@ -36,6 +36,8 @@ namespace UltimateRedditBot.App.Services.Subscriptions
             _postService = postService;
 
             _logger.LogInformation("Starting subscription service");
+
+            CheckForRemovedPosts().GetAwaiter().GetResult();
         }
 
         #endregion
@@ -64,6 +66,30 @@ namespace UltimateRedditBot.App.Services.Subscriptions
         public Task StopAsync(CancellationToken cancellationToken)
         {
             throw new System.NotImplementedException();
+        }
+
+        private async Task CheckForRemovedPosts()
+        {
+            _logger.LogInformation("Starting check for subscriptions");
+
+            var subscriptions = await _redditSubscriptionService.GetSubscriptions();
+
+            var subscriptionsToUpdate = new List<Subscription>();
+            foreach (var subscription in subscriptions)
+            {
+                if(await _redditApiService.IsPostRemoved(subscription.Post.PostLink))
+                {
+                    subscription.Post = null;
+                    subscription.PostId = null;
+
+                    subscriptionsToUpdate.Add(subscription);
+                }
+            }
+
+            if (subscriptionsToUpdate.Any())
+                await _redditSubscriptionService.Update(subscriptionsToUpdate);
+
+            _logger.LogInformation("Finished checking the removed posts");
         }
 
         private async Task HandleSubscriptions(CancellationToken cancellationToken)

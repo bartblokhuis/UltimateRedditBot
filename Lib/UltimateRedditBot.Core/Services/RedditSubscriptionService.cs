@@ -59,7 +59,7 @@ namespace UltimateRedditBot.Core.Services
 
         public Task<List<Subscription>> GetSubscriptions()
         {
-            return _subscriptionRepo.Table.Include(x => x.Subreddit).ToListAsync();
+            return _subscriptionRepo.Table.Include(x => x.Subreddit).Include(x => x.Post).ToListAsync();
         }
 
         public Task Update(IEnumerable<Subscription> subscriptions)

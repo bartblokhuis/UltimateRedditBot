@@ -13,5 +13,7 @@ namespace UltimateRedditBot.Infra.Services
 
         Task<PostDto> GetSubscriptionPost(string subredditName, string previousName, Sort sort, PostType postType,
             Guid id);
+
+        Task<bool> IsPostRemoved(string postUrl);
     }
 }

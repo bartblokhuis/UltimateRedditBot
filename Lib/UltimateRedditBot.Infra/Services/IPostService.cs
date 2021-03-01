@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UltimateRedditBot.Domain.Dtos.Reddit;
+using UltimateRedditBot.Domain.Models.Reddit;
 
 namespace UltimateRedditBot.Infra.Services
 {
@@ -11,5 +12,7 @@ namespace UltimateRedditBot.Infra.Services
         Task SavePosts(IEnumerable<PostDto> postDtos);
 
         Task<PostDto> GetPostDtoById(string postId);
+
+        Task<List<Post>> GetPostDtoByIds(IEnumerable<string> postIds);
     }
 }

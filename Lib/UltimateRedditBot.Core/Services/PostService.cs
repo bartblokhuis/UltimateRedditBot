@@ -59,6 +59,11 @@ namespace UltimateRedditBot.Core.Services
             return post != null ? _mapper.Map<PostDto>(post) : null;
         }
 
+        public Task<List<Post>> GetPostDtoByIds(IEnumerable<string> postIds)
+        {
+            return _postRepository.Table.AsQueryable().Where(x => postIds.Contains(x.Id)).ToListAsync();
+        }
+
         #endregion
     }
 }

@@ -28,12 +28,14 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
         private readonly ITextChannelSubscriptionService _channelSubscriptionService;
         private readonly IBannedSubredditService _bannedSubredditService;
         private readonly DiscordShardedClient _discord;
+        private readonly IRedditApiService _redditApiService;
+        private readonly IPostService _postService;
 
         #endregion
 
         #region Constructor
 
-        public SubscribeModule(ITextChannelService textChannelService, IRedditSubscriptionService redditSubscriptionService, ISubredditService subredditService, ITextChannelSubscriptionService channelSubscriptionService, DiscordShardedClient discord, IBannedSubredditService bannedSubredditService)
+        public SubscribeModule(ITextChannelService textChannelService, IRedditSubscriptionService redditSubscriptionService, ISubredditService subredditService, ITextChannelSubscriptionService channelSubscriptionService, DiscordShardedClient discord, IBannedSubredditService bannedSubredditService, IRedditApiService redditApiService, IPostService postService)
         {
             _textChannelService = textChannelService;
             _redditSubscriptionService = redditSubscriptionService;
@@ -41,6 +43,8 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
             _channelSubscriptionService = channelSubscriptionService;
             _discord = discord;
             _bannedSubredditService = bannedSubredditService;
+            _redditApiService = redditApiService;
+            _postService = postService;
         }
 
         #endregion
@@ -48,6 +52,25 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
         #region Methods
 
         #region Subscriptions
+
+        [Command("test")]
+        public async Task Test(string subName)
+        {
+            var subreddit = await _subredditService.GetSubredditDtoByName(subName);
+            var sub = await _redditSubscriptionService.GetSubscriptionBySubredditAndSort(subreddit.Id, Sort.New);
+
+            var post = await _postService.GetPostDtoById(sub.PostId);
+
+            var res = await _redditApiService.IsPostRemoved(post.PostLink);
+
+            if (res)
+            {
+                await ReplyAsync("removed");
+                return;
+            }
+
+            await ReplyAsync("not removed");
+        }
 
         [Command("Subscribe")]
         [Alias("Sub")]
@@ -198,7 +221,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 
 
         #endregion
-
 
         #region Utils
 

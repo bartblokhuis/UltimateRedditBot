@@ -59,6 +59,30 @@ namespace UltimateRedditBot.Core.Services
             return Process(subredditName, "before", previousName, sort, postType);
         }
 
+        public async Task<bool> IsPostRemoved(string postUrl)
+        {
+            var url = string.Format(RedditApiConstants.IsPostRemovedUrl, postUrl);
+            var client = _clientFactory.CreateClient();
+
+            var result = await client.GetAsync(url);
+
+            var request = await result.Content.ReadAsStringAsync();
+
+            try
+            {
+                var posts = JsonConvert.DeserializeObject<RedditApiPostDto[]>(request);
+                return posts.Any(x => x.Data.Children.Any(y => y.Data.Selftext != null && y.Data.Selftext.Equals("[deleted]")));
+            }
+            catch(Exception e)
+            {
+
+            }
+            
+
+            return true;
+
+        }
+
         private async Task<PostDto> Process(string subRedditName, string beforeOrAfter,
             string previousName, Sort sort, PostType postType = PostType.Image)
         {

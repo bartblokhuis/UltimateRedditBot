@@ -3,6 +3,12 @@ using Newtonsoft.Json;
 
 namespace UltimateRedditBot.Domain.Dtos.Reddit
 {
+    public class RedditApiPostDto2
+    {
+        [JsonProperty("kind")] 
+        public string Kind { get; set; }
+    }
+
     public class RedditApiPostDto
     {
         [JsonProperty("kind")] public string Kind { get; set; }
@@ -18,9 +24,9 @@ namespace UltimateRedditBot.Domain.Dtos.Reddit
 
         [JsonProperty("children")] public Child[] Children { get; set; }
 
-        [JsonProperty("after")] public string After { get; set; }
-
-        [JsonProperty("before")] public object Before { get; set; }
+        [JsonProperty("after")] public string After { get; set; } = "";
+            
+        [JsonProperty("before")] public object Before { get; set; } = "";
     }
 
     public class Child
@@ -645,4 +651,5 @@ namespace UltimateRedditBot.Domain.Dtos.Reddit
 
         [JsonProperty("nsfw")] public Gif Nsfw { get; set; }
     }
+
 }
