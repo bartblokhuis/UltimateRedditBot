@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Discord;
 using UltimateRedditBot.Domain.Queue;
 
@@ -8,18 +9,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Helpers
     {
         public static List<EmbedFieldBuilder> EmbedQueueItems(IEnumerable<QueueItem> queueItems)
         {
-            var embedBuilder = new List<EmbedFieldBuilder>();
-
-            foreach (var queueItem in queueItems)
-            {
-                embedBuilder.Add(new EmbedFieldBuilder
-                {
-                    Name = queueItem.SubredditDto.Name,
-                    Value = $"{queueItem.AmountOfPosts}, {(queueItem.AmountOfPosts > 1 ? "times" : "time")} in the queue"
-                });
-            }
-
-            return embedBuilder;
+            return queueItems.Select(queueItem => new EmbedFieldBuilder {Name = queueItem.SubredditDto.Name, Value = $"{queueItem.AmountOfPosts}, {(queueItem.AmountOfPosts > 1 ? "times" : "time")} in the queue"}).ToList();
         }
 
         public static EmbedFooterBuilder QueueItemsFooter(long amountOfItemsInQueue)

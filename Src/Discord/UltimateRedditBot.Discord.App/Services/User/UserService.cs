@@ -61,10 +61,7 @@ namespace UltimateRedditBot.Discord.App.Services.User
         public async Task<UserDto> GetById(ulong userId)
         {
             var user = await _userRepository.GetByIdAsync(userId);
-            if (user == null)
-                return null;
-
-            return _mapper.Map<UserDto>(user);
+            return user == null ? null : _mapper.Map<UserDto>(user);
         }
 
 

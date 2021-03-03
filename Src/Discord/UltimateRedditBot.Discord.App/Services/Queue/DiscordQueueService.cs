@@ -5,11 +5,8 @@ using System.Threading.Tasks;
 using UltimateRedditBot.App.Services.Events;
 using UltimateRedditBot.App.Services.Queue;
 using UltimateRedditBot.Discord.App.Discord.Constants;
-using UltimateRedditBot.Discord.Database;
-using UltimateRedditBot.Discord.Domain.Models;
 using UltimateRedditBot.Domain.Dtos.Reddit;
 using UltimateRedditBot.Domain.Queue;
-using UltimateRedditBot.Infra.BaseRepository;
 using UltimateRedditBot.Infra.Services;
 
 namespace UltimateRedditBot.Discord.App.Services.Queue
@@ -23,6 +20,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
         private readonly IEventPublisher _eventPublisher;
         private readonly IPostHistoryService _postHistoryService;
         private readonly ISubredditService _subredditService;
+        private readonly IPostService _postService;
 
         #endregion
 
@@ -30,7 +28,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
 
         public DiscordQueueService(IGenericSettingService genericSettingService, ISubredditService subredditService,
             IQueueManager queueManager, IRedditApiService redditApiService, IEventPublisher eventPublisher,
-            IPostHistoryService postHistoryService)
+            IPostHistoryService postHistoryService, IPostService postService)
             : base(genericSettingService, subredditService, queueManager)
         {
             _subredditService = subredditService;
@@ -38,6 +36,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
             _redditApiService = redditApiService;
             _eventPublisher = eventPublisher;
             _postHistoryService = postHistoryService;
+            _postService = postService;
         }
 
         #endregion
@@ -54,17 +53,24 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
             var isGuild = options.Group.Equals(DiscordSettings.GenericSettingGuildGroup);
             var id = Convert.ToUInt64(options.ClientId);
 
-            var postHistory = _postHistoryService.GetPostHistoryPostId(isGuild, id, subreddit.Id);
-            if (!string.IsNullOrEmpty(postHistory))
+            var postHistory = _postHistoryService.GetPostHistoryPost(isGuild, id, subreddit.Id);
+            var lastPostId = "";
+            if (postHistory != null)
             {
-                if (await _redditApiService.IsPostRemoved(postHistory))
-                    postHistory = "";
+                var post = await _postService.GetPostDtoById(postHistory.PostId);
+                if (post != null)
+                {
+                    if (await _redditApiService.IsPostRemoved(post.PostLink))
+                        postHistory.PostId = "";
+
+                    lastPostId = postHistory.PostId;
+                }
             }
 
             var queueClient = FindQueueClient(options.Group, options.ClientId, options.ChannelId);
             if (queueClient == null)
             {
-                var queueItem = await PrepareQueueItem(subreddit, postHistory, amountOfTimes);
+                var queueItem = await PrepareQueueItem(subreddit, lastPostId, amountOfTimes);
                 if (queueItem.SubredditDto == null)
                     return "Subreddit could not be found";
 
@@ -86,11 +92,11 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
                 return string.Empty;
             }
 
-            var newQeueItem = await PrepareQueueItem(subreddit, postHistory, amountOfTimes);
-            if (newQeueItem.SubredditDto == null)
+            var newQueueItem = await PrepareQueueItem(subreddit, lastPostId, amountOfTimes);
+            if (newQueueItem.SubredditDto == null)
                 return "Subreddit could not be found";
 
-            queueClient.QueueItems.Add(newQeueItem);
+            queueClient.QueueItems.Add(newQueueItem);
             _queueManager.UpdateQueueClient(queueClient, client => (client as DiscordQueueClient)?.ChannelId == options.ChannelId && client.ClientId == queueClient.ClientId);
 
             return "";
@@ -163,7 +169,7 @@ namespace UltimateRedditBot.Discord.App.Services.Queue
             if (!queueClients.Any())
                 return null;
 
-            return (group == DiscordSettings.GenericSettingGuildGroup)
+            return group == DiscordSettings.GenericSettingGuildGroup
                 ? queueClients.FirstOrDefault(x =>
                     x.Group == group && x.ClientId == clientId && x.ChannelId == channelId)
 

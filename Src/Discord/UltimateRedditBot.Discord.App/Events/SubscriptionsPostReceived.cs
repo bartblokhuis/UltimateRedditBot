@@ -57,8 +57,12 @@ namespace UltimateRedditBot.Discord.App.Events
             textChannelSubscriptions = textChannelSubscriptions.Where(x => x.TextChannel.GuildId.HasValue).ToList();
 
             var tasks = new List<Task>();
-            foreach (var textChannelSubscription in textChannelSubscriptions.Where(x => x.SubscriptionId == post.Subscription.Id))
+            foreach (var textChannelSubscription in textChannelSubscriptions
+                .Where(x => x.SubscriptionId == post.Subscription.Id))
             {
+                if (textChannelSubscription.TextChannel.GuildId == null)
+                    continue;
+
                 var guild = _discord.GetGuild((ulong)textChannelSubscription.TextChannel.GuildId);
 
                 var textChannel =
@@ -67,13 +71,13 @@ namespace UltimateRedditBot.Discord.App.Events
                 if (textChannel == null)
                     continue;
 
-                tasks.Add((textChannel as ITextChannel)?.SendMessageAsync(post.PostDto.Url.ToString()));
+                tasks.Add(((ITextChannel) textChannel).SendMessageAsync(post.PostDto.Url.ToString()));
             }
 
             return tasks;
         }
 
-        private async Task<IEnumerable<Task>> SendDmPosts(SubscriptionPost post, IEnumerable<TextChannelSubscription> textChannelSubscriptions)
+        private IEnumerable<Task> SendDmPosts(SubscriptionPost post, IEnumerable<TextChannelSubscription> textChannelSubscriptions)
         {
             textChannelSubscriptions = textChannelSubscriptions.ToList();
             var userTextChannels = textChannelSubscriptions.Where(x => x.SubscriptionId == post.Subscription.Id && x.TextChannel.UserId.HasValue).Select(x => x.TextChannel).ToList();

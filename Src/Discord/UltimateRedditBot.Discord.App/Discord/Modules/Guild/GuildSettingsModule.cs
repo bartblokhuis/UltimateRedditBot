@@ -7,7 +7,6 @@ using UltimateRedditBot.Discord.App.Discord.Constants;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
 using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.App.Services.Guild;
-using UltimateRedditBot.Discord.Domain.Dtos;
 using UltimateRedditBot.Discord.Domain.Models;
 using UltimateRedditBot.Domain.Models.Settings;
 using UltimateRedditBot.Infra.Services;

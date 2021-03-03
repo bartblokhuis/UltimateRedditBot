@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using UltimateRedditBot.Discord.Database;
 using UltimateRedditBot.Discord.Domain.Models;
 using UltimateRedditBot.Domain.Dtos.Reddit;
-using UltimateRedditBot.Domain.Models.Reddit;
 using UltimateRedditBot.Infra.BaseRepository;
 using UltimateRedditBot.Infra.Services;
 
@@ -23,7 +22,7 @@ namespace UltimateRedditBot.Discord.App.Services
 
         #region Constructor
 
-        public BannedSubredditService(IBaseRepository<Domain.Models.BannedSubreddit, int, UltimateDiscordDbContext> bannedSubredditRepo, ISubredditService subredditService)
+        public BannedSubredditService(IBaseRepository<BannedSubreddit, int, UltimateDiscordDbContext> bannedSubredditRepo, ISubredditService subredditService)
         {
             _bannedSubredditRepo = bannedSubredditRepo;
             _subredditService = subredditService;
@@ -42,7 +41,7 @@ namespace UltimateRedditBot.Discord.App.Services
             if (IsSubredditBanned(id, subreddit.Id))
                 return "Subreddit is already banned";
 
-            await _bannedSubredditRepo.InsertAsync(new Domain.Models.BannedSubreddit
+            await _bannedSubredditRepo.InsertAsync(new BannedSubreddit
             {
                 GuildId = id,
                 SubredditId = subreddit.Id

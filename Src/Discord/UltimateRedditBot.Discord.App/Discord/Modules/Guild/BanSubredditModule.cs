@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
-using UltimateRedditBot.Discord.App.Discord.Modules.Helpers;
 using UltimateRedditBot.Discord.App.Services;
-using UltimateRedditBot.Domain.Dtos.Reddit;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
 {
@@ -81,7 +79,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
                 valueBuilder.Append(subredditDto.Name + "\n");
             }
 
-            bannedSubredditsBuilder.Fields.Add(new EmbedFieldBuilder()
+            bannedSubredditsBuilder.Fields.Add(new EmbedFieldBuilder
             {
                 Name = "Subreddits",
                 Value = valueBuilder.ToString()

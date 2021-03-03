@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -14,16 +12,14 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Guild
         #region Fields
 
         private readonly IGuildModService _guildModService;
-        private readonly DiscordShardedClient _discord;
 
         #endregion
 
         #region Constructor
 
-        public GuildModModule(IGuildModService guildModService, DiscordShardedClient discord)
+        public GuildModModule(IGuildModService guildModService)
         {
             _guildModService = guildModService;
-            _discord = discord;
         }
 
         #endregion

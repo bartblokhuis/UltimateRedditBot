@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Discord;
 using Discord.WebSocket;
@@ -12,17 +11,27 @@ using UltimateRedditBot.Discord.App.Services.Queue;
 using UltimateRedditBot.Discord.Domain.Models;
 using UltimateRedditBot.Domain.Dtos.Reddit;
 using UltimateRedditBot.Domain.Queue;
+using UltimateRedditBot.Infra.Services;
 
 namespace UltimateRedditBot.Discord.App.Events
 {
     public class DiscordQueueItemReceived : IConsumer<QueueItemPostReceived>
     {
+        #region Fields
+
+        private readonly DiscordShardedClient _discord;
+        private readonly IPostHistoryService _postHistoryService;
+        private readonly IPostService _postService;
+
+        #endregion
+
         #region Constructor
 
-        public DiscordQueueItemReceived(DiscordShardedClient DiscordShardedClient, IPostHistoryService postHistoryService)
+        public DiscordQueueItemReceived(DiscordShardedClient discordShardedClient, IPostHistoryService postHistoryService, IPostService postService)
         {
-            _discord = DiscordShardedClient;
+            _discord = discordShardedClient;
             _postHistoryService = postHistoryService;
+            _postService = postService;
         }
 
         #endregion
@@ -33,6 +42,9 @@ namespace UltimateRedditBot.Discord.App.Events
         {
             if (!(eventMessage.QueueClient is IDiscordQueueClient discordQueueClient))
                 throw new ApplicationException("");
+
+            eventMessage.PostDto.SubRedditId = eventMessage.QueueItem.SubredditDto.Id;
+            await _postService.SavePost(eventMessage.PostDto);
 
             var isForGuild = discordQueueClient.Group.Equals(DiscordSettings.GenericSettingGuildGroup);
             if (!isForGuild)
@@ -69,13 +81,6 @@ namespace UltimateRedditBot.Discord.App.Events
                 await _postHistoryService.SavePostHistory(postHistory);
             }
         }
-
-        #endregion
-
-        #region Fields
-
-        private readonly DiscordShardedClient _discord;
-        private readonly IPostHistoryService _postHistoryService;
 
         #endregion
 

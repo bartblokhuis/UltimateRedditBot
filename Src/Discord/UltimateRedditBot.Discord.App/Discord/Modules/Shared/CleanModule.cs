@@ -34,7 +34,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
         if (amountOfMessagesToScan > 100)
             amountOfMessagesToScan = 100;
 
-        var messages = await Context.Channel.GetMessagesAsync(limit: amountOfMessagesToScan).ToListAsync();
+        var messages = await Context.Channel.GetMessagesAsync(amountOfMessagesToScan).ToListAsync();
         var removeTasks = new List<Task>();
         foreach (var message in messages.SelectMany(x => x))
         {

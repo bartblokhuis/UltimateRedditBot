@@ -122,14 +122,13 @@ namespace UltimateRedditBot.App.Services.Subscriptions
                 var post = postRequest.Result.PostDto;
                 post.SubRedditId = postRequest.Result.Subscription.SubredditId;
 
-                if(posts.All(x => x.Id != post.Id))
+                if(posts.Where(x => x.SubRedditId != 0).All(x => x.Id != post.Id))
                     posts.Add(post);
 
                 postRequest.Result.Subscription.PostId = postRequest.Result.PostDto.Id;
             }
 
             await _postService.SavePosts(posts);
-
 
             await _redditSubscriptionService.Update(postRequests.Select(x => x.Result.Subscription));
 

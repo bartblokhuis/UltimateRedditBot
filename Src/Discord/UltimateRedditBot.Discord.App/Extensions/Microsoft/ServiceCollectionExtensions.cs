@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;

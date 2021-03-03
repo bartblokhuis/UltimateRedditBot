@@ -7,13 +7,11 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using UltimateRedditBot.Discord.App.Discord.Modules.Common;
-using UltimateRedditBot.Discord.App.Discord.Modules.Helpers;
 using UltimateRedditBot.Discord.App.Extensions.Microsoft;
 using UltimateRedditBot.Discord.App.Services;
 using UltimateRedditBot.Discord.App.Services.TextChannelService;
 using UltimateRedditBot.Discord.Domain.Models;
 using UltimateRedditBot.Domain.Enums;
-using UltimateRedditBot.Domain.Models.Reddit;
 using UltimateRedditBot.Infra.Services;
 
 namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
@@ -28,14 +26,12 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
         private readonly ITextChannelSubscriptionService _channelSubscriptionService;
         private readonly IBannedSubredditService _bannedSubredditService;
         private readonly DiscordShardedClient _discord;
-        private readonly IRedditApiService _redditApiService;
-        private readonly IPostService _postService;
 
         #endregion
 
         #region Constructor
 
-        public SubscribeModule(ITextChannelService textChannelService, IRedditSubscriptionService redditSubscriptionService, ISubredditService subredditService, ITextChannelSubscriptionService channelSubscriptionService, DiscordShardedClient discord, IBannedSubredditService bannedSubredditService, IRedditApiService redditApiService, IPostService postService)
+        public SubscribeModule(ITextChannelService textChannelService, IRedditSubscriptionService redditSubscriptionService, ISubredditService subredditService, ITextChannelSubscriptionService channelSubscriptionService, DiscordShardedClient discord, IBannedSubredditService bannedSubredditService)
         {
             _textChannelService = textChannelService;
             _redditSubscriptionService = redditSubscriptionService;
@@ -43,8 +39,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
             _channelSubscriptionService = channelSubscriptionService;
             _discord = discord;
             _bannedSubredditService = bannedSubredditService;
-            _redditApiService = redditApiService;
-            _postService = postService;
         }
 
         #endregion
@@ -176,11 +170,9 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
         {
             var textChannelSubscriptions =  await _channelSubscriptionService.GetTextChannelSubscriptions();
 
-            List<TextChannelSubscription> subscriptions;
-
             var isForGuild = IsForGuild();
 
-            subscriptions = isForGuild ?
+            var subscriptions = isForGuild ?
                 textChannelSubscriptions.Where(x => x.TextChannel.GuildId == Context.Guild.Id).ToList()
                 : textChannelSubscriptions.Where(x => x.TextChannel.UserId == Context.User.Id).ToList();
 
@@ -205,7 +197,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
 
         #region Utils
 
-        private async Task<List<EmbedFieldBuilder>> DmSubscriptionFields(List<TextChannelSubscription> textChannelSubscriptions)
+        private async Task<List<EmbedFieldBuilder>> DmSubscriptionFields(IEnumerable<TextChannelSubscription> textChannelSubscriptions)
         {
             var fields = new List<EmbedFieldBuilder>();
 
@@ -229,7 +221,7 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
             return fields;
         }
 
-        private async Task<List<EmbedFieldBuilder>> GuildSubscriptionFields(List<TextChannelSubscription> textChannelSubscriptions)
+        private async Task<List<EmbedFieldBuilder>> GuildSubscriptionFields(IEnumerable<TextChannelSubscription> textChannelSubscriptions)
         {
             var channels = textChannelSubscriptions.DistinctBy(x => x.TextChannel?.TextChannelId)
                 .Select(x => new
@@ -248,10 +240,6 @@ namespace UltimateRedditBot.Discord.App.Discord.Modules.Shared
             subscriptions = subscriptions.ToList();
             foreach (var channel in channels)
             {
-                var t = IsForGuild()
-                    ? await Context.Guild.GetChannelAsync(channel.ChannelId) as ITextChannel
-                    : await _discord.GetDMChannelAsync(channel.ChannelId) as ITextChannel;
-
                 var discordChannel = await Context.Guild.GetChannelAsync(channel.ChannelId);
                 if (discordChannel == null)
                     continue;

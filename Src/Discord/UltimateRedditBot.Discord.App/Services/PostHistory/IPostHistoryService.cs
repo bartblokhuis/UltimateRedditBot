@@ -7,7 +7,7 @@ namespace UltimateRedditBot.Discord.App.Services
     {
         PostHistory GetPostHistory(bool isForGuild, ulong id, int subredditId);
 
-        string GetPostHistoryPostId(bool isForGuild, ulong id, int subredditId);
+        PostHistory GetPostHistoryPost(bool isForGuild, ulong id, int subredditId);
 
         Task SavePostHistory(PostHistory postHistory);
 

@@ -10,21 +10,18 @@ namespace UltimateRedditBot.Discord.App.Services
 {
     public class PostHistoryService : IPostHistoryService
     {
-        #region Constructor
-
-        public PostHistoryService(IBaseRepository<PostHistory, int, UltimateDiscordDbContext> postHistoryRepo,
-            IMapper mapper)
-        {
-            _postHistoryRepo = postHistoryRepo;
-            _mapper = mapper;
-        }
-
-        #endregion
-
         #region Fields
 
         private readonly IBaseRepository<PostHistory, int, UltimateDiscordDbContext> _postHistoryRepo;
-        private readonly IMapper _mapper;
+
+        #endregion
+
+        #region Constructor
+
+        public PostHistoryService(IBaseRepository<PostHistory, int, UltimateDiscordDbContext> postHistoryRepo)
+        {
+            _postHistoryRepo = postHistoryRepo;
+        }
 
         #endregion
 
@@ -39,13 +36,13 @@ namespace UltimateRedditBot.Discord.App.Services
             return postHistory;
         }
 
-        public string GetPostHistoryPostId(bool isForGuild, ulong id, int subredditId)
+        public PostHistory GetPostHistoryPost(bool isForGuild, ulong id, int subredditId)
         {
             return isForGuild
                 ? _postHistoryRepo.Table.AsNoTracking()
-                    .FirstOrDefault(x => x.SubredditId == subredditId && x.GuildId == id)?.PostId
+                    .FirstOrDefault(x => x.SubredditId == subredditId && x.GuildId == id)
                 : _postHistoryRepo.Table.AsNoTracking()
-                    .FirstOrDefault(x => x.SubredditId == subredditId && x.UserId == id)?.PostId;
+                    .FirstOrDefault(x => x.SubredditId == subredditId && x.UserId == id);
         }
 
         public Task SavePostHistory(PostHistory postHistory)

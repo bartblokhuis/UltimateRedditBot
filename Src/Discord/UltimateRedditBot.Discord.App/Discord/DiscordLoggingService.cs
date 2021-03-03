@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Discord;
 using Discord.Commands;
