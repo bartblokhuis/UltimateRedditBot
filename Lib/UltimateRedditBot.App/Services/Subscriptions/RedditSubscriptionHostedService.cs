@@ -48,7 +48,7 @@ namespace UltimateRedditBot.App.Services.Subscriptions
             try
             {
                 var minutesPassed = (DateTime.Now - _lastCheckRemovedPosts).TotalMinutes;
-                if(minutesPassed >= 1)
+                if(minutesPassed >= 5)
                 {
                     await CheckForRemovedPosts();
                     _lastCheckRemovedPosts = DateTime.Now;
@@ -76,26 +76,24 @@ namespace UltimateRedditBot.App.Services.Subscriptions
 
         private async Task CheckForRemovedPosts()
         {
-            _logger.LogInformation("Starting check for subscriptions");
-
             var subscriptions = await _redditSubscriptionService.GetSubscriptions();
 
             var subscriptionsToUpdate = new List<Subscription>();
             foreach (var subscription in subscriptions)
             {
-                if(await _redditApiService.IsPostRemoved(subscription.Post.PostLink))
-                {
-                    subscription.Post = null;
-                    subscription.PostId = null;
+                if (!await _redditApiService.IsPostRemoved(subscription.Post.PostLink))
+                    continue;
 
-                    subscriptionsToUpdate.Add(subscription);
-                }
+                _logger.LogInformation($"Found a removed post in subreddit: {subscription.Subreddit.Name}, ");
+
+                subscription.Post = null;
+                subscription.PostId = null;
+
+                subscriptionsToUpdate.Add(subscription);
             }
 
             if (subscriptionsToUpdate.Any())
                 await _redditSubscriptionService.Update(subscriptionsToUpdate);
-
-            _logger.LogInformation("Finished checking the removed posts");
         }
 
         private async Task HandleSubscriptions(CancellationToken cancellationToken)
