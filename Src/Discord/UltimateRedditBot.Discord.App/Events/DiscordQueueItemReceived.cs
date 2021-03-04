@@ -44,7 +44,6 @@ namespace UltimateRedditBot.Discord.App.Events
                 throw new ApplicationException("");
 
             eventMessage.PostDto.SubRedditId = eventMessage.QueueItem.SubredditDto.Id;
-            await _postService.SavePost(eventMessage.PostDto);
 
             var isForGuild = discordQueueClient.Group.Equals(DiscordSettings.GenericSettingGuildGroup);
             if (!isForGuild)
@@ -55,6 +54,11 @@ namespace UltimateRedditBot.Discord.App.Events
             //Since we still have to remove 1 in the queue service it means that here 1 is the last post item.
             if (eventMessage.QueueItem.AmountOfPosts == 1)
             {
+                var postDto = await _postService.GetPostDtoById(eventMessage.PostDto.Id);
+
+                if(postDto == null)
+                    await _postService.SavePost(eventMessage.PostDto);
+                
                 var id = Convert.ToUInt64(eventMessage.QueueClient.ClientId);
 
                 var postHistory = _postHistoryService.GetPostHistory(isForGuild, id,

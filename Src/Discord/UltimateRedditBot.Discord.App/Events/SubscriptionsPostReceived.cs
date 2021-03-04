@@ -41,7 +41,7 @@ namespace UltimateRedditBot.Discord.App.Events
             var sendMessageTasks = new List<Task>();
             foreach (var subscriptionPost in subscriptionPosts)
             {
-                sendMessageTasks.AddRange(await SendDmPosts(subscriptionPost, allSubscriptions));
+                sendMessageTasks.AddRange(SendDmPosts(subscriptionPost, allSubscriptions));
                 sendMessageTasks.AddRange(SendGuildPosts(subscriptionPost, allSubscriptions));
             }
 
