@@ -78,8 +78,7 @@ namespace UltimateRedditBot.Core.Services
             {
 
             }
-            
-
+           
             return true;
 
         }

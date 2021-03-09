@@ -3,6 +3,7 @@
     public enum Sort
     {
         New,
-        Hot
+        Hot,
+        Top
     }
 }

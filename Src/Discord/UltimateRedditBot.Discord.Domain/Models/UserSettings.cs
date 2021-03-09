@@ -1,4 +1,5 @@
-﻿using UltimateRedditBot.Domain.Models.Common;
+﻿using UltimateRedditBot.Domain.Enums;
+using UltimateRedditBot.Domain.Models.Common;
 
 namespace UltimateRedditBot.Discord.Domain.Models
 {
@@ -8,5 +9,7 @@ namespace UltimateRedditBot.Discord.Domain.Models
         public ulong UserId { get; set; }
 
         public string Prefix { get; set; }
+
+        public Sort Sort { get; set; }
     }
 }

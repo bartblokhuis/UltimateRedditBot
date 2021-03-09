@@ -1,4 +1,5 @@
 ﻿using System;
+using UltimateRedditBot.Domain.Enums;
 using UltimateRedditBot.Domain.Models.Common;
 
 namespace UltimateRedditBot.Discord.Domain.Models
@@ -10,7 +11,10 @@ namespace UltimateRedditBot.Discord.Domain.Models
         public virtual Guild Guild { get; set; }
         public ulong GuildId { get; set; }
 
+        public Sort Sort { get; set; }
+
         public DateTime CreatedAtUTC { get; set; }
+
         public DateTime UpdatedAtUTC { get; set; }
     }
 }
