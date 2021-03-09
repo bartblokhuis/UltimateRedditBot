@@ -39,8 +39,8 @@ namespace UltimateRedditBot.Discord.App.Extensions.Microsoft
                 .AddScoped<IGuildModService, GuildModService>()
                 .AddScoped<ITextChannelSubscriptionService, TextChannelSubscriptionService>();
 
-            services.AddSingleton<IConsumer<QueueItemPostReceived>, DiscordQueueItemReceived>();
-            services.AddSingleton<IConsumer<IEnumerable<SubscriptionPost>>, SubscriptionsPostReceived>();
+            services.AddScoped<IConsumer<QueueItemPostReceived>, DiscordQueueItemReceived>();
+            services.AddScoped<IConsumer<IEnumerable<SubscriptionPost>>, SubscriptionsPostReceived>();
             services.Replace(ServiceDescriptor.Singleton<IQueueService, DiscordQueueService>());
 
             services.AddSingleton(new CommandService(new CommandServiceConfig

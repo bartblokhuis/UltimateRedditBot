@@ -71,7 +71,8 @@ namespace UltimateRedditBot.Core.Services
             try
             {
                 var posts = JsonConvert.DeserializeObject<RedditApiPostDto[]>(request);
-                return posts.Any(x => x.Data.Children.Any(y => y.Data.Selftext != null && y.Data.Selftext.Equals("[deleted]")));
+                return posts.Any(x => x.Data.Children.Any(y => y.Data.Selftext != null && y.Data.Selftext.Equals("[deleted]")) ||
+                    x.Data.Children.Any(y => !string.IsNullOrEmpty(y.Data.RemovedByCategory)));
             }
             catch(Exception e)
             {

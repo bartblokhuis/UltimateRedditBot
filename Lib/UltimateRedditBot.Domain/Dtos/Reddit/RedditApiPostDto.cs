@@ -150,7 +150,9 @@ namespace UltimateRedditBot.Domain.Dtos.Reddit
 
         [JsonProperty("wls")] public object Wls { get; set; }
 
-        [JsonProperty("removed_by_category")] public object RemovedByCategory { get; set; }
+
+        [JsonProperty("removed_by_category")] 
+        public string? RemovedByCategory { get; set; }
 
         [JsonProperty("banned_by")] public object BannedBy { get; set; }
 
