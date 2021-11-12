@@ -1,0 +1,13 @@
+<div class="features">
+    <div class="container">
+        <div class="row text-center">
+            <h2>Features</h2>
+            <div class="col-md-4 ml-auto mr-auto text-center" *ngFor="let feature of features;">
+                <div class="icon">
+                      <img src="assets/icons/{{ feature.icon }}.svg">
+                </div>
+                <h5>{{ feature.name }}</h5>
+            </div>
+        </div>
+    </div>
+</div>

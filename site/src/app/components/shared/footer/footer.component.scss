@@ -1,0 +1,13 @@
+@import './../../../../assets/sass/variables';
+
+.footer-default {
+    margin-top: 20px;
+    padding: 20px 0;
+    background-color: $secondary-black;
+}
+
+a,
+.copyright {
+    color: #fff;
+    opacity: 0.9;
+}

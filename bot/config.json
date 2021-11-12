@@ -1,0 +1,7 @@
+{
+    "token": "BOT_TOKEN",
+    "baseUrl": "https://localhost:5001/api/",
+    "superUserId": "",
+    "apiKey": "12345",
+    "inviteUrl": "https://discord.com/oauth2/authorize?client_id=773276181805662228&permissions=1133584&scope=bot"
+}

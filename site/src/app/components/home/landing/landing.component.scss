@@ -1,0 +1,38 @@
+.page-header.page-header-small{
+    min-height: auto;
+    max-height: none;
+    height: 65vh;
+}
+
+.btn.btn-primary.btn-round.btn-lg:hover {
+    color: #000;
+    opacity: 0.9;
+}
+
+.page-header .container {
+    height: 100%;
+    z-index: 1;
+    text-align: center;
+    position: relative;
+}
+
+.page-header .container > .content-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 0 15px;
+    color: #FFFFFF;
+    width: 100%;
+    max-width: 880px;
+}
+
+.title{
+    margin-bottom: 0;
+}
+
+label{
+    display: block;
+    margin: 20px 0;
+}

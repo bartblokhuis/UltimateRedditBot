@@ -1,0 +1,26 @@
+<div class="container">
+
+      <div class="accordion" id="accordionPanelsStayOpenExample">
+        <div class="accordion-item" *ngFor="let commandGroup of commandGroups; let i=index;">
+            <h2 class="accordion-header" 
+                id="panel-{{i}}-heading">
+                <button class="accordion-button " type="button" 
+                    data-bs-toggle="collapse" 
+                    attr.data-bs-target="#panel-{{i}}-body" 
+                    aria-expanded="false" 
+                    attr.aria-controls="panel-{{i}}-body">
+                    {{ commandGroup.name}}
+                  </button>
+            </h2>
+            <div id="panel-{{i}}-body"  class="accordion-collapse collapse show" attr.aria-labelledby="panel-{{i}}-heading">
+                <div class="command" *ngFor="let command of commandGroup.commands">
+                    <h3 class="command-name"> {{command.name}} </h3> 
+                    <label class="command-command"> Command: {{ command.command }}</label>
+                    <label class="command-description"> Description: {{ command.description}}</label>
+                 </div>
+            </div>
+        </div>
+      </div>
+</div>
+
+

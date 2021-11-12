@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "Bart",
+    "classifications": [ "Console" ], 
+    "name": "UltimateRedditBot-Feature",
+    "identity": "Ultimate.Reddit.Bot",         
+    "groupIdentity":"Ultimate.Reddit.Bot",
+    "shortName": "ur-feature",
+    "tags": {
+      "language": "C#",
+      "type":"project"
+    },
+    "sourceName": "ApplicationName",
+    "preferNameDirectory": true,
+    "symbols":{
+      "name": {
+        "type": "parameter",
+        "defaultValue": "zzz",
+        "replaces":"FeatureName",
+        "FileRename": "FeatureName"
+      }
+    }
+  }

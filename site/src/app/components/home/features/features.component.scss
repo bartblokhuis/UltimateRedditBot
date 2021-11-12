@@ -1,0 +1,27 @@
+@import '../../../../assets/sass/variables';
+
+.features {
+    background-color: $yellow;
+    padding-bottom: 20px;
+}
+
+h2{
+    font-weight: 700;
+    margin: 20px 0;
+}
+
+h2, h5{
+    color: #000;
+}
+
+h5 {
+    padding: 5px 0 0 0;
+}
+
+.icon img {
+    height: 2em;
+}
+
+.col-md-4 {
+    padding: 20px 0;
+}
