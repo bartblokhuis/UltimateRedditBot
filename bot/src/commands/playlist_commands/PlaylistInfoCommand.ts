@@ -54,7 +54,6 @@ export const run: RunFunction = async(client, message, args) => {
 
     async function getPlaylistsInfo(message: Message){
         const playlists = await playListService.getByGuildId(guild.id);
-        console.log(playlists);
         if(!playlists){
             message.channel.send("This server has no playlists");
             return;

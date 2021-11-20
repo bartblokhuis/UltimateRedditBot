@@ -36,9 +36,6 @@ export const run: RunFunction = async(client, message, args) => {
             }
 
             message.channel.send(`${user.toString()} is no longer a mod`);
-        })
-        .catch((error) => {
-            console.log(error);
         });
 }
 export const name: string = 'unmod';

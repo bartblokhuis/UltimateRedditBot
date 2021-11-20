@@ -34,19 +34,14 @@ export const run: RunFunction = async(client, message, args) => {
     const apiUser = await userService.getUser(user.id);
 
     guildAdminService.addAdmin(apiUser.id, guild.id)
-    .then((result) => {
-        if(!result.data.succeeded && result.data.messages[0] === 'User is already an admin') {
-            message.channel.send(`${user.toString()}  is already a mod`);
-            return;
-        }
+        .then((result) => {
+            if(!result.data.succeeded && result.data.messages[0] === 'User is already an admin') {
+                message.channel.send(`${user.toString()}  is already a mod`);
+                return;
+            }
 
-        message.channel.send(`${user.toString()} is now a mod`);
-    })
-    .catch((error) => {
-        console.log(error);
-    });
-
-   
+            message.channel.send(`${user.toString()} is now a mod`);
+        });
 };
 
 export const name: string = 'mod';

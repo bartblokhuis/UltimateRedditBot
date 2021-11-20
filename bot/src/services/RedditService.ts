@@ -1,3 +1,4 @@
+import consola from 'consola';
 import axios from 'axios'
 import { RedditPost } from '../data/RedditPost';
 import { Subreddit } from '../data/Subreddit';
@@ -21,7 +22,7 @@ export class RedditService {
                }
             })
             .catch((error) => {
-                console.log(error);
+                consola.error('Request failed with status code ' + error.response.status, error.response.config.url);
                 return null;
             });
     };
@@ -49,7 +50,7 @@ export class RedditService {
                }
             })
             .catch((error) => {
-                console.log(error);
+                consola.error('Request failed with status code ' + error.response.status, error.response.config.url);
                 return null;
             });
     }
@@ -94,7 +95,7 @@ export class RedditService {
                }
             })
             .catch((error) => {
-                console.log(error);
+                consola.error('Request failed with status code ' + error.response.status, error.response.config.url);
                 return null;
             });
     }

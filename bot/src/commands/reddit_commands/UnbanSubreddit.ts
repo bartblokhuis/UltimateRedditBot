@@ -42,7 +42,6 @@ export const run: RunFunction = async(client, message, args) => {
             channel.send(result.messages[0]);
         })
         .catch((error) => {
-            console.log(error);
             channel.send("Error, please try again");
         })
     

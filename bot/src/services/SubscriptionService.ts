@@ -1,3 +1,4 @@
+import consola from 'consola';
 import { Client, TextChannel } from "discord.js";
 import { Service } from "typedi";
 import { Subscription } from "../data/Subscription";
@@ -25,12 +26,13 @@ export class SubscriptionService  {
         this.bot = new Client();
         await this.bot.login(this.config.token);
         //Start by getting all the subscriptions
-        console.log("Starting subscription service...")
+        consola.info("Starting subscription service.")
         this.subscriptions = await this.subscriptionApiService.getAll();
         if(!this.subscriptions){
-            return "Subscription start failed";
+            consola.error("An error occurred when starting the subscription service!");
+            return;
         }
-        console.info("Subscriptions service started!");
+        consola.success("Subscriptions service started!");
         //ensure we don't have any subscriptions that don't have any channels.
         this.subscriptions = this.subscriptions.filter(subscription => !subscription.channels || subscription.channels.length !== 0);
 

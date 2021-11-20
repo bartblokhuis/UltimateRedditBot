@@ -1,8 +1,8 @@
 
+import consola from 'consola';
 import { Config } from '.././interfaces/Config';
 import * as File from '../../config.json';
-import { Result } from '../data/Result';
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosStatic } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 export class BaseApiService {
 
@@ -20,7 +20,7 @@ export class BaseApiService {
             return result;
         })
         .catch((error) => {
-            console.log(error);
+            consola.error('Request failed with status code ' + error.response.status, error.response.config.url);
             return undefined;
         });
     }
@@ -31,7 +31,7 @@ export class BaseApiService {
             return result;
         })
         .catch((error) => {
-            console.log(error);
+            consola.error('Request failed with status code ' + error.response.status, error.response.config.url);
             return undefined;
         });
     }
@@ -42,7 +42,7 @@ export class BaseApiService {
             return result;
         })
         .catch((error) => {
-            console.log(error);
+            consola.error('Request failed with status code ' + error.response.status, error.response.config.url);
             return undefined;
         });
     }
@@ -53,7 +53,7 @@ export class BaseApiService {
             .then((result) => {
                 return result;
             }).catch((error) => {
-                console.log(error);
+                consola.error('Request failed with status code ' + error.response.status, error.response.config.url);
                 return undefined;
             })
     }

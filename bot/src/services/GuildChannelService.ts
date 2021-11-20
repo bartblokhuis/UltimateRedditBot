@@ -24,8 +24,7 @@ export class GuildChannelService extends BaseApiService {
         return this.get<Result<GuildChannel>>(`GuildChannels?guildId=${guildId}&discordChannelId=${discordChannelId}`).then((result) => {
             this.cachedChannels.push(result.data.data);
                 return result.data.data;
-            }).catch((eror) => {
-                console.log(eror);
+            }).catch(() => {
                 return undefined;
             })
     }

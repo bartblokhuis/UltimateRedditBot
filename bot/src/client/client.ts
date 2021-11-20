@@ -26,7 +26,6 @@ class Bot extends Client {
     public async start(config: Config) : Promise<void> {
         this.config = config;
 
-
         //Reguster the events
         const eventFiles: string[] = await globalPromise(`${__dirname}/../events/**/*{.ts,.js}`);
         eventFiles.map(async(value: string) => {
@@ -34,12 +33,6 @@ class Bot extends Client {
             this.events.set(file.name, file);
             this.on(file.name, file.run.bind(null, this));
         });
-        console.log("Bot events have been registered...")
-
-
-        //Sign in
-        await this.login(config.token);
-        console.log("Bot has signed into discord...")
 
         //Register the commands
         const commandFiles: string[] = await globalPromise(`${__dirname}/../commands/**/*{.ts,.js}`);
@@ -47,7 +40,11 @@ class Bot extends Client {
             const file: Command = await import(value);
             this.commands.push(file);
         });
-        console.log("Bot commands have been registered...")
+        this.logger.info("Bot commands and events have been registered.")
+
+        //Sign in
+        await this.login(config.token);
+        this.logger.success("The bot has signed in.")
     }
 
     public embed(options: MessageEmbedOptions, message: Message): MessageEmbed {

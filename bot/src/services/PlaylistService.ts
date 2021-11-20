@@ -21,8 +21,7 @@ export class PlaylistService extends BaseApiService {
         return this.get<Result<Playlist[]>>(`Playlists/GetByGuildId?guildId=${guildId}`)
         .then((result) => {
             return result.data;
-        }).catch((error) => {
-            console.log(error);
+        }).catch(() => {
             return undefined;
         })
     }

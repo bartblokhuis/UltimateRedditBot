@@ -57,9 +57,6 @@ export const run: RunFunction = async(client, message, args) => {
         else{
             message.channel.send(result.messages[0]);
         }
-    })
-    .catch((error) => {
-        console.log(error);
     });
 };
 
