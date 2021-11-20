@@ -1,9 +1,9 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosStatic } from 'axios'
+import axios from 'axios'
 import { RedditPost } from '../data/RedditPost';
 import { Subreddit } from '../data/Subreddit';
 import { Service } from 'typedi';
 import { Sort } from '../data/Sort';
-
+import { URLHelper } from '../utils/urlHelper';
 
 @Service()
 export class RedditService {
@@ -70,8 +70,7 @@ export class RedditService {
                     result.data.data.children.map(post => posts.push({ author: post.data.author, downs: post.data.downs, isOver18: post.data.over_18, postLink: `https://www.reddit.com${post.data.permaLink}`, selftext: post.data.selftext, thumbnail: post.data.thumbnail, title: post.data.title, ups: post.data.ups, url: post.data.url, postId: post.data.name, description: post.data.selftext, permalink: `https://www.reddit.com${post.data.permalink}`, stickied: post.data.stickied }));
             
                     //Remove the posts that don't have an image or are stickied
-                    posts = posts.filter((post) => post.stickied == false && post.url &&
-                        (post.url.endsWith(".jpg") || post.url.endsWith(".jpeg") || post.url.endsWith(".png") || post.url.endsWith(".gif") || post.url.startsWith("https://gfycat") || post.url.startsWith("https://redgifs") || post.url.endsWith(".mp4") || post.url.startsWith("https://i.imgur") ));
+                    posts = posts.filter(x => x.stickied == false && URLHelper.isVideoOrImage(x.url));
 
                     //No new post has been found
                     if(posts.length === 0){
@@ -82,7 +81,7 @@ export class RedditService {
                     if(!posts || posts.length === 0){
                         return undefined;
                     }
-
+                    
                     //No new post.
                     if(posts[0].postId == lastPostName){
                         return undefined;
@@ -98,8 +97,6 @@ export class RedditService {
                 console.log(error);
                 return null;
             });
-
-        return undefined;
     }
 
     private parseSortToRedditSort(sort: Sort) : SortTime {

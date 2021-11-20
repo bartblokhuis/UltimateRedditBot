@@ -1,12 +1,11 @@
-import consola, { Consola } from 'consola' ;
+import consola, { Consola } from 'consola';
 import { Client, MessageEmbedOptions, MessageEmbed, Message, Intents, Collection, ChannelManager } from 'discord.js';
 import glob from 'glob';
-import Container, { Service } from 'typedi';
+import { Service } from 'typedi';
 import { promisify } from 'util';
 import { Command } from '../interfaces/Command';
 import { Config } from '../interfaces/Config';
-import { Event } from '../interfaces/Event'
-import { SubscriptionService } from '../services/SubscriptionService';
+import { Event } from '../interfaces/Event';
 
 const globalPromise = promisify(glob);
 
@@ -27,15 +26,6 @@ class Bot extends Client {
     public async start(config: Config) : Promise<void> {
         this.config = config;
 
-        //Sign in
-        await this.login(config.token);
-
-        //Register the commands
-        const commandFiles: string[] = await globalPromise(`${__dirname}/../commands/**/*{.ts,.js}`);
-        commandFiles.map(async(value: string) => {
-            const file: Command = await import(value);
-            this.commands.push(file);
-        });
 
         //Reguster the events
         const eventFiles: string[] = await globalPromise(`${__dirname}/../events/**/*{.ts,.js}`);
@@ -44,6 +34,20 @@ class Bot extends Client {
             this.events.set(file.name, file);
             this.on(file.name, file.run.bind(null, this));
         });
+        console.log("Bot events have been registered...")
+
+
+        //Sign in
+        await this.login(config.token);
+        console.log("Bot has signed into discord...")
+
+        //Register the commands
+        const commandFiles: string[] = await globalPromise(`${__dirname}/../commands/**/*{.ts,.js}`);
+        commandFiles.map(async(value: string) => {
+            const file: Command = await import(value);
+            this.commands.push(file);
+        });
+        console.log("Bot commands have been registered...")
     }
 
     public embed(options: MessageEmbedOptions, message: Message): MessageEmbed {

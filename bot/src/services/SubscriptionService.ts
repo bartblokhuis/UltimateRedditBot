@@ -1,6 +1,5 @@
-import { Channel, Client, MessageEmbed, TextChannel } from "discord.js";
-import Container, { Service } from "typedi";
-import { Bot } from "../client/client";
+import { Client, TextChannel } from "discord.js";
+import { Service } from "typedi";
 import { Subscription } from "../data/Subscription";
 import { Config } from "../interfaces/Config";
 import { DiscordUtils } from "../utils/discordUtils";
@@ -26,11 +25,12 @@ export class SubscriptionService  {
         this.bot = new Client();
         await this.bot.login(this.config.token);
         //Start by getting all the subscriptions
+        console.log("Starting subscription service...")
         this.subscriptions = await this.subscriptionApiService.getAll();
         if(!this.subscriptions){
             return "Subscription start failed";
         }
-        console.info("Subscriptions have started");
+        console.info("Subscriptions service started!");
         //ensure we don't have any subscriptions that don't have any channels.
         this.subscriptions = this.subscriptions.filter(subscription => !subscription.channels || subscription.channels.length !== 0);
 
@@ -43,19 +43,20 @@ export class SubscriptionService  {
         
         //This subscription no longer has any channels, stop searching for new posts.
         if(subscription.channels.length === 0) {
-            this.subscriptions = this.subscriptions.filter(x => x.id !+ subscription.id);
+            this.subscriptions = this.subscriptions.filter(x => x.id != subscription.id);
             return;
         }
 
         const post = await this.redditService.getNewPost(subscription.subredditName, subscription.lastPostId, subscription.sort);
+
         if(!post || post === undefined){
             setTimeout(() => {
                 this.handleSubscription(subscription);
             }, 10000);
             return;
         }
-        subscription.lastPostId = post.postId;
 
+        subscription.lastPostId = post.postId;
         let channelsThatShouldReceivePost = subscription.channels.filter(x => x.isEnabled);
         if(post.isOver18){
             channelsThatShouldReceivePost = channelsThatShouldReceivePost.filter(x => x.isShowNsfw);
@@ -63,6 +64,7 @@ export class SubscriptionService  {
 
         let textChannels = await this.getTextChannels(channelsThatShouldReceivePost.map(x => x.discordChannelId));
         if(post.isOver18) textChannels = textChannels.filter(channel => channel.nsfw);
+
         textChannels.forEach((channel) => {
             DiscordUtils.sendPost(post, subscription.subredditName, channel);
         });
@@ -77,7 +79,6 @@ export class SubscriptionService  {
     async getTextChannels(ids: string[]) : Promise<TextChannel[]>{
         //TODO Get from cache if possible
         let channels  : TextChannel[]= [];
-
         for(const id of ids){
             try{
                 const channel = await this.bot.channels.fetch(id) as TextChannel;

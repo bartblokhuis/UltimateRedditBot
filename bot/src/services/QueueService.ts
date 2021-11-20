@@ -1,4 +1,4 @@
-import { MessageEmbed, TextChannel } from 'discord.js';
+import { TextChannel } from 'discord.js';
 import { Service } from 'typedi';
 import { Guild } from '../data/Guild';
 import { GuildQueueItem } from '../data/GuildQueueItem';
@@ -7,6 +7,7 @@ import { QueueItem } from '../data/QueueItem';
 import { Sort } from '../data/Sort';
 import { Subreddit } from '../data/Subreddit';
 import { DiscordUtils } from '../utils/discordUtils';
+import { URLHelper } from '../utils/urlHelper';
 import { PostHistoryService } from './PostHistoryService';
 import { RedditService } from './RedditService';
 
@@ -101,10 +102,9 @@ export class QueueService{
             return;
         }
 
-        //Filter out any posts are stickied or dont have an video / image.
-        var postsWithImage = posts.filter((post) => post.stickied == false && post.url && post.postId != queueItem.lastUsedPostName &&
-            (post.url.endsWith(".jpg") || post.url.endsWith(".jpeg") || post.url.endsWith(".png") || post.url.endsWith(".gif") || post.url.startsWith("https://gfycat") || post.url.startsWith("https://redgifs") || post.url.endsWith(".mp4") ));
-
+        //Remove the posts that don't have an image or are stickied
+        var postsWithImage = posts.filter(x => x.stickied == false && URLHelper.isVideoOrImage(x.url));
+            
         if(postsWithImage.length === 0) {
             queueItem.lastUsedPostName = posts[posts.length-1].postId;
             queueItem.failedGetAttemppts++;
