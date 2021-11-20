@@ -1,7 +1,6 @@
 import { RunFunction } from '../../interfaces/Command';
 import { TextChannel } from 'discord.js';
 import { SubredditService } from '../../services/SubredditService';
-import { RedditService } from '../../services/RedditService';
 import { Container } from 'typedi';
 import { QueueService } from '../../services/QueueService';
 import { GuildService } from '../../services/GuildService';

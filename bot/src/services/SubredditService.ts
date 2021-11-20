@@ -1,4 +1,3 @@
-import { AxiosRequestConfig } from 'axios';
 import { Service } from 'typedi';
 import { Result } from '../data/Result';
 import { Subreddit } from '../data/Subreddit';

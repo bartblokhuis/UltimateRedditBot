@@ -1,6 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosStatic } from 'axios'
+import axios, { AxiosRequestConfig } from 'axios'
 import { Service } from 'typedi';
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 @Service()
 export class APIService{
@@ -27,6 +26,5 @@ export class APIService{
             return null;
 
         })
-    }
-    
+    } 
 }

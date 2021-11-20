@@ -1,4 +1,3 @@
-import { channel } from 'diagnostic_channel';
 import { EmbedFieldData, MessageEmbed, TextChannel } from 'discord.js';
 import Container from 'typedi';
 import { RunFunction } from '../../interfaces/Command';

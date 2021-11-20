@@ -2,7 +2,6 @@ import { RunFunction } from '../../interfaces/Command';
 import Container from 'typedi';
 import { GuildService } from '../../services/GuildService';
 import { PlaylistService } from '../../services/PlaylistService';
-import { SubredditService } from '../../services/SubredditService';
 import { EmbedFieldData, Message, MessageEmbed, TextChannel } from 'discord.js';
 
 export const run: RunFunction = async(client, message, args) => {

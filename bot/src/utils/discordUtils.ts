@@ -7,7 +7,6 @@ import { UserService } from "../services/UserService";
 import * as File from '../../config.json';
 import Container from "typedi";
 import { RedditPost } from "../data/RedditPost";
-import { Subreddit } from "../data/Subreddit";
 
 export abstract class DiscordUtils {
 

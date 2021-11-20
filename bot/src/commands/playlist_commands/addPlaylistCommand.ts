@@ -3,7 +3,7 @@ import Container from 'typedi';
 import { GuildService } from '../../services/GuildService';
 import { PlaylistService } from '../../services/PlaylistService';
 import { SubredditService } from '../../services/SubredditService';
-import { Message, TextChannel } from 'discord.js';
+import { Message } from 'discord.js';
 import { DiscordUtils } from '../../utils/discordUtils';
 
 export const run: RunFunction = async(client, message, args) => {

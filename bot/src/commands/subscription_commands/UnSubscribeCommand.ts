@@ -1,4 +1,3 @@
-import { TextChannel } from 'discord.js';
 import Container from 'typedi';
 import { Sort } from '../../data/Sort';
 import { RunFunction } from '../../interfaces/Command';
